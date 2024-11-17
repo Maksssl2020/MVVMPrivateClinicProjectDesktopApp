@@ -1,12 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "95iu8vU/Dgs=",
+  "dgSpecHash": "5l/3Q9z4UVs=",
   "success": true,
   "projectFilePath": "C:\\Users\\maksy\\RiderProjects\\MVVMPrivateClinicProjectDesktopApp\\MVVMPrivateClinicProjectDesktopApp\\MVVMPrivateClinicProjectDesktopApp.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\maksy\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\maksy\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",
     "C:\\Users\\maksy\\.nuget\\packages\\entityframework\\6.5.1\\entityframework.6.5.1.nupkg.sha512",
+    "C:\\Users\\maksy\\.nuget\\packages\\fontawesome.sharp\\6.6.0\\fontawesome.sharp.6.6.0.nupkg.sha512",
     "C:\\Users\\maksy\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\maksy\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\6.0.0\\microsoft.bcl.asyncinterfaces.6.0.0.nupkg.sha512",
     "C:\\Users\\maksy\\.nuget\\packages\\microsoft.codeanalysis.analyzers\\3.3.3\\microsoft.codeanalysis.analyzers.3.3.3.nupkg.sha512",

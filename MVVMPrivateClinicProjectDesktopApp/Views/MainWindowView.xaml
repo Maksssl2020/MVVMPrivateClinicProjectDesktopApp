@@ -1,0 +1,105 @@
+﻿<Window x:Class="MVVMPrivateClinicProjectDesktopApp.Views.MainWindowView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+        mc:Ignorable="d"
+        Title="MainWindow" 
+        Height="600" 
+        Width="800" 
+        WindowStyle="None" 
+        Background="Transparent" 
+        AllowsTransparency="True">
+    <Border Background="{StaticResource CustomBlackColor1}" CornerRadius="20">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            
+            
+           
+            
+            <Border Grid.Column="0" Background="{StaticResource CustomGrayColor1}"  CornerRadius="20 0 0 20">
+                <Grid >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="75"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Image  Source="../Assets/app-icon.png" Height="45" Width="45"/>
+                        <TextBlock 
+                            Text="MEDICA"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Left"
+                            Foreground="White"
+                            FontSize="28"
+                            Margin="10 0 0 0"/>
+                    </StackPanel>
+                    
+                    <StackPanel Grid.Row="1" VerticalAlignment="Center">
+                        
+                        <RadioButton Style="{StaticResource MenuButtonTheme}"
+                                     Tag="{StaticResource CustomGreenColor1}">
+                            <StackPanel Orientation="Horizontal">
+                                <fa:IconImage Icon="UserInjured" Style="{StaticResource  MenuButtonIcon}"/>
+                                <TextBlock Text="Patients" Style="{StaticResource MenuButtonText}"/> 
+                            </StackPanel>
+                        </RadioButton>
+                        
+                        <RadioButton Style="{StaticResource MenuButtonTheme}"
+                                     Tag="{StaticResource CustomVioletColor1}">
+                            <StackPanel Orientation="Horizontal">
+                                <fa:IconImage Icon="UserDoctor" Style="{StaticResource  MenuButtonIcon}"/>
+                                <TextBlock Text="Doctors" Style="{StaticResource MenuButtonText}"/> 
+                            </StackPanel>
+                        </RadioButton>
+                        
+                        <RadioButton Style="{StaticResource MenuButtonTheme}"
+                                     Tag="{StaticResource CustomRedColor1}">
+                            <StackPanel Orientation="Horizontal">
+                                <fa:IconImage Icon="Calendar" Style="{StaticResource  MenuButtonIcon}"/>
+                                <TextBlock Text="Appointments" Style="{StaticResource MenuButtonText}"/> 
+                            </StackPanel>
+                        </RadioButton>
+                        
+                        <RadioButton Style="{StaticResource MenuButtonTheme}"
+                                     Tag="{StaticResource CustomOrangeColor1}">
+                            <StackPanel Orientation="Horizontal">
+                                <fa:IconImage Icon="PrescriptionBottleMedical" Style="{StaticResource  MenuButtonIcon}"/>
+                                <TextBlock Text="Prescriptions" Style="{StaticResource MenuButtonText}"/> 
+                            </StackPanel>
+                        </RadioButton>
+                        
+                        <RadioButton Style="{StaticResource MenuButtonTheme}"
+                                     Tag="{StaticResource CustomBlueColor1}">
+                            <StackPanel Orientation="Horizontal">
+                                <fa:IconImage Icon="NotesMedical" Style="{StaticResource  MenuButtonIcon}"/>
+                                <TextBlock Text="Notes" Style="{StaticResource MenuButtonText}"/> 
+                            </StackPanel>
+                        </RadioButton>
+                        
+                        <RadioButton Style="{StaticResource MenuButtonTheme}"
+                                     Tag="{StaticResource CustomYellowColor1}">
+                            <StackPanel Orientation="Horizontal">
+                                <fa:IconImage Icon="Receipt" Style="{StaticResource  MenuButtonIcon}"/>
+                                <TextBlock Text="Referrals" Style="{StaticResource MenuButtonText}"/> 
+                            </StackPanel>
+                        </RadioButton>
+                        
+                        <RadioButton Style="{StaticResource MenuButtonTheme}"
+                                     Tag="{StaticResource CustomCoralColor1}">
+                            <StackPanel Orientation="Horizontal">
+                                <fa:IconImage Icon="FileInvoiceDollar" Style="{StaticResource  MenuButtonIcon}"/>
+                                <TextBlock Text="Invoices" Style="{StaticResource MenuButtonText}"/> 
+                            </StackPanel>
+                        </RadioButton>
+                        
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+    </Border>
+</Window>

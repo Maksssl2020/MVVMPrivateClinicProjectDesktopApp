@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using MVVMPrivateClinicProjectDesktopApp.Models.Entities;
-
-namespace MVVMPrivateClinicProjectDesktopApp.Models;
+﻿namespace MVVMPrivateClinicProjectDesktopApp.Models.Entities;
 
 public partial class Patient
 {

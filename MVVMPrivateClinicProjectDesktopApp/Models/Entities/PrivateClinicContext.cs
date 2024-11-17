@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-using MVVMPrivateClinicProjectDesktopApp.Models.Entities;
+﻿using Microsoft.EntityFrameworkCore;
 
-namespace MVVMPrivateClinicProjectDesktopApp.Models;
+namespace MVVMPrivateClinicProjectDesktopApp.Models.Entities;
 
 public partial class PrivateClinicContext : DbContext
 {

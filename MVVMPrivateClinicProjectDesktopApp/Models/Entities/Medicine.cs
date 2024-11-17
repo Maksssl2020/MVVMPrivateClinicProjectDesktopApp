@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace MVVMPrivateClinicProjectDesktopApp.Models;
+﻿namespace MVVMPrivateClinicProjectDesktopApp.Models.Entities;
 
 public partial class Medicine
 {

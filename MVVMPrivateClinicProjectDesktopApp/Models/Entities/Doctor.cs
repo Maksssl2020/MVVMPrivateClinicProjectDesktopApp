@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using MVVMPrivateClinicProjectDesktopApp.Models.Entities;
 
 namespace MVVMPrivateClinicProjectDesktopApp.Models;
 
