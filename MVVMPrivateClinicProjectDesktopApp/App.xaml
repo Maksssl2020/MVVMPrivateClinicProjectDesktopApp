@@ -7,6 +7,8 @@
              <ResourceDictionary.MergedDictionaries>
                  <ResourceDictionary Source="Themes/UserInterfaceColors.xaml"/>
                  <ResourceDictionary Source="Themes/MenuButtonTheme.xaml"/>
+                 <ResourceDictionary Source="Themes/ControlBarButtonTheme.xaml"/>
+                 <ResourceDictionary Source="Themes/DataGridTheme.xaml"/>
              </ResourceDictionary.MergedDictionaries>
          </ResourceDictionary>
     </Application.Resources>

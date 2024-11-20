@@ -5,10 +5,26 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Views"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="485" d:DesignWidth="610">
     <Border Background="{StaticResource CustomBlackColor1}">
         <Grid>
-        
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            
+            <DataGrid Style="{StaticResource DataGridTheme }" Grid.Row="1" >
+               <DataGrid.Columns>
+                   <DataGridTextColumn Width="45" CanUserResize="False" Header="ID" IsReadOnly="True"/>
+                   <DataGridTextColumn Width="*" CanUserResize="False" Header="Patient Code" IsReadOnly="True"/>
+                   <DataGridTextColumn Width="*" CanUserResize="False" Header="First Name" IsReadOnly="True"/>
+                   <DataGridTextColumn Width="*" CanUserResize="False" Header="Last Name" IsReadOnly="True"/>
+                   <DataGridTextColumn Width="*" CanUserResize="False" Header="Phone Number" IsReadOnly="True"/>
+                   <DataGridTextColumn Width="*" CanUserResize="False" Header="E-mail" IsReadOnly="True"/>
+                   <DataGridTextColumn Width="35" CanUserResize="False" Header="" IsReadOnly="True"/>
+               </DataGrid.Columns>
+            </DataGrid>
+            
         </Grid>
     </Border>
 </UserControl>

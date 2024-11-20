@@ -13,7 +13,6 @@
         "packagesPath": "C:\\Users\\maksy\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\maksy\\RiderProjects\\MVVMPrivateClinicProjectDesktopApp\\MVVMPrivateClinicProjectDesktopApp\\obj\\",
         "projectStyle": "PackageReference",
-        "UsingMicrosoftNETSdk": false,
         "configFilePaths": [
           "C:\\Users\\maksy\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"

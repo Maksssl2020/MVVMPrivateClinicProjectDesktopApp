@@ -4,13 +4,30 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+        xmlns:local="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Views"
+        xmlns:viewModel="clr-namespace:MVVMPrivateClinicProjectDesktopApp.ViewModels"
         mc:Ignorable="d"
-        Title="MainWindow" 
-        Height="600" 
-        Width="800" 
+        Title="MainWindowView" 
+        Height="750" 
+        Width="1150" 
         WindowStyle="None" 
+        WindowStartupLocation="CenterScreen"
         Background="Transparent" 
         AllowsTransparency="True">
+    
+    <Window.DataContext>
+        <viewModel:MainWindowViewModel/>
+    </Window.DataContext>
+    
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type viewModel:HomeViewModel}">
+            <local:HomeView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:PatientsViewModel}">
+            <local:PatientsView/>
+        </DataTemplate>
+    </Window.Resources>
+    
     <Border Background="{StaticResource CustomBlackColor1}" CornerRadius="20">
         <Grid>
             <Grid.ColumnDefinitions>
@@ -18,18 +35,15 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             
-            
-           
-            
-            <Border Grid.Column="0" Background="{StaticResource CustomGrayColor1}"  CornerRadius="20 0 0 20">
+            <Border Grid.Column="0" Background="{StaticResource CustomGrayColor1}"  CornerRadius="20">
                 <Grid >
                     <Grid.RowDefinitions>
                         <RowDefinition Height="75"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     
-                    <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
-                        <Image  Source="../Assets/app-icon.png" Height="45" Width="45"/>
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" >
+                        <fa:IconImage Icon="HeartPulse" Height="45" Width="45" Foreground="{StaticResource CustomBlueColor1}"/>
                         <TextBlock 
                             Text="MEDICA"
                             VerticalAlignment="Center"
@@ -42,7 +56,18 @@
                     <StackPanel Grid.Row="1" VerticalAlignment="Center">
                         
                         <RadioButton Style="{StaticResource MenuButtonTheme}"
-                                     Tag="{StaticResource CustomGreenColor1}">
+                                     Tag="{StaticResource CustomLavenderColor1}"
+                                     Command="{Binding ShowHomeViewCommand}"
+                                     IsChecked="True">
+                            <StackPanel Orientation="Horizontal">
+                                <fa:IconImage Icon="House" Style="{StaticResource  MenuButtonIcon}"/>
+                                <TextBlock Text="Home" Style="{StaticResource MenuButtonText}"/> 
+                            </StackPanel>
+                        </RadioButton>
+                        
+                        <RadioButton Style="{StaticResource MenuButtonTheme}"
+                                     Tag="{StaticResource CustomGreenColor1}"
+                                     Command="{Binding ShowPatientsViewCommand}">
                             <StackPanel Orientation="Horizontal">
                                 <fa:IconImage Icon="UserInjured" Style="{StaticResource  MenuButtonIcon}"/>
                                 <TextBlock Text="Patients" Style="{StaticResource MenuButtonText}"/> 
@@ -98,6 +123,54 @@
                         </RadioButton>
                         
                     </StackPanel>
+                </Grid>
+            </Border>
+            
+            <Border Grid.Column="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="75"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="100"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <Border Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center">
+                            <Border Margin="15 0 0 0" Width="175" Height="50" CornerRadius="20" Background="{StaticResource CustomGrayColor1}">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                    <fa:IconImage Foreground="{Binding HeaderBrush}" Margin="0 0 10 0" Width="25" Height="25"  Icon="{Binding ViewIcon}"/>
+                                    <TextBlock Foreground="{Binding HeaderBrush}"  FontFamily="/Fonts/#OpenSans" FontWeight="Medium" VerticalAlignment="Center" FontSize="18"  Text="{Binding ViewTitle}"/>
+                                </StackPanel>
+                            </Border>
+                        </Border>
+                        
+                        <StackPanel x:Name="ControlBar"
+                                    Grid.Column="1"
+                                    Orientation="Horizontal"
+                                    FlowDirection="RightToLeft"
+                                    Margin="0,0,10,0"
+                                    MouseLeftButtonDown="controlBar_MouseLeftButtonDown">
+                            <Button x:Name="closeButton" 
+                                    Click="buttonClose_Click"
+                                    Style="{StaticResource ControlBarButton}"
+                                    Tag="{StaticResource CustomRedColor1}"
+                            >
+                                <fa:IconImage Icon="Xmark" Style="{StaticResource ControlBarButtonIcon}"/>
+                            </Button>
+                            <Button x:Name="minimizeButton"
+                                    Click="buttonMinimize_Click"
+                                    Style="{StaticResource ControlBarButton}"
+                                    Tag="{StaticResource CustomBlueColor1}">
+                                <fa:IconImage Icon="WindowMinimize" Style="{StaticResource ControlBarButtonIcon}"/>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                    
+                    <ContentControl Content="{Binding CurrentView}" Grid.Row="1" Margin="20"/>
                 </Grid>
             </Border>
         </Grid>
