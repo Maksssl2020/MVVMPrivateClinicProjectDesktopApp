@@ -1,17 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MVVMPrivateClinicProjectDesktopApp.Entities;
 
 namespace MVVMPrivateClinicProjectDesktopApp.Models.Entities;
 
 public partial class PrivateClinicContext : DbContext
 {
     public PrivateClinicContext()
-    {
-    }
+    { }
 
     public PrivateClinicContext(DbContextOptions<PrivateClinicContext> options)
         : base(options)
-    {
-    }
+    { }
 
     public virtual DbSet<Address> Addresses { get; set; }
 

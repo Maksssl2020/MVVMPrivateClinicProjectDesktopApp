@@ -4,27 +4,69 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Views"
+             xmlns:viewModel="clr-namespace:MVVMPrivateClinicProjectDesktopApp.ViewModels"
              mc:Ignorable="d"
              d:DesignHeight="485" d:DesignWidth="610">
+    
+    <UserControl.DataContext>
+        <viewModel:PatientsViewModel/>
+    </UserControl.DataContext>
+    
     <Border Background="{StaticResource CustomBlackColor1}">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            
-            <DataGrid Style="{StaticResource DataGridTheme }" Grid.Row="1" >
-               <DataGrid.Columns>
-                   <DataGridTextColumn Width="45" CanUserResize="False" Header="ID" IsReadOnly="True"/>
-                   <DataGridTextColumn Width="*" CanUserResize="False" Header="Patient Code" IsReadOnly="True"/>
-                   <DataGridTextColumn Width="*" CanUserResize="False" Header="First Name" IsReadOnly="True"/>
-                   <DataGridTextColumn Width="*" CanUserResize="False" Header="Last Name" IsReadOnly="True"/>
-                   <DataGridTextColumn Width="*" CanUserResize="False" Header="Phone Number" IsReadOnly="True"/>
-                   <DataGridTextColumn Width="*" CanUserResize="False" Header="E-mail" IsReadOnly="True"/>
-                   <DataGridTextColumn Width="35" CanUserResize="False" Header="" IsReadOnly="True"/>
-               </DataGrid.Columns>
-            </DataGrid>
-            
+            <Border Grid.Row="1" Padding="10 0" Height="50" Background="{StaticResource CustomGrayColor1}" Margin="0 0 20 0" CornerRadius="15">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="35"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="35"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock FontSize="12" Foreground="White" VerticalAlignment="Center" Grid.Column="0" Text="Id"/>
+                    <TextBlock FontSize="12" Foreground="White" VerticalAlignment="Center" Grid.Column="1" Text="Patient Code"/>
+                    <TextBlock FontSize="12" Foreground="White" VerticalAlignment="Center" Grid.Column="2" Text="First Name"/>
+                    <TextBlock FontSize="12" Foreground="White" VerticalAlignment="Center" Grid.Column="3" Text="Last Name"/>
+                    <TextBlock FontSize="12" Foreground="White" VerticalAlignment="Center" Grid.Column="4" Text="Phone Number"/>
+                    <TextBlock FontSize="12" Foreground="White" VerticalAlignment="Center" Grid.Column="5" Text="E-mail"/>
+                    <TextBlock FontSize="12" Foreground="White" VerticalAlignment="Center" Grid.Column="6"/>
+                </Grid>
+            </Border>
+            <ScrollViewer  Style="{StaticResource ScrollBarTheme}" Grid.Row="2">
+                <ItemsControl ItemsSource="{Binding Patients}" Padding="10 0 10 0" Margin="0 15 0 0">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Padding="5 0 15 0" BorderBrush="{StaticResource CustomGrayColor1}" BorderThickness="0 0 0 2" Height="35">
+                                <Grid  VerticalAlignment="Center">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="35"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="35"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Foreground="White" Grid.Column="0" Text="{Binding Id}"/>
+                                    <TextBlock Foreground="White" Grid.Column="1" Text="{Binding PatientCode}"/>
+                                    <TextBlock Foreground="White" Grid.Column="2" Text="{Binding FirstName}"/>
+                                    <TextBlock Foreground="White" Grid.Column="3" Text="{Binding LastName}"/>
+                                    <TextBlock Foreground="White" Grid.Column="4" Text="{Binding PhoneNumber}"/>
+                                    <TextBlock Foreground="White" Grid.Column="5" Text="{Binding EmailAddress}"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                
+                </ItemsControl>
+            </ScrollViewer>
         </Grid>
     </Border>
 </UserControl>
