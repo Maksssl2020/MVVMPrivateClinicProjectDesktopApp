@@ -16,7 +16,7 @@ public partial class MainWindowView : Window {
     [DllImport("user32.dll")]
     private static extern IntPtr SendMessage(IntPtr hWnd, uint wMsg, IntPtr wParam, IntPtr lParam);
     
-    private void controlBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e){
+    private void MouseLeftButtonDown_Press(object sender, MouseButtonEventArgs e){
         var helper = new WindowInteropHelper(this);
         SendMessage(helper.Handle, 161, 2, 0);
     }

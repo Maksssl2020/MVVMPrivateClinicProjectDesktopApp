@@ -9,6 +9,9 @@
                  <ResourceDictionary Source="Themes/MenuButtonTheme.xaml"/>
                  <ResourceDictionary Source="Themes/ControlBarButtonTheme.xaml"/>
                  <ResourceDictionary Source="Themes/ScrollBarTheme.xaml"/>
+                 <ResourceDictionary Source="Themes/ButtonWithIconSmallTheme.xaml"/>
+                 <ResourceDictionary Source="Themes/ButtonWithIconLargeTheme.xaml"/>
+                 <ResourceDictionary Source="Themes/FormTextBoxTheme.xaml"/>
              </ResourceDictionary.MergedDictionaries>
          </ResourceDictionary>
     </Application.Resources>

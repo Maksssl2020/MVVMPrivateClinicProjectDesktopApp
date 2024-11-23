@@ -39,23 +39,23 @@ public class MainWindowViewModel : ViewModelBase {
 
 
     public MainWindowViewModel(){
-        ShowHomeViewCommand = new RelayCommand(ExecuteShowHomeViewCommand);
-        ShowPatientsViewCommand = new RelayCommand(ExecuteShowPatientsViewCommand);
+        ShowHomeViewCommand = new NavigateCommand<HomeViewModel>(ExecuteShowHomeViewCommand);
+        ShowPatientsViewCommand = new NavigateCommand<PatientsViewModel>(ExecuteShowPatientsViewCommand);
         
-        ExecuteShowHomeViewCommand(null);
+        ExecuteShowHomeViewCommand();
     }
 
-    private void ExecuteShowHomeViewCommand(object? parameter){
+    private void ExecuteShowHomeViewCommand(){
         CurrentView = new HomeViewModel();
         ViewTitle = "Home";
         ViewIcon = IconChar.House;
-        HeaderBrush = (SolidColorBrush)Application.Current.Resources["CustomLavenderColor1"];
+        HeaderBrush = (SolidColorBrush)Application.Current.Resources["CustomLavenderColor1"]!;
     }
     
-    private void ExecuteShowPatientsViewCommand(object parameter){
+    private void ExecuteShowPatientsViewCommand(){
         CurrentView = new PatientsViewModel();
         ViewTitle = "Patients";
         ViewIcon = IconChar.UserInjured;
-        HeaderBrush = (SolidColorBrush)Application.Current.Resources["CustomGreenColor1"];
+        HeaderBrush = (SolidColorBrush)Application.Current.Resources["CustomGreenColor1"]!;
     }
 }

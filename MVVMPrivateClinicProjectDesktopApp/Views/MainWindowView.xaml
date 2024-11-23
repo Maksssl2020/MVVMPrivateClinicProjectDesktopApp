@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         Title="MainWindowView" 
         Height="750" 
-        Width="1150" 
+        Width="1250" 
         WindowStyle="None" 
         WindowStartupLocation="CenterScreen"
         Background="Transparent" 
@@ -28,7 +28,7 @@
         </DataTemplate>
     </Window.Resources>
     
-    <Border Background="{StaticResource CustomBlackColor1}" CornerRadius="20">
+    <Border MouseLeftButtonDown="MouseLeftButtonDown_Press" Background="{StaticResource CustomBlackColor1}" CornerRadius="20">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="250"/>
@@ -152,8 +152,7 @@
                                     Grid.Column="1"
                                     Orientation="Horizontal"
                                     FlowDirection="RightToLeft"
-                                    Margin="0,0,10,0"
-                                    MouseLeftButtonDown="controlBar_MouseLeftButtonDown">
+                                    Margin="0,0,10,0">
                             <Button x:Name="closeButton" 
                                     Click="buttonClose_Click"
                                     Style="{StaticResource ControlBarButton}"
@@ -170,7 +169,7 @@
                         </StackPanel>
                     </Grid>
                     
-                    <ContentControl Content="{Binding CurrentView}" Grid.Row="1" Margin="20"/>
+                    <ContentControl Content="{Binding CurrentView}" Grid.Row="1" Margin="15"/>
                 </Grid>
             </Border>
         </Grid>
