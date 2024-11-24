@@ -1,12 +1,14 @@
+using Microsoft.EntityFrameworkCore;
+
 namespace MVVMPrivateClinicProjectDesktopApp.Repositories.Patient;
 
 public class PatientRepository : RepositoryBase, IPatientRepository {
-    public IEnumerable<Models.Entities.Patient> GetAllPatients(){
-        return DbContext.Patients.ToList();
+    public async Task<IEnumerable<Models.Entities.Patient>> GetAllPatientsAsync(){
+        return await DbContext.Patients.ToListAsync();
     }
 
-    public Models.Entities.Patient? GetPatientById(int id){
-        return DbContext.Patients
-            .FirstOrDefault(patient => patient.Id == id);
+    public async Task<Models.Entities.Patient?> GetPatientById(int id){
+        return await DbContext.Patients
+            .FirstOrDefaultAsync(patient => patient.Id == id);
     }
 }

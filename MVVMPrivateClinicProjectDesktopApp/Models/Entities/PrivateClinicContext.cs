@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MVVMPrivateClinicProjectDesktopApp.Entities;
 
 namespace MVVMPrivateClinicProjectDesktopApp.Models.Entities;
 

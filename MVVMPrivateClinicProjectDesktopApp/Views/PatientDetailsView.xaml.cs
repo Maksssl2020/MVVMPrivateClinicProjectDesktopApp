@@ -1,6 +1,5 @@
 using System.Windows;
 using System.Windows.Input;
-using MVVMPrivateClinicProjectDesktopApp.Models.Entities;
 using MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
 namespace MVVMPrivateClinicProjectDesktopApp.Views;

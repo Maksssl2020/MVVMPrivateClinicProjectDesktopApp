@@ -11,6 +11,14 @@
     <SolidColorBrush x:Key="CustomYellowColor1" Color="#FFC857"/>
     <SolidColorBrush x:Key="CustomCoralColor1" Color="#FF6F91"/>
     <SolidColorBrush x:Key="CustomLavenderColor1" Color="#B39DDB"/>
-
-
+    <SolidColorBrush x:Key="CustomTurquoiseColor1" Color="#4DB6AC"/>
+    <SolidColorBrush x:Key="CustomRoseColor1" Color="#F19CBB"/>
+    <SolidColorBrush x:Key="CustomSunsetOrangeColor1" Color="#F4A261"/>
+    <SolidColorBrush x:Key="CustomPlumColor1" Color="#9B7A9D"/>
+    <SolidColorBrush x:Key="CustomOliveColor1" Color="#A8B77E"/>
+    <SolidColorBrush x:Key="CustomMauveColor1" Color="#B794CC"/>
+    <SolidColorBrush x:Key="CustomTealColor1" Color="#66A9A7"/>
+    <SolidColorBrush x:Key="CustomWarmBeigeColor1" Color="#D6A77A"/>
+    <SolidColorBrush x:Key="CustomGrapeColor1" Color="#B39DDB"/>
+    <SolidColorBrush x:Key="CustomMintBlueColor1" Color="#80B9A0"/>
 </ResourceDictionary>

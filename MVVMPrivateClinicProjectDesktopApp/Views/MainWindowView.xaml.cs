@@ -1,7 +1,7 @@
-﻿using System.Runtime.InteropServices;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Input;
-using System.Windows.Interop;
+using MVVMPrivateClinicProjectDesktopApp.ViewModels;
+using Application = System.Windows.Application;
 
 namespace MVVMPrivateClinicProjectDesktopApp.Views;
 
@@ -11,21 +11,10 @@ namespace MVVMPrivateClinicProjectDesktopApp.Views;
 public partial class MainWindowView : Window {
     public MainWindowView(){
         InitializeComponent();
+        ResizeMode = ResizeMode.NoResize;
     }
 
-    [DllImport("user32.dll")]
-    private static extern IntPtr SendMessage(IntPtr hWnd, uint wMsg, IntPtr wParam, IntPtr lParam);
-    
-    private void MouseLeftButtonDown_Press(object sender, MouseButtonEventArgs e){
-        var helper = new WindowInteropHelper(this);
-        SendMessage(helper.Handle, 161, 2, 0);
-    }
-
-    private void buttonClose_Click(object sender, RoutedEventArgs e){
-        Application.Current.Shutdown();
-    }
-
-    private void buttonMinimize_Click(object sender, RoutedEventArgs e){
-        WindowState = WindowState.Minimized;
-    }
+    private void MouseLeftButtonDown_Press(object sender, MouseButtonEventArgs e) => DragMove();
+    private void buttonClose_Click(object sender, RoutedEventArgs e) => Application.Current.Shutdown();
+    private void buttonMinimize_Click(object sender, RoutedEventArgs e) => WindowState = WindowState.Minimized;
 }

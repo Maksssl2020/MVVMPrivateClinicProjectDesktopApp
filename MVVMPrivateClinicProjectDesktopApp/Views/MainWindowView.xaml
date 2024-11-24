@@ -26,6 +26,15 @@
         <DataTemplate DataType="{x:Type viewModel:PatientsViewModel}">
             <local:PatientsView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:DoctorsViewModel}">
+            <local:DoctorsView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:DiseasesViewModel}">
+            <local:DiseasesView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:MedicinesViewModel}">
+            <local:MedicinesView/>
+        </DataTemplate>
     </Window.Resources>
     
     <Border MouseLeftButtonDown="MouseLeftButtonDown_Press" Background="{StaticResource CustomBlackColor1}" CornerRadius="20">
@@ -75,7 +84,8 @@
                         </RadioButton>
                         
                         <RadioButton Style="{StaticResource MenuButtonTheme}"
-                                     Tag="{StaticResource CustomVioletColor1}">
+                                     Tag="{StaticResource CustomVioletColor1}"
+                                     Command="{Binding ShowDoctorsViewCommand}">
                             <StackPanel Orientation="Horizontal">
                                 <fa:IconImage Icon="UserDoctor" Style="{StaticResource  MenuButtonIcon}"/>
                                 <TextBlock Text="Doctors" Style="{StaticResource MenuButtonText}"/> 
@@ -122,6 +132,23 @@
                             </StackPanel>
                         </RadioButton>
                         
+                        <RadioButton Style="{StaticResource MenuButtonTheme}"
+                                     Tag="{StaticResource CustomTurquoiseColor1}"
+                                     Command="{Binding ShowDiseasesViewCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <fa:IconImage Icon="Disease" Style="{StaticResource  MenuButtonIcon}"/>
+                                <TextBlock Text="Diseases" Style="{StaticResource MenuButtonText}"/> 
+                            </StackPanel>
+                        </RadioButton>
+                        
+                        <RadioButton Style="{StaticResource MenuButtonTheme}"
+                                     Tag="{StaticResource CustomPlumColor1}"
+                                     Command="{Binding ShowMedicinesViewCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <fa:IconImage Icon="Capsules" Style="{StaticResource  MenuButtonIcon}"/>
+                                <TextBlock Text="Medicines" Style="{StaticResource MenuButtonText}"/> 
+                            </StackPanel>
+                        </RadioButton>
                     </StackPanel>
                 </Grid>
             </Border>

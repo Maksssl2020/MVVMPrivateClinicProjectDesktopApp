@@ -10,7 +10,6 @@ using MVVMPrivateClinicProjectDesktopApp.Repositories.Patient;
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
 public class PatientsViewModel : ViewModelBase {
-    
     private readonly IPatientRepository _patientRepository;
     
     private string _patientsFilter = string.Empty;
@@ -27,18 +26,26 @@ public class PatientsViewModel : ViewModelBase {
         }
     }
     
-    public PatientsViewModel() {
+    public PatientsViewModel(){
         _patientRepository = new PatientRepository();
         
-        LoadPatients();
+        LoadPatientsAsync();
         
         PatientsView = CollectionViewSource.GetDefaultView(Patients);
         PatientsView.Filter = FilterPatients;
     }
 
-    private void LoadPatients(){
-         var patients = _patientRepository.GetAllPatients();
-         Patients = new ObservableCollection<Patient>(patients);
+    private async void LoadPatientsAsync(){
+        try {
+            var patients = await _patientRepository.GetAllPatientsAsync();
+
+            foreach (var patient in patients) {
+                Patients.Add(patient);
+            }
+        }
+        catch (Exception e) {
+            Console.WriteLine("Something went wrong... " + e.Message);
+        }
     }
     
     private bool FilterPatients(object obj){
