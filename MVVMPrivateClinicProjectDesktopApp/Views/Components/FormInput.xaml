@@ -6,11 +6,15 @@
              xmlns:local="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Views.Components"
              x:Name="Root"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="300"
+             BorderBrush="Transparent"
+             BorderThickness="0">
+    
     <StackPanel Margin="0 0 0 5" >
         <Label FontSize="15" Style="{StaticResource LabelForm}" Content="{Binding LabelTitle, ElementName=Root}"/>
-        <Border CornerRadius="10" Background="{StaticResource CustomGrayColor2}">
-            <TextBox FontSize="18" Height="35" Style="{StaticResource FormTextBox}"/>
+        <Border BorderBrush="Transparent" BorderThickness="0" CornerRadius="10" Background="{StaticResource CustomGrayColor2}">
+            <TextBox Text="{Binding FormText, ElementName=Root, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" FontSize="18" Height="35" Style="{StaticResource FormTextBox}"/>
         </Border>
+        <Label FontSize="15" Foreground="Red" HorizontalContentAlignment="Left" Padding="3 0 0 0" Content="{Binding ErrorMessage, ElementName=Root}" Margin="0 5"/>
     </StackPanel>
 </UserControl>

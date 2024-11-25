@@ -172,3 +172,4 @@ C:\Users\maksy\RiderProjects\MVVMPrivateClinicProjectDesktopApp\MVVMPrivateClini
 C:\Users\maksy\RiderProjects\MVVMPrivateClinicProjectDesktopApp\MVVMPrivateClinicProjectDesktopApp\obj\Debug\net8.0-windows\Views\MedicinesView.g.cs
 C:\Users\maksy\RiderProjects\MVVMPrivateClinicProjectDesktopApp\MVVMPrivateClinicProjectDesktopApp\obj\Debug\net8.0-windows\Views\DiseasesView.baml
 C:\Users\maksy\RiderProjects\MVVMPrivateClinicProjectDesktopApp\MVVMPrivateClinicProjectDesktopApp\obj\Debug\net8.0-windows\Views\MedicinesView.baml
+C:\Users\maksy\RiderProjects\MVVMPrivateClinicProjectDesktopApp\MVVMPrivateClinicProjectDesktopApp\obj\Debug\net8.0-windows\Themes\FormInputErrorsTheme.baml

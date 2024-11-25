@@ -9,5 +9,9 @@ public abstract class RelayCommand : ICommand {
     }
     public abstract void Execute(object? parameter);
 
+    public void RaiseCanExecuteChanged() {
+        CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+    }
+    
     public event EventHandler? CanExecuteChanged;
 }

@@ -10,6 +10,7 @@ public partial class PatientDetailsView : Window {
         
         var patientDetailsViewModel = new PatientDetailsViewModel(patientId);
         DataContext = patientDetailsViewModel;
+        ResizeMode = ResizeMode.NoResize;
     }
     
     private void buttonClose_Click(object sender, RoutedEventArgs e) => Close();

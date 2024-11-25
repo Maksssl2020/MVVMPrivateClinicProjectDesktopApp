@@ -6,14 +6,20 @@
         xmlns:local="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Views"
         xmlns:components="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Views.Components"
         xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+        xmlns:viewModel="clr-namespace:MVVMPrivateClinicProjectDesktopApp.ViewModels"
         mc:Ignorable="d"
         Title="AddPatientView" 
-        Height="550" 
+        Height="700" 
         Width="1000"
         WindowStyle="None" 
         WindowStartupLocation="CenterScreen"
         Background="Transparent"
         AllowsTransparency="True">
+    
+    <Window.DataContext>
+        <viewModel:AddNewPatientViewModel/>
+    </Window.DataContext>
+    
     <Border MouseLeftButtonDown="MouseLeftButtonDown_Hold" BorderThickness="2" BorderBrush="{StaticResource CustomGrayColor1}" Background="{StaticResource CustomBlackColor1}" CornerRadius="20" Padding="20">
         <Grid>
             <Grid.RowDefinitions>
@@ -39,24 +45,56 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                     
-                <Border Width="450" Height="350" Grid.Column="0"  Padding="5" CornerRadius="15" Background="{StaticResource CustomGrayColor1}">
+                <Border Width="450" Height="475" Grid.Column="0"  Padding="5" CornerRadius="15" Background="{StaticResource CustomGrayColor1}">
                     <StackPanel>
                         <Label FontSize="18" Margin="0 0 0 15" Foreground="{StaticResource CustomGreenColor1}" Content="Patient Personal Data"/>
-                        <components:FormInput LabelTitle="First Name*"/>
-                        <components:FormInput LabelTitle="Last Name*"/>
+                        <components:FormInput 
+                            x:Name="FirstNameInput"  
+                            ErrorMessage="{Binding ElementName=FirstNameInput, Path=(Validation.Errors)[0].ErrorContent}" 
+                            Style="{StaticResource FormInputErrorsStyle}" 
+                            FormText="{Binding FirstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                            LabelTitle="First Name*"/>
+                        <components:FormInput
+                            x:Name="LastNameInput" 
+                            ErrorMessage="{Binding ElementName=LastNameInput, Path=(Validation.Errors)[0].ErrorContent}"
+                            Style="{StaticResource FormInputErrorsStyle}" 
+                            FormText="{Binding LastName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            LabelTitle="Last Name*"/>
                         <components:FormInput LabelTitle="Phone Number"/>
                         <components:FormInput LabelTitle="E-mail Address"/>
                     </StackPanel>
                 </Border>
             
-                <Border Width="450" Height="350" Grid.Column="1"  Padding="5" CornerRadius="15" Background="{StaticResource CustomGrayColor1}">
-                    <StackPanel  >
+                <Border Width="450" Height="475" Grid.Column="1"  Padding="5" CornerRadius="15" Background="{StaticResource CustomGrayColor1}">
+                    <StackPanel >
                         <Label FontSize="18" Margin="0 0 0 15" Foreground="{StaticResource CustomGreenColor1}" Content="Patient Address Data"/>
-                        <components:FormInput LabelTitle="Postal Code*"/>
-                        <components:FormInput LabelTitle="Street*"/>
-                        <components:FormInput LabelTitle="City*"/>
+                        <components:FormInput 
+                            x:Name="CityInput"
+                            ErrorMessage="{Binding ElementName=CityInput, Path=(Validation.Errors)[0].ErrorContent}"
+                            Style="{StaticResource FormInputErrorsStyle}"
+                            FormText="{Binding City, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            LabelTitle="City*"/>
+                        <components:FormInput 
+                            x:Name="PostalCodeInput"
+                            ErrorMessage="{Binding ElementName=PostalCodeInput, Path=(Validation.Errors)[0].ErrorContent}"
+                            Style="{StaticResource FormInputErrorsStyle}"
+                            FormText="{Binding PostalCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            LabelTitle="Postal Code*"/>
+                        <components:FormInput 
+                            x:Name="StreetInput"
+                            ErrorMessage="{Binding ElementName=StreetInput, Path=(Validation.Errors)[0].ErrorContent}"
+                            Style="{StaticResource FormInputErrorsStyle}"
+                            FormText="{Binding Street, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            LabelTitle="Street*"/>
                         <DockPanel >
-                            <components:FormInput DockPanel.Dock="Left"  Width="215" LabelTitle="Building Number*"/>
+                            <components:FormInput
+                                x:Name="BuildingNumberInput"
+                                ErrorMessage="{Binding ElementName=BuildingNumberInput, Path=(Validation.Errors)[0].ErrorContent}"
+                                Style="{StaticResource FormInputErrorsStyle}"
+                                FormText="{Binding BuildingNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                DockPanel.Dock="Left"  
+                                Width="215" 
+                                LabelTitle="Building Number*"/>
                             <components:FormInput DockPanel.Dock="Right" Margin="10 0 0 0" Width="215" LabelTitle="Local Number"/>
                         </DockPanel>
                     </StackPanel>
@@ -64,10 +102,11 @@
             </Grid>
             
             <StackPanel Grid.Row="2" HorizontalAlignment="Right">
-                <components:ButtonWithIcon 
-                    ButtonText="Add New Patient" 
+                <components:ButtonWithIcon
+                    ButtonText="Add New Patient"
                     IconName="Plus"
-                    TextColor="{StaticResource CustomGreenColor1}" />
+                    TextColor="{StaticResource CustomGreenColor1}"
+                    Command="{Binding SubmitCommand}"/>
             </StackPanel>
         </Grid>
     </Border>
