@@ -15,7 +15,7 @@ public class DoctorsViewModel : ViewModelBase {
 
     private string _doctorsFilter = string.Empty;
     
-    private ObservableCollection<DoctorDTO> Doctors { get; set; } = [];
+    private ObservableCollection<DoctorDto> Doctors { get; set; } = [];
     public ICollectionView DoctorsView { get; set; }
     private string _doctorSpecialization = string.Empty;
     
@@ -61,7 +61,7 @@ public class DoctorsViewModel : ViewModelBase {
     }
     
     private bool FilterDoctors(object obj){
-        if (obj is not DoctorDTO doctorDto) {
+        if (obj is not DoctorDto doctorDto) {
             return false;
         }
 

@@ -6,7 +6,7 @@ namespace MVVMPrivateClinicProjectDesktopApp.Helpers;
 
 public class MapperProfiles : Profile {
     public MapperProfiles(){
-        CreateMap<Doctor, DoctorDTO>()
+        CreateMap<Doctor, DoctorDto>()
             .ForMember(dest => dest.DoctorSpecialization, 
                 opt => opt.Ignore());
     }

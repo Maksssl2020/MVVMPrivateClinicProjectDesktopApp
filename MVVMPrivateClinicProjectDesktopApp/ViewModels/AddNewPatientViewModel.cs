@@ -1,15 +1,16 @@
 using System.ComponentModel.DataAnnotations;
-using System.Windows;
+using System.Windows.Input;
 using MVVMPrivateClinicProjectDesktopApp.Commands;
 using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
 using MVVMPrivateClinicProjectDesktopApp.Repositories.Address;
 using MVVMPrivateClinicProjectDesktopApp.Repositories.Patient;
+using MVVMPrivateClinicProjectDesktopApp.Stores;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
 public class AddNewPatientViewModel : ViewModelBase {
-    private IPatientRepository _patientRepository;
-    private IAddressRepository _addressRepository;
+    private readonly IPatientRepository _patientRepository;
+    private readonly IAddressRepository _addressRepository;
     
     private string _firstName = string.Empty;
 
@@ -37,7 +38,32 @@ public class AddNewPatientViewModel : ViewModelBase {
         }
     }
     
+    private string _phoneNumber = string.Empty;
 
+    [Required(AllowEmptyStrings = true)]
+    [RegularExpression(@"(((\d{3}-?){3})?((\d{3}\s?){3})?(\d{9})?)?", ErrorMessage = "Invalid phone number!")]
+    public string PhoneNumber {
+        get => _phoneNumber;
+        set {
+            _phoneNumber = value;
+            Validate(nameof(PhoneNumber), value);
+            SubmitCommand.RaiseCanExecuteChanged();
+        }
+    }
+
+    private string _email = string.Empty;
+
+    [Required(AllowEmptyStrings = true)]
+    [RegularExpression("([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,})", ErrorMessage = "Invalid email!")]
+    public string Email {
+        get => _email;
+        set {
+            _email = value;
+            Validate(nameof(Email), value);
+            SubmitCommand.RaiseCanExecuteChanged();
+        }
+    }
+    
     private string _city = string.Empty;
 
     [Required(ErrorMessage = "City is required!")]
@@ -91,11 +117,17 @@ public class AddNewPatientViewModel : ViewModelBase {
             SubmitCommand.RaiseCanExecuteChanged();
         }
     }
-    
-    public SubmitCommand SubmitCommand { get; set; }
 
-    public AddNewPatientViewModel(){
+    public string LocalNumber { get; set; } = string.Empty;
+
+    public RelayCommand SubmitCommand { get; set; }
+    public ICommand CreatePatientCommand { get; set; }
+    
+    public AddNewPatientViewModel(PatientStore patientStore){
+        _patientRepository = new PatientRepository();
+        _addressRepository = new AddressRepository();
         SubmitCommand = new SubmitCommand(Submit, CanSubmit);
+        CreatePatientCommand = new CreatePatientCommand(this, patientStore);
     }
 
     private bool CanSubmit(){
@@ -105,13 +137,37 @@ public class AddNewPatientViewModel : ViewModelBase {
     }
 
     private void Submit(){
-        // new SaveAddressRequest {
-        //  City = City,
-        //  PostalCode = PostalCode,
-        //  Street = Street,
-        //  BuildingNumber = BuildingNumber,
-        //  LocalNumber = LocalN
-        // }
-        // new SavePatientRequest();
+        var saveAddressRequest = new SaveAddressRequest {
+            City = City,
+            PostalCode = PostalCode,
+            Street = Street,
+            BuildingNumber = BuildingNumber,
+            LocalNumber = LocalNumber,
+        };
+
+        var savedAddress = _addressRepository.SaveAddress(saveAddressRequest);
+
+        var savePatientRequest = new SavePatientRequest {
+            FirstName = FirstName,
+            LastName = LastName,
+            PhoneNumber = PhoneNumber,
+            Email = Email,
+            AddressId = savedAddress.Id,
+        };
+        
+        _patientRepository.SavePatient(savePatientRequest);
+        ResetForm();
+    }
+
+    private void ResetForm() {
+        FirstName = string.Empty;
+        LastName = string.Empty;
+        PhoneNumber = string.Empty;
+        Email = string.Empty;
+        City = string.Empty;
+        PostalCode = string.Empty;
+        Street = string.Empty;
+        BuildingNumber = string.Empty;
+        LocalNumber = string.Empty;
     }
 }

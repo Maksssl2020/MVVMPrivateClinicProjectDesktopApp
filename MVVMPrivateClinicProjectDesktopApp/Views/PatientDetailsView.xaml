@@ -17,10 +17,6 @@
         WindowStartupLocation="CenterScreen"
         >
     
-    <Window.DataContext>
-        <viewModel:PatientDetailsViewModel/>
-    </Window.DataContext>
-    
     <Window.Resources>
         <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
     </Window.Resources>
@@ -92,7 +88,7 @@
                                 <Label FontSize="14" Foreground="White" Content="{Binding SelectedPatientAddress.City }"/>
                                 <Label FontSize="14" Foreground="White" Content="{Binding SelectedPatientAddress.Street }"/>
                                 <Label FontSize="14" Foreground="White" Content="{Binding SelectedPatientAddress.BuildingNumber }"/>
-                                <Label Visibility="{Binding SelectedPatientAddress.BuildingNumber, Converter={StaticResource NullToVisibilityConverter} }" 
+                                <Label Visibility="{Binding SelectedPatientAddress.BuildingNumber, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type viewModel:PatientDetailsViewModel}}, Converter={StaticResource NullToVisibilityConverter} }" 
                                        FontSize="14" 
                                        Foreground="White" 
                                        Content="{Binding SelectedPatientAddress.LocalNumber}"/>

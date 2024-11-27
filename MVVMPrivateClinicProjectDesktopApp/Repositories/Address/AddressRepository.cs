@@ -21,7 +21,7 @@ public class AddressRepository : RepositoryBase, IAddressRepository {
         };
         
         DbContext.Addresses.Add(createdAddress);
-        DbContext.SaveChangesAsync();
+        DbContext.SaveChanges();
         
         return createdAddress;
     }

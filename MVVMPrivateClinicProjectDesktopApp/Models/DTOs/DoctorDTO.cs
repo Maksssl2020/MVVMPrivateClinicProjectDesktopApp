@@ -1,6 +1,6 @@
 namespace MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
 
-public class DoctorDTO {
+public class DoctorDto {
     public int Id { get; set; }
 
     public string DoctorCode { get; set; } = null!;

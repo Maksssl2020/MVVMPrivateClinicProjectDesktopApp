@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace MVVMPrivateClinicProjectDesktopApp.Models.Entities;
 
@@ -217,7 +218,11 @@ public partial class PrivateClinicContext : DbContext
             entity.Property(e => e.EmailAddress).HasMaxLength(255);
             entity.Property(e => e.FirstName).HasMaxLength(255);
             entity.Property(e => e.LastName).HasMaxLength(255);
-            entity.Property(e => e.PatientCode).HasMaxLength(50);
+            entity.Property(e => e.PatientCode)
+                .HasMaxLength(50)
+                .ValueGeneratedOnAddOrUpdate()
+                .Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
+            
             entity.Property(e => e.PhoneNumber).HasMaxLength(50);
 
             entity.HasOne(d => d.IdAddressNavigation).WithMany(p => p.Patients)

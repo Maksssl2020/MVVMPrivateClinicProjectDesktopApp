@@ -6,6 +6,8 @@
         xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
         xmlns:local="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Views"
         xmlns:viewModel="clr-namespace:MVVMPrivateClinicProjectDesktopApp.ViewModels"
+        xmlns:components="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Views.Components"
+
         mc:Ignorable="d"
         Title="MainWindowView" 
         Height="750" 
@@ -13,18 +15,16 @@
         WindowStyle="None" 
         WindowStartupLocation="CenterScreen"
         Background="Transparent" 
-        AllowsTransparency="True">
+        AllowsTransparency="True"
+        d:DataContext="{d:DesignInstance viewModel:MainWindowViewModel}">
     
-    <Window.DataContext>
-        <viewModel:MainWindowViewModel/>
-    </Window.DataContext>
     
     <Window.Resources>
         <DataTemplate DataType="{x:Type viewModel:HomeViewModel}">
-            <local:HomeView/>
+            <local:HomeView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type viewModel:PatientsViewModel}">
-            <local:PatientsView/>
+            <local:PatientsView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type viewModel:DoctorsViewModel}">
             <local:DoctorsView/>
@@ -44,114 +44,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             
-            <Border Grid.Column="0" Background="{StaticResource CustomGrayColor1}"  CornerRadius="20">
-                <Grid >
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="75"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    
-                    <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" >
-                        <fa:IconImage Icon="HeartPulse" Height="45" Width="45" Foreground="{StaticResource CustomBlueColor1}"/>
-                        <TextBlock 
-                            Text="MEDICA"
-                            VerticalAlignment="Center"
-                            HorizontalAlignment="Left"
-                            Foreground="White"
-                            FontSize="28"
-                            Margin="10 0 0 0"/>
-                    </StackPanel>
-                    
-                    <StackPanel Grid.Row="1" VerticalAlignment="Center">
-                        
-                        <RadioButton Style="{StaticResource MenuButtonTheme}"
-                                     Tag="{StaticResource CustomLavenderColor1}"
-                                     Command="{Binding ShowHomeViewCommand}"
-                                     IsChecked="True">
-                            <StackPanel Orientation="Horizontal">
-                                <fa:IconImage Icon="House" Style="{StaticResource  MenuButtonIcon}"/>
-                                <TextBlock Text="Home" Style="{StaticResource MenuButtonText}"/> 
-                            </StackPanel>
-                        </RadioButton>
-                        
-                        <RadioButton Style="{StaticResource MenuButtonTheme}"
-                                     Tag="{StaticResource CustomGreenColor1}"
-                                     Command="{Binding ShowPatientsViewCommand}">
-                            <StackPanel Orientation="Horizontal">
-                                <fa:IconImage Icon="UserInjured" Style="{StaticResource  MenuButtonIcon}"/>
-                                <TextBlock Text="Patients" Style="{StaticResource MenuButtonText}"/> 
-                            </StackPanel>
-                        </RadioButton>
-                        
-                        <RadioButton Style="{StaticResource MenuButtonTheme}"
-                                     Tag="{StaticResource CustomVioletColor1}"
-                                     Command="{Binding ShowDoctorsViewCommand}">
-                            <StackPanel Orientation="Horizontal">
-                                <fa:IconImage Icon="UserDoctor" Style="{StaticResource  MenuButtonIcon}"/>
-                                <TextBlock Text="Doctors" Style="{StaticResource MenuButtonText}"/> 
-                            </StackPanel>
-                        </RadioButton>
-                        
-                        <RadioButton Style="{StaticResource MenuButtonTheme}"
-                                     Tag="{StaticResource CustomRedColor1}">
-                            <StackPanel Orientation="Horizontal">
-                                <fa:IconImage Icon="Calendar" Style="{StaticResource  MenuButtonIcon}"/>
-                                <TextBlock Text="Appointments" Style="{StaticResource MenuButtonText}"/> 
-                            </StackPanel>
-                        </RadioButton>
-                        
-                        <RadioButton Style="{StaticResource MenuButtonTheme}"
-                                     Tag="{StaticResource CustomOrangeColor1}">
-                            <StackPanel Orientation="Horizontal">
-                                <fa:IconImage Icon="PrescriptionBottleMedical" Style="{StaticResource  MenuButtonIcon}"/>
-                                <TextBlock Text="Prescriptions" Style="{StaticResource MenuButtonText}"/> 
-                            </StackPanel>
-                        </RadioButton>
-                        
-                        <RadioButton Style="{StaticResource MenuButtonTheme}"
-                                     Tag="{StaticResource CustomBlueColor1}">
-                            <StackPanel Orientation="Horizontal">
-                                <fa:IconImage Icon="NotesMedical" Style="{StaticResource  MenuButtonIcon}"/>
-                                <TextBlock Text="Notes" Style="{StaticResource MenuButtonText}"/> 
-                            </StackPanel>
-                        </RadioButton>
-                        
-                        <RadioButton Style="{StaticResource MenuButtonTheme}"
-                                     Tag="{StaticResource CustomYellowColor1}">
-                            <StackPanel Orientation="Horizontal">
-                                <fa:IconImage Icon="Receipt" Style="{StaticResource  MenuButtonIcon}"/>
-                                <TextBlock Text="Referrals" Style="{StaticResource MenuButtonText}"/> 
-                            </StackPanel>
-                        </RadioButton>
-                        
-                        <RadioButton Style="{StaticResource MenuButtonTheme}"
-                                     Tag="{StaticResource CustomCoralColor1}">
-                            <StackPanel Orientation="Horizontal">
-                                <fa:IconImage Icon="FileInvoiceDollar" Style="{StaticResource  MenuButtonIcon}"/>
-                                <TextBlock Text="Invoices" Style="{StaticResource MenuButtonText}"/> 
-                            </StackPanel>
-                        </RadioButton>
-                        
-                        <RadioButton Style="{StaticResource MenuButtonTheme}"
-                                     Tag="{StaticResource CustomTurquoiseColor1}"
-                                     Command="{Binding ShowDiseasesViewCommand}">
-                            <StackPanel Orientation="Horizontal">
-                                <fa:IconImage Icon="Disease" Style="{StaticResource  MenuButtonIcon}"/>
-                                <TextBlock Text="Diseases" Style="{StaticResource MenuButtonText}"/> 
-                            </StackPanel>
-                        </RadioButton>
-                        
-                        <RadioButton Style="{StaticResource MenuButtonTheme}"
-                                     Tag="{StaticResource CustomPlumColor1}"
-                                     Command="{Binding ShowMedicinesViewCommand}">
-                            <StackPanel Orientation="Horizontal">
-                                <fa:IconImage Icon="Capsules" Style="{StaticResource  MenuButtonIcon}"/>
-                                <TextBlock Text="Medicines" Style="{StaticResource MenuButtonText}"/> 
-                            </StackPanel>
-                        </RadioButton>
-                    </StackPanel>
-                </Grid>
-            </Border>
+            <components:NavigationBar Grid.Column="0" DataContext="{Binding NavigationBarViewModel}"/>
             
             <Border Grid.Column="1">
                 <Grid>
@@ -196,7 +89,7 @@
                         </StackPanel>
                     </Grid>
                     
-                    <ContentControl Content="{Binding CurrentView}" Grid.Row="1" Margin="15"/>
+                    <ContentControl Content="{Binding CurrentViewModel}" Grid.Row="1" Margin="15"/>
                 </Grid>
             </Border>
         </Grid>

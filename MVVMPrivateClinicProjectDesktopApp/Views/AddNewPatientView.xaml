@@ -60,8 +60,18 @@
                             Style="{StaticResource FormInputErrorsStyle}" 
                             FormText="{Binding LastName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             LabelTitle="Last Name*"/>
-                        <components:FormInput LabelTitle="Phone Number"/>
-                        <components:FormInput LabelTitle="E-mail Address"/>
+                        <components:FormInput
+                            x:Name="PhoneNumberInput" 
+                            ErrorMessage="{Binding ElementName=PhoneNumberInput, Path=(Validation.Errors)[0].ErrorContent}"
+                            Style="{StaticResource FormInputErrorsStyle}" 
+                            FormText="{Binding PhoneNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            LabelTitle="Phone Number"/>
+                        <components:FormInput
+                            x:Name="EmailInput" 
+                            ErrorMessage="{Binding ElementName=EmailInput, Path=(Validation.Errors)[0].ErrorContent}"
+                            Style="{StaticResource FormInputErrorsStyle}" 
+                            FormText="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            LabelTitle="E-mail Address"/>
                     </StackPanel>
                 </Border>
             
@@ -95,7 +105,12 @@
                                 DockPanel.Dock="Left"  
                                 Width="215" 
                                 LabelTitle="Building Number*"/>
-                            <components:FormInput DockPanel.Dock="Right" Margin="10 0 0 0" Width="215" LabelTitle="Local Number"/>
+                            <components:FormInput 
+                                DockPanel.Dock="Right" 
+                                Margin="10 0 0 0" 
+                                Width="215"
+                                FormText="{Binding LocalNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                LabelTitle="Local Number"/>
                         </DockPanel>
                     </StackPanel>
                 </Border>

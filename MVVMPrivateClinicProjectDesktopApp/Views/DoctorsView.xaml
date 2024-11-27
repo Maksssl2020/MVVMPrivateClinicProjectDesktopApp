@@ -72,7 +72,7 @@
             <ScrollViewer  Style="{StaticResource ScrollBarTheme}" Grid.Row="2">
                 <ItemsControl ItemsSource="{Binding DoctorsView}" Padding="10 0" Margin="0 25 0 0">
                     <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="{x:Type dto:DoctorDTO}">
+                        <DataTemplate DataType="{x:Type dto:DoctorDto}">
                             <Border Padding="5 0 5 0" BorderBrush="{StaticResource CustomGrayColor1}" BorderThickness="0 0 0 2" Height="45">
                                 <Grid  VerticalAlignment="Center">
                                     <Grid.ColumnDefinitions>

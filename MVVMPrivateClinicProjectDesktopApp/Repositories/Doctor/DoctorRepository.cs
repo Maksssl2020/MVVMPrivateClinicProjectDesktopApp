@@ -8,12 +8,12 @@ using MVVMPrivateClinicProjectDesktopApp.Repositories.DoctorSpecialization;
 namespace MVVMPrivateClinicProjectDesktopApp.Repositories.Doctor;
 
 public class DoctorRepository(IMapper mapper, IDoctorSpecializationRepository doctorSpecializationRepository) : RepositoryBase, IDoctorRepository {
-    public async Task<IEnumerable<DoctorDTO>> GetAllDoctors(){
+    public async Task<IEnumerable<DoctorDto>> GetAllDoctors(){
         var doctors = await DbContext.Doctors.ToListAsync();
         var specializations = await doctorSpecializationRepository.GetAllDoctorSpecializations();
 
         return doctors.Select(doctor => {
-            var doctorDto = mapper.Map<DoctorDTO>(doctor);
+            var doctorDto = mapper.Map<DoctorDto>(doctor);
             var doctorSpecialization = specializations.FirstOrDefault(s => s.Id == doctor.IdDoctorSpecialization);
             doctorDto.DoctorSpecialization = doctorSpecialization?.Name;
             

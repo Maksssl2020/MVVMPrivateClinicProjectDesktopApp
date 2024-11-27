@@ -1,11 +1,9 @@
-using System.Windows.Input;
-using MVVMPrivateClinicProjectDesktopApp.ViewModels;
+using MVVMPrivateClinicProjectDesktopApp.Services;
 
 namespace MVVMPrivateClinicProjectDesktopApp.Commands;
 
-public class NavigateCommand<T>(Action execute) : RelayCommand
-    where T : ViewModelBase {
+public class NavigateCommand(NavigationService navigationService) : RelayCommand {
     public override void Execute(object? parameter){
-        execute();
+        navigationService.Navigate();
     }
 }

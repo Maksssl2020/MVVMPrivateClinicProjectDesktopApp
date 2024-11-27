@@ -1,16 +1,15 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Data;
-using System.Windows.Input;
-using MVVMPrivateClinicProjectDesktopApp.Commands;
 using MVVMPrivateClinicProjectDesktopApp.Models.Entities;
-using MVVMPrivateClinicProjectDesktopApp.Repositories.Address;
 using MVVMPrivateClinicProjectDesktopApp.Repositories.Patient;
+using MVVMPrivateClinicProjectDesktopApp.Stores;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
 public class PatientsViewModel : ViewModelBase {
     private readonly IPatientRepository _patientRepository;
+    private readonly PatientStore _patientStore;
     
     private string _patientsFilter = string.Empty;
     
@@ -26,13 +25,22 @@ public class PatientsViewModel : ViewModelBase {
         }
     }
     
-    public PatientsViewModel(){
+    public PatientsViewModel(PatientStore patientStore){
         _patientRepository = new PatientRepository();
+        _patientStore = patientStore;
         
         LoadPatientsAsync();
         
         PatientsView = CollectionViewSource.GetDefaultView(Patients);
         PatientsView.Filter = FilterPatients;
+
+        _patientStore.PatientCreated += OnPatientCreated;
+    }
+
+    public PatientsViewModel() {}
+    
+    private void OnPatientCreated(Patient patient){
+        Patients.Add(patient);
     }
 
     private async void LoadPatientsAsync(){
