@@ -1,7 +1,6 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Data;
-using MVVMPrivateClinicProjectDesktopApp.Models.Entities;
 using MVVMPrivateClinicProjectDesktopApp.Repositories.Medicine;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;

@@ -22,12 +22,15 @@ public partial class App : Application {
 
     private readonly ServiceProvider _serviceProvider;
     private readonly NavigationStore _navigationStore;
+    private readonly ModalNavigationStore _modalNavigationStore;
     private readonly PatientStore _patientStore;
     private readonly NavigationBarViewModel _navigationBarViewModel;
+    private readonly ModalNavigationViewModel _modalNavigationViewModel;
     
     public App(){
         _navigationStore = new NavigationStore();
         _patientStore = new PatientStore();
+        _modalNavigationStore = new ModalNavigationStore();
         _navigationBarViewModel = new NavigationBarViewModel(
             CreateHomeNavigationService(),
             CreatePatientsNavigationService(),
@@ -35,6 +38,10 @@ public partial class App : Application {
             CreateDiseasesNavigationService(),
             CreateMedicinesNavigationService()
         );
+        _modalNavigationViewModel = new ModalNavigationViewModel(
+            CreateAddNewPatientsNavigationService(),
+            CreateDeletePatientsNavigationService()
+            );
         
         IServiceCollection services = new ServiceCollection();
         services.AddAutoMapper(typeof(App));
@@ -55,23 +62,31 @@ public partial class App : Application {
         base.OnStartup(e);
     }
 
-    private NavigationService CreateHomeNavigationService(){
+    private NavigationServiceBase CreateHomeNavigationService(){
         return new NavigationService(_navigationStore, () => new HomeViewModel());
     }
     
-    private NavigationService CreatePatientsNavigationService(){
-        return new NavigationService(_navigationStore, () => new PatientsViewModel(_patientStore));
+    private NavigationServiceBase CreatePatientsNavigationService(){
+        return new NavigationService(_navigationStore, () => PatientsViewModel.LoadPatientsViewModel(_patientStore, _modalNavigationViewModel));
     }
     
-    private NavigationService CreateDoctorsNavigationService(){
+    private NavigationServiceBase CreateDoctorsNavigationService(){
         return new NavigationService(_navigationStore, () => new DoctorsViewModel());
     }
     
-    private NavigationService CreateDiseasesNavigationService(){
+    private NavigationServiceBase CreateDiseasesNavigationService(){
         return new NavigationService(_navigationStore, () => new DiseasesViewModel());
     }
     
-    private NavigationService CreateMedicinesNavigationService(){
+    private NavigationServiceBase CreateMedicinesNavigationService(){
         return new NavigationService(_navigationStore, () => new MedicinesViewModel());
+    }
+
+    private NavigationServiceBase CreateAddNewPatientsNavigationService(){
+        return new ModalNavigationService(_modalNavigationStore, () => new AddNewPatientViewModel(_patientStore));
+    }
+
+    private NavigationServiceBase CreateDeletePatientsNavigationService(){
+        return new ModalNavigationService(_modalNavigationStore, () => new DeletePatientViewModel(_patientStore));
     }
 }

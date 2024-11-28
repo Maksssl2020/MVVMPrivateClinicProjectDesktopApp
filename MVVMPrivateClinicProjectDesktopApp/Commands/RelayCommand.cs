@@ -9,7 +9,7 @@ public abstract class RelayCommand : ICommand {
     public virtual bool CanExecute(object? parameter) => true;
     public abstract void Execute(object? parameter);
 
-    public void RaiseCanExecuteChanged() {
+    public void OnCanExecuteChanged() {
         CanExecuteChanged?.Invoke(this, EventArgs.Empty);
     }
 }

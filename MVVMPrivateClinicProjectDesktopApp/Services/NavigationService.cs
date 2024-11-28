@@ -1,13 +1,11 @@
-using System.Diagnostics;
-using MVVMPrivateClinicProjectDesktopApp.Helpers;
 using MVVMPrivateClinicProjectDesktopApp.Stores;
 using MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
 namespace MVVMPrivateClinicProjectDesktopApp.Services;
 
-public class NavigationService(NavigationStore navigationStore, Func<ViewModelBase> createViewModel) {
+public class NavigationService(NavigationStore navigationStore, Func<ViewModelBase> createViewModel) : NavigationServiceBase {
 
-    public void Navigate(){
+    public override void Navigate(){
         var viewModel = createViewModel();
         var viewTitle = GetViewTitleDependsOnCreatedViewModel(viewModel);
         navigationStore.ChangeCurrentViewModel(viewModel, viewTitle);

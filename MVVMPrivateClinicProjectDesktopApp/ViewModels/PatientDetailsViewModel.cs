@@ -1,4 +1,3 @@
-using MVVMPrivateClinicProjectDesktopApp.Models.Entities;
 using MVVMPrivateClinicProjectDesktopApp.Repositories.Address;
 using MVVMPrivateClinicProjectDesktopApp.Repositories.Patient;
 

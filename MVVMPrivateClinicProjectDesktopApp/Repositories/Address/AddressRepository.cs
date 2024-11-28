@@ -1,12 +1,13 @@
+using System.Data.Entity;
 using Microsoft.EntityFrameworkCore;
 using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
 
 namespace MVVMPrivateClinicProjectDesktopApp.Repositories.Address;
 
 public class AddressRepository : RepositoryBase, IAddressRepository {
-    public Models.Entities.Address SaveAddress(SaveAddressRequest address) {
+    public async Task<Models.Entities.Address> SaveAddressAsync(SaveAddressRequest address) {
 
-        var foundAddress = AddressExists(address);
+        var foundAddress = await AddressExists(address);
         
         if (foundAddress != null) {
             return foundAddress;
@@ -20,15 +21,15 @@ public class AddressRepository : RepositoryBase, IAddressRepository {
             LocalNumber = address?.LocalNumber,
         };
         
-        DbContext.Addresses.Add(createdAddress);
-        DbContext.SaveChanges();
+        await DbContext.Addresses.AddAsync(createdAddress);
+        await DbContext.SaveChangesAsync();
         
         return createdAddress;
     }
 
-    private Models.Entities.Address? AddressExists(SaveAddressRequest address){
-        return DbContext.Addresses
-            .FirstOrDefault(
+    private async Task<Models.Entities.Address?> AddressExists(SaveAddressRequest address){
+        return await DbContext.Addresses
+            .FirstOrDefaultAsync(
                 a =>
                     a.City == address.City &&
                     a.PostalCode == address.PostalCode &&

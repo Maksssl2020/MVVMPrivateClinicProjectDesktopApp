@@ -6,11 +6,11 @@ using MVVMPrivateClinicProjectDesktopApp.Services;
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
 public class NavigationBarViewModel(
-    NavigationService homeNavigationService,
-    NavigationService patientsNavigationService,
-    NavigationService doctorsNavigationService,
-    NavigationService diseasesNavigationService,
-    NavigationService medicinesNavigationService)
+    NavigationServiceBase homeNavigationService,
+    NavigationServiceBase patientsNavigationService,
+    NavigationServiceBase doctorsNavigationService,
+    NavigationServiceBase diseasesNavigationService,
+    NavigationServiceBase medicinesNavigationService)
     : ViewModelBase {
     
     public ICommand ShowHomeViewCommand { get; set; } = new NavigateCommand(homeNavigationService);

@@ -1,6 +1,5 @@
 using AutoMapper;
 using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
-using MVVMPrivateClinicProjectDesktopApp.Models.Entities;
 
 namespace MVVMPrivateClinicProjectDesktopApp.Helpers;
 

@@ -5,19 +5,17 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
              xmlns:viewModel="clr-namespace:MVVMPrivateClinicProjectDesktopApp.ViewModels"
+             xmlns:view="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Views"
              xmlns:entities="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Models.Entities"
              mc:Ignorable="d"
              FontFamily="/Fonts/#OpenSans"
              d:DesignHeight="675" 
-             d:DesignWidth="1000">
-    
-    <UserControl.DataContext>
-        <viewModel:PatientsViewModel/>
-    </UserControl.DataContext>
+             d:DesignWidth="1000"
+             d:DataContext="{d:DesignInstance viewModel:PatientsViewModel}">
     
     <Border Background="{StaticResource CustomBlackColor1}">
+        
         <Grid>
-           
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="60"/>
@@ -41,7 +39,7 @@
                     </Border>
                     
                     <Button Grid.Column="1" 
-                            Click="AddPatientButton_OnClick"
+                            Command="{Binding ShowAddNewPatientModal}"
                             Style="{StaticResource ButtonWithIconLarge}"
                             Tag="{StaticResource CustomGreenColor1}">
                         <StackPanel Style="{StaticResource ButtonStackPanel}">
@@ -85,7 +83,7 @@
                                         <ColumnDefinition Width="125"/>
                                         <ColumnDefinition Width="125"/>
                                         <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="45"/>
+                                        <ColumnDefinition Width="100"/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock VerticalAlignment="Center" Foreground="White" Grid.Column="0" Text="{Binding Id}"/>
                                     <TextBlock VerticalAlignment="Center" Foreground="White" Grid.Column="1" Text="{Binding PatientCode}"/>
@@ -93,12 +91,19 @@
                                     <TextBlock VerticalAlignment="Center" Foreground="White" Grid.Column="3" Text="{Binding LastName}"/>
                                     <TextBlock VerticalAlignment="Center" Foreground="White" Grid.Column="4" Text="{Binding PhoneNumber}"/>
                                     <TextBlock VerticalAlignment="Center" Foreground="White" Grid.Column="5" Text="{Binding EmailAddress}"/>
-                                    <Button Grid.Column="6" 
-                                            Style="{StaticResource ButtonWithIconSmall}"
-                                            Tag="{StaticResource CustomBlueColor1}" 
-                                            Click="SeePatientDetailsButton_OnClick">
-                                        <fa:IconImage Style="{StaticResource IconButtonSmall}" Icon="Eye"/>
-                                    </Button>
+                                    <StackPanel Orientation="Horizontal" Grid.Column="6">
+                                        <Button Style="{StaticResource ButtonWithIconSmall}"
+                                                Tag="{StaticResource CustomBlueColor1}" 
+                                                Click="SeePatientDetailsButton_OnClick">
+                                            <fa:IconImage Style="{StaticResource IconButtonSmall}" Icon="Eye"/>
+                                        </Button>
+                                        <Button Style="{StaticResource ButtonWithIconSmall}"
+                                                Tag="{StaticResource CustomRedColor1}"
+                                                Command="{Binding SetPatientIdToDeleteAndShowWarningModalCommand, RelativeSource={RelativeSource AncestorType=viewModel:PatientsViewModel}}"
+                                                CommandParameter="{Binding Id}">
+                                            <fa:IconImage Style="{StaticResource IconButtonSmall}" Icon="Trash"/>
+                                        </Button>
+                                    </StackPanel>
                                 </Grid>
                             </Border>
                         </DataTemplate>

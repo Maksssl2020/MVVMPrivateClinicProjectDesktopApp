@@ -4,7 +4,6 @@ using System.Windows.Data;
 using AutoMapper;
 using MVVMPrivateClinicProjectDesktopApp.Helpers;
 using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
-using MVVMPrivateClinicProjectDesktopApp.Models.Entities;
 using MVVMPrivateClinicProjectDesktopApp.Repositories.Doctor;
 using MVVMPrivateClinicProjectDesktopApp.Repositories.DoctorSpecialization;
 

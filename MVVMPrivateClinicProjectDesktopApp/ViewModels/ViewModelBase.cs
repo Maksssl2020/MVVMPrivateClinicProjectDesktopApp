@@ -40,4 +40,6 @@ public class ViewModelBase : INotifyPropertyChanged, INotifyDataErrorInfo {
         
         ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
     }
+    
+    public virtual void Dispose(){}
 }

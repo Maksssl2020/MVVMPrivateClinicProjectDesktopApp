@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:local="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Views"
         xmlns:components="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Views.Components"
         xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
         xmlns:viewModel="clr-namespace:MVVMPrivateClinicProjectDesktopApp.ViewModels"
@@ -14,11 +13,8 @@
         WindowStyle="None" 
         WindowStartupLocation="CenterScreen"
         Background="Transparent"
-        AllowsTransparency="True">
-    
-    <Window.DataContext>
-        <viewModel:AddNewPatientViewModel/>
-    </Window.DataContext>
+        AllowsTransparency="True"
+        d:DataContext="{d:DesignInstance viewModel:AddNewPatientViewModel}">
     
     <Border MouseLeftButtonDown="MouseLeftButtonDown_Hold" BorderThickness="2" BorderBrush="{StaticResource CustomGrayColor1}" Background="{StaticResource CustomBlackColor1}" CornerRadius="20" Padding="20">
         <Grid>
@@ -106,6 +102,7 @@
                                 Width="215" 
                                 LabelTitle="Building Number*"/>
                             <components:FormInput 
+                                x:Name="LocalNumberInput"
                                 DockPanel.Dock="Right" 
                                 Margin="10 0 0 0" 
                                 Width="215"
@@ -116,7 +113,15 @@
                 </Border>
             </Grid>
             
-            <StackPanel Grid.Row="2" HorizontalAlignment="Right">
+            <StackPanel Grid.Row="2" HorizontalAlignment="Right" Orientation="Horizontal">
+                <Button
+                    Style="{StaticResource CommonButton}"
+                    Click="buttonClearForm_Click"
+                    Content="Clear Form"
+                    BorderBrush="Transparent"
+                    BorderThickness="0"
+                    Margin="0 0 5 0"
+                    Tag="{StaticResource CustomGreenColor1}"/>
                 <components:ButtonWithIcon
                     ButtonText="Add New Patient"
                     IconName="Plus"

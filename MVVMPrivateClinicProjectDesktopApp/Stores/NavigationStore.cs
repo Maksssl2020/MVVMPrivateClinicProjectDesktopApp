@@ -5,18 +5,20 @@ using MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
 namespace MVVMPrivateClinicProjectDesktopApp.Stores;
 
-public class NavigationStore {
-    public event Action? CurrentViewModelChanged;
-
-    public ViewModelBase CurrentViewModel { get; set; } = null!;
+public class NavigationStore : NavigationStoreBase {
     public string ViewTitle { get; set; } = null!;
     public IconChar ViewIcon { get; set; }
     public SolidColorBrush HeaderBrush { get; set; } = null!;
 
     public void ChangeCurrentViewModel(ViewModelBase viewModel, string viewTitle){
+        if (CurrentViewModel != null) {
+            CurrentViewModel.Dispose();
+        }
+        
         CurrentViewModel = viewModel;
         ViewTitle = viewTitle;
         ChangeIconAndColorInHeaderDependsOnViewModelTitle(viewTitle);
+        
         OnCurrentViewModelChanged();
     }
 
@@ -53,9 +55,5 @@ public class NavigationStore {
                 break;
             }
         }
-    }
-    
-    private void OnCurrentViewModelChanged(){
-        CurrentViewModelChanged?.Invoke();
     }
 }
