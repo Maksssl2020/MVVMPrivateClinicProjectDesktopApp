@@ -5,7 +5,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
              xmlns:viewModel="clr-namespace:MVVMPrivateClinicProjectDesktopApp.ViewModels"
-             xmlns:view="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Views"
              xmlns:entities="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Models.Entities"
              mc:Ignorable="d"
              FontFamily="/Fonts/#OpenSans"
@@ -99,8 +98,7 @@
                                         </Button>
                                         <Button Style="{StaticResource ButtonWithIconSmall}"
                                                 Tag="{StaticResource CustomRedColor1}"
-                                                Command="{Binding SetPatientIdToDeleteAndShowWarningModalCommand, RelativeSource={RelativeSource AncestorType=viewModel:PatientsViewModel}}"
-                                                CommandParameter="{Binding Id}">
+                                                Click="ShowDeleteWarningModal_OnClick">
                                             <fa:IconImage Style="{StaticResource IconButtonSmall}" Icon="Trash"/>
                                         </Button>
                                     </StackPanel>

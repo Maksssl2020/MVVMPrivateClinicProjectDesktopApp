@@ -10,8 +10,8 @@
 
         mc:Ignorable="d"
         Title="MainWindowView" 
-        Height="750" 
-        Width="1250" 
+        Height="800" 
+        Width="1350" 
         WindowStyle="None" 
         WindowStartupLocation="CenterScreen"
         Background="Transparent" 
@@ -28,6 +28,9 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type viewModel:DoctorsViewModel}">
             <local:DoctorsView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:AppointmentsViewModel}">
+            <local:AppointmentsView/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type viewModel:DiseasesViewModel}">
             <local:DiseasesView/>

@@ -13,8 +13,7 @@ public class PatientsViewModel : ViewModelBase {
     private readonly PatientStore _patientStore;
 
     public ICommand ShowAddNewPatientModal {get; set;}
-    private ICommand ShowDeletePatientModal { get; set; }
-    public ICommand SetPatientIdToDeleteAndShowWarningModalCommand { get; set; }
+    public ICommand ShowDeletePatientModal { get; set; }
     private ICommand LoadPatients { get; set; }
     
     private ObservableCollection<Patient> Patients { get; set; } = [];
@@ -37,7 +36,6 @@ public class PatientsViewModel : ViewModelBase {
         LoadPatients = new LoadPatientsCommand(this, patientStore);
         ShowAddNewPatientModal = modalNavigationViewModel.ShowAddNewPatientModal;
         ShowDeletePatientModal = modalNavigationViewModel.ShowDeletePatientModal;
-        SetPatientIdToDeleteAndShowWarningModalCommand = new PrepareDeletePatientCommand<int>(SetPatientIdToDeleteAndShowWarningModal);
         
         PatientsView = CollectionViewSource.GetDefaultView(Patients);
         PatientsView.Filter = FilterPatients;
@@ -55,10 +53,8 @@ public class PatientsViewModel : ViewModelBase {
         return patientsViewModel;
     }
 
-    private void SetPatientIdToDeleteAndShowWarningModal(int patientId) {
-        Console.WriteLine("CLICK!");
+    public void SetPatientIdToDelete(int patientId) {
         _patientStore.PatientIdToDelete = patientId;
-        ShowDeletePatientModal.Execute(null);
     }
     
     public override void Dispose(){

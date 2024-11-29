@@ -39,6 +39,11 @@ public class NavigationStore : NavigationStoreBase {
                 HeaderBrush = (SolidColorBrush)Application.Current.Resources["CustomVioletColor1"]!;
                 break;
             }
+            case "Appointments": {
+                ViewIcon = IconChar.Calendar;
+                HeaderBrush = (SolidColorBrush)Application.Current.Resources["CustomRedColor1"]!;
+                break;
+            }
             case "Diseases": {
                 ViewIcon = IconChar.Disease;
                 HeaderBrush = (SolidColorBrush)Application.Current.Resources["CustomTurquoiseColor1"]!;

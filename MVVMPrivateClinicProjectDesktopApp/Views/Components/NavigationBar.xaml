@@ -4,8 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+             xmlns:viewModel="clr-namespace:MVVMPrivateClinicProjectDesktopApp.ViewModels"
              mc:Ignorable="d"
-             d:DesignHeight="750" d:DesignWidth="250">
+             d:DesignHeight="750" d:DesignWidth="250"
+             d:DataContext="{d:DesignInstance viewModel:NavigationBarViewModel}">
     <Border Background="{StaticResource CustomGrayColor1}"  CornerRadius="20">
                 <Grid >
                     <Grid.RowDefinitions>
@@ -55,7 +57,8 @@
                         </RadioButton>
                         
                         <RadioButton Style="{StaticResource MenuButtonTheme}"
-                                     Tag="{StaticResource CustomRedColor1}">
+                                     Tag="{StaticResource CustomRedColor1}"
+                                     Command="{Binding ShowAppointmentsViewCommand}">
                             <StackPanel Orientation="Horizontal">
                                 <fa:IconImage Icon="Calendar" Style="{StaticResource  MenuButtonIcon}"/>
                                 <TextBlock Text="Appointments" Style="{StaticResource MenuButtonText}"/> 

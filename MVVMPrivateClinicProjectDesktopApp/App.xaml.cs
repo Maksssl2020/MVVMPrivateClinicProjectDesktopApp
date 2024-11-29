@@ -35,6 +35,7 @@ public partial class App : Application {
             CreateHomeNavigationService(),
             CreatePatientsNavigationService(),
             CreateDoctorsNavigationService(),
+            CreateAppointmentsNavigationService(),
             CreateDiseasesNavigationService(),
             CreateMedicinesNavigationService()
         );
@@ -72,6 +73,10 @@ public partial class App : Application {
     
     private NavigationServiceBase CreateDoctorsNavigationService(){
         return new NavigationService(_navigationStore, () => new DoctorsViewModel());
+    }
+
+    private NavigationService CreateAppointmentsNavigationService(){
+        return new NavigationService(_navigationStore, () => new AppointmentsViewModel());
     }
     
     private NavigationServiceBase CreateDiseasesNavigationService(){

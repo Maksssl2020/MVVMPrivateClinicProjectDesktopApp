@@ -37,6 +37,10 @@ public class PatientStore {
         OnPatientDeleted(patientId);
     }
 
+    public string? GetSelectedPatientCode(int patientId){
+        return _patients.Find(patient => patient.Id == patientId)?.PatientCode;
+    }
+    
     private void OnPatientDeleted(int patientId){
         PatientDeleted?.Invoke(patientId);
     }

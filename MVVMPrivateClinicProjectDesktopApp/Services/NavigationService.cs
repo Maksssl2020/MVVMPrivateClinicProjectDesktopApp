@@ -15,6 +15,7 @@ public class NavigationService(NavigationStore navigationStore, Func<ViewModelBa
         HomeViewModel => "Home",
         PatientsViewModel => "Patients",
         DoctorsViewModel => "Doctors",
+        AppointmentsViewModel => "Appointments",
         DiseasesViewModel => "Diseases",
         MedicinesViewModel => "Medicines",
         _ => "Home",
