@@ -6,15 +6,13 @@ using MVVMPrivateClinicProjectDesktopApp.ViewModels;
 namespace MVVMPrivateClinicProjectDesktopApp.Stores;
 
 public class NavigationStore : NavigationStoreBase {
-    public string ViewTitle { get; set; } = null!;
-    public IconChar ViewIcon { get; set; }
-    public SolidColorBrush HeaderBrush { get; set; } = null!;
+    public string ViewTitle { get; private set; } = null!;
+    public IconChar ViewIcon { get; private set; }
+    public SolidColorBrush HeaderBrush { get; private set; } = null!;
 
     public void ChangeCurrentViewModel(ViewModelBase viewModel, string viewTitle){
-        if (CurrentViewModel != null) {
-            CurrentViewModel.Dispose();
-        }
-        
+        CurrentViewModel?.Dispose();
+
         CurrentViewModel = viewModel;
         ViewTitle = viewTitle;
         ChangeIconAndColorInHeaderDependsOnViewModelTitle(viewTitle);

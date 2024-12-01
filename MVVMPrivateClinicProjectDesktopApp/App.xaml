@@ -13,6 +13,7 @@
                  <ResourceDictionary Source="Themes/FormTextBoxTheme.xaml"/>
                  <ResourceDictionary Source="Themes/FormInputErrorsTheme.xaml"/>
                  <ResourceDictionary Source="Themes/CommonButtonTheme.xaml"/>
+                 <ResourceDictionary Source="Themes/ButtonWithIconToToggle.xaml"/>
              </ResourceDictionary.MergedDictionaries>
          </ResourceDictionary>
     </Application.Resources>

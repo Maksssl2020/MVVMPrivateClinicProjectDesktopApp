@@ -10,6 +10,8 @@
              xmlns:entities="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Models.Entities"
              xmlns:dto="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Models.DTOs"
              xmlns:converters="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Converters"
+             xmlns:components="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Views.Components"
+
              FontFamily="/Fonts/#OpenSans"
              d:DesignHeight="725" 
              d:DesignWidth="1100"
@@ -18,15 +20,65 @@
     
     <UserControl.Resources>
         <converters:DateTimeFormatConverter x:Key="DateTimeFormatConverter"/>
+        <converters:AppointmentCardButtonsVisibilityConverter x:Key="AppointmentCardButtonsVisibilityConverter"/>
     </UserControl.Resources>
     
     <Border Background="{StaticResource CustomBlackColor1}">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="50"/>
+                <RowDefinition Height="75"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="75"/>
             </Grid.RowDefinitions>
+            
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal" Grid.Row="0">
+                <RadioButton Style="{StaticResource FilterToggleButtonStyle}" 
+                              Tag="{StaticResource CustomGreenColor1}"
+                              Command="{Binding AppendFilterCommand}"
+                              CommandParameter="Completed">
+                    <StackPanel Style="{StaticResource ToggleButtonStackPanel}">
+                        <fa:IconImage Style="{StaticResource ToggleButtonIcon}" Icon="CheckDouble"/>
+                        <TextBlock Text="Completed" Style="{StaticResource ToggleButtonText}"/>
+                    </StackPanel>
+                </RadioButton>
+                <RadioButton Style="{StaticResource FilterToggleButtonStyle}" 
+                              Tag="{StaticResource CustomMintBlueColor1}"
+                              Command="{Binding AppendFilterCommand}"
+                              CommandParameter="Accepted"
+                              IsChecked="True">
+                    <StackPanel Style="{StaticResource ToggleButtonStackPanel}">
+                        <fa:IconImage Style="{StaticResource ToggleButtonIcon}" Icon="Check"/>
+                        <TextBlock Text="Accepted" Style="{StaticResource ToggleButtonText}"/>
+                    </StackPanel>
+                </RadioButton>
+                <RadioButton Style="{StaticResource FilterToggleButtonStyle}" 
+                              Tag="{StaticResource CustomYellowColor1}"
+                              Command="{Binding AppendFilterCommand}"
+                              CommandParameter="Scheduled">
+                    <StackPanel Style="{StaticResource ToggleButtonStackPanel}">
+                        <fa:IconImage Style="{StaticResource ToggleButtonIcon}" Icon="Clock"/>
+                        <TextBlock Text="Scheduled" Style="{StaticResource ToggleButtonText}"/>
+                    </StackPanel>
+                </RadioButton>
+                <RadioButton Style="{StaticResource FilterToggleButtonStyle}" 
+                              Tag="{StaticResource CustomOrangeColor1}"
+                              Command="{Binding AppendFilterCommand}"
+                              CommandParameter="Canceled">
+                    <StackPanel Style="{StaticResource ToggleButtonStackPanel}">
+                        <fa:IconImage Style="{StaticResource ToggleButtonIcon}" Icon="Ban"/>
+                        <TextBlock Text="Canceled" Style="{StaticResource ToggleButtonText}"/>
+                    </StackPanel>
+                </RadioButton>
+                <RadioButton Style="{StaticResource FilterToggleButtonStyle}" 
+                              Tag="{StaticResource CustomRedColor1}"
+                              Command="{Binding AppendFilterCommand}"
+                              CommandParameter="PatientNoShow">
+                    <StackPanel Style="{StaticResource ToggleButtonStackPanel}">
+                        <fa:IconImage Style="{StaticResource ToggleButtonIcon}" Icon="UserSlash"/>
+                        <TextBlock Text="No Show" Style="{StaticResource ToggleButtonText}"/>
+                    </StackPanel>
+                </RadioButton>
+            </StackPanel>
             
             <ScrollViewer Grid.Row="1" HorizontalContentAlignment="Center">
                 <ItemsControl ItemsSource="{Binding AppointmentsView }">
@@ -77,6 +129,7 @@
                                                 <LineBreak/>
                                                 <Run FontWeight="Bold" Text="{Binding PatientFirstName}"/>
                                                 <Run FontWeight="Bold" Text="{Binding PatientLastName}"/>
+                                                <Run FontWeight="Bold" Text="{Binding Id}"/>
                                             </TextBlock>
                                             <TextBlock Grid.Column="1">
                                                 <Run  FontSize="14" Foreground="White" Text="App. Status"/>
@@ -86,7 +139,7 @@
                                         </Grid>
                                     </Border>
                                 </StackPanel>
-                                    <StackPanel Grid.Row="1" Height="40" Orientation="Horizontal" HorizontalAlignment="Center" >
+                                    <StackPanel Visibility="{Binding AppointmentStatus, Converter={StaticResource AppointmentCardButtonsVisibilityConverter}}" Grid.Row="1" Height="40" Orientation="Horizontal" HorizontalAlignment="Center" >
                                         <Button Height="40" Tag="{StaticResource CustomBlueColor1}" Style="{StaticResource CommonButton}">ACCEPT</Button>
                                         <Button Height="40" Tag="{StaticResource CustomRedColor1}" Style="{StaticResource CommonButton}">CANCEL</Button>
                                     </StackPanel>
@@ -96,6 +149,29 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </ScrollViewer>
+            
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="2">
+                <Button Style="{StaticResource ControlBarButton}"
+                        Tag="{StaticResource CustomBlueColor1}"
+                        Width="50" Height="50"
+                        Margin="00 0 20 0"
+                        Click="ButtonBackPage_Click">
+                    <fa:IconImage Icon="ChevronLeft" Style="{StaticResource ControlBarButtonIcon}"/>
+                </Button>
+                <Button Style="{StaticResource ControlBarButton}"
+                        Tag="{StaticResource CustomBlueColor1}"
+                        Width="50" Height="50"
+                        Content="{Binding CurrentPageDisplay}"
+                        FontWeight="Bold" FontSize="18">
+                </Button>
+                <Button Style="{StaticResource ControlBarButton}"
+                        Tag="{StaticResource CustomBlueColor1}"
+                        Width="50" Height="50"
+                        Margin="20 0 0 0"
+                        Click="ButtonNextPage_Click">
+                    <fa:IconImage Icon="ChevronRight" Style="{StaticResource ControlBarButtonIcon}"/>
+                </Button>
+            </StackPanel>
         </Grid>
     </Border>
 </UserControl>

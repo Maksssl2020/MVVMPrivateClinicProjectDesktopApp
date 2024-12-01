@@ -9,7 +9,9 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Button Style="{StaticResource ButtonWithIconLarge}"
             Tag="{Binding TextColor, ElementName=Root}"
-            Command="{Binding Command, ElementName=Root}">
+            Command="{Binding Command, ElementName=Root}"
+            Width="{Binding ButtonWidth, ElementName=Root}"
+            Height="{Binding ButtonHeight, ElementName=Root}">
         <StackPanel Style="{StaticResource ButtonStackPanel}">
             <fa:IconImage Margin="0 0 5 0" 
                           Icon="{Binding IconName, ElementName=Root}" 

@@ -22,6 +22,14 @@ public partial class ButtonWithIcon : UserControl {
         DependencyProperty.Register(nameof(Command), typeof(ICommand), typeof(ButtonWithIcon),
             new PropertyMetadata(null));
     
+    public static readonly DependencyProperty ButtonWidthProperty = 
+        DependencyProperty.Register(nameof(ButtonWidth), typeof(double), typeof(ButtonWithIcon),
+            new PropertyMetadata(150.0d));
+    
+    public static readonly DependencyProperty ButtonHeightProperty = 
+        DependencyProperty.Register(nameof(ButtonHeight), typeof(double), typeof(ButtonWithIcon),
+            new PropertyMetadata(50.0d));
+    
     public string IconName {
         get => (string)GetValue(IconNameProperty);
         set => SetValue(IconNameProperty, value);
@@ -40,6 +48,16 @@ public partial class ButtonWithIcon : UserControl {
     public ICommand Command {
         get => (ICommand)GetValue(CommandProperty);
         set => SetValue(CommandProperty, value);
+    }
+
+    public double ButtonWidth {
+        get => (double)GetValue(ButtonWidthProperty);
+        set => SetValue(ButtonWidthProperty, value);
+    }
+
+    public double ButtonHeight {
+        get => (double)GetValue(ButtonHeightProperty); 
+        set => SetValue(ButtonHeightProperty, value);
     }
     
     public ButtonWithIcon(){

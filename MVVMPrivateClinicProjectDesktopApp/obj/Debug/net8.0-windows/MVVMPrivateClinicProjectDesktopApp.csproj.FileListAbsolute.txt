@@ -181,3 +181,4 @@ C:\Users\maksy\RiderProjects\MVVMPrivateClinicProjectDesktopApp\MVVMPrivateClini
 C:\Users\maksy\RiderProjects\MVVMPrivateClinicProjectDesktopApp\MVVMPrivateClinicProjectDesktopApp\obj\Debug\net8.0-windows\Views\DeletePatientView.baml
 C:\Users\maksy\RiderProjects\MVVMPrivateClinicProjectDesktopApp\MVVMPrivateClinicProjectDesktopApp\obj\Debug\net8.0-windows\Views\AppointmentsView.g.cs
 C:\Users\maksy\RiderProjects\MVVMPrivateClinicProjectDesktopApp\MVVMPrivateClinicProjectDesktopApp\obj\Debug\net8.0-windows\Views\AppointmentsView.baml
+C:\Users\maksy\RiderProjects\MVVMPrivateClinicProjectDesktopApp\MVVMPrivateClinicProjectDesktopApp\obj\Debug\net8.0-windows\Themes\ButtonWithIconToToggle.baml
