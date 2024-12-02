@@ -8,7 +8,7 @@ public class MainWindowViewModel: ViewModelBase {
     private readonly NavigationStore _navigationStore;
     public NavigationBarViewModel NavigationBarViewModel { get; }
     
-    public ViewModelBase CurrentViewModel => _navigationStore.CurrentViewModel;
+    public ViewModelBase CurrentViewModel => _navigationStore.CurrentViewModel!;
     public string ViewTitle => _navigationStore.ViewTitle;
     public IconChar ViewIcon => _navigationStore.ViewIcon;
     public SolidColorBrush HeaderBrush => _navigationStore.HeaderBrush;

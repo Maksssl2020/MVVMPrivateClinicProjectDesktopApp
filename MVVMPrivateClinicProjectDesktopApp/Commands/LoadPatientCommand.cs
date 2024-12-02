@@ -1,8 +1,20 @@
+using MVVMPrivateClinicProjectDesktopApp.Stores;
+using MVVMPrivateClinicProjectDesktopApp.ViewModels;
+
 namespace MVVMPrivateClinicProjectDesktopApp.Commands;
 
-public class LoadPatientCommand<T>(Action<T> execute) : RelayCommand {
-    public override void Execute(object? parameter){
-        if (parameter == null) return; 
-        execute((T)parameter);
+public class LoadPatientCommand(PatientDataModalViewModel patientDataModalViewModel, PatientStore patientStore) : AsyncRelayCommand {
+    public override async Task ExecuteAsync(object? parameter){
+        try {
+            await patientStore.LoadPatientData();
+            if (patientStore.SelectedPatientData != null) {
+                patientDataModalViewModel.SelectedPatient = patientStore.SelectedPatientData;
+                Console.WriteLine($"Selected Patient: {patientStore.SelectedPatientData.FirstName}");
+            }
+        }
+        catch (Exception e) {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 }

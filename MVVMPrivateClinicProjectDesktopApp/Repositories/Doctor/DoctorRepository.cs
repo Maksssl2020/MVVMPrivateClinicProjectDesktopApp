@@ -1,15 +1,15 @@
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
-using MVVMPrivateClinicProjectDesktopApp.Helpers;
+using MVVMPrivateClinicProjectDesktopApp.DbContext;
 using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
 using MVVMPrivateClinicProjectDesktopApp.Repositories.DoctorSpecialization;
 
 namespace MVVMPrivateClinicProjectDesktopApp.Repositories.Doctor;
 
-public class DoctorRepository(IMapper mapper, IDoctorSpecializationRepository doctorSpecializationRepository) : RepositoryBase, IDoctorRepository {
+public class DoctorRepository(DbContextFactory dbContextFactory, IMapper mapper, IDoctorSpecializationRepository doctorSpecializationRepository) : IDoctorRepository {
     public async Task<IEnumerable<DoctorDto>> GetAllDoctors(){
-        var doctors = await DbContext.Doctors.ToListAsync();
+        await using var context = dbContextFactory.CreateDbContext();
+        var doctors = await context.Doctors.ToListAsync();
         var specializations = await doctorSpecializationRepository.GetAllDoctorSpecializations();
 
         return doctors.Select(doctor => {
@@ -19,5 +19,17 @@ public class DoctorRepository(IMapper mapper, IDoctorSpecializationRepository do
             
             return doctorDto;
         }).ToList();
+    }
+
+    public async Task<DoctorDto?> GetDoctorByIdAsync(int id){
+        await using var context = dbContextFactory.CreateDbContext();
+        var foundDoctor = await context.Doctors.FirstOrDefaultAsync(doctor => doctor.Id == id);
+        if (foundDoctor == null) return null;
+        var foundSpecialization = await doctorSpecializationRepository.GetDoctorSpecializationById(foundDoctor.Id);
+        
+        var doctorDto = mapper.Map<DoctorDto>(foundDoctor);
+        doctorDto.DoctorSpecialization = foundSpecialization?.Name;
+        
+        return doctorDto;
     }
 }

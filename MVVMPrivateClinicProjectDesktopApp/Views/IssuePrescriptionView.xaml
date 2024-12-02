@@ -1,0 +1,42 @@
+<UserControl x:Class="MVVMPrivateClinicProjectDesktopApp.Views.IssuePrescriptionView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Views"
+             mc:Ignorable="d"
+             d:DesignHeight="550"
+             d:DesignWidth="1205"
+             Background="Transparent">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="475"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="75"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+            
+            <Grid Grid.Row="0" VerticalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <TextBlock FontSize="18" Text="Id" Foreground="White" Grid.Column="0"/>
+                <TextBlock FontSize="18" Text="Medicine Name" Foreground="White" Grid.Column="1"/>
+                <TextBlock FontSize="18" Text="Medicine Type" Foreground="White" Grid.Column="2"/>
+            </Grid>
+            
+            <ListView SelectionMode="Multiple" Grid.Row="1" Background="Transparent" Foreground="White">
+                <ListViewItem>ITEM 1</ListViewItem>
+                <ListViewItem>ITEM 1</ListViewItem>
+                <ListViewItem>ITEM 1</ListViewItem>
+            </ListView>
+        </Grid>
+    </Grid>
+</UserControl>

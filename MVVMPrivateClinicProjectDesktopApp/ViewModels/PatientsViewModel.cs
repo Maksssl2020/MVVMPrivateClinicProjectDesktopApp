@@ -2,10 +2,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Data;
 using System.Windows.Input;
-using CommunityToolkit.Mvvm.Input;
 using MVVMPrivateClinicProjectDesktopApp.Commands;
 using MVVMPrivateClinicProjectDesktopApp.Stores;
-using RelayCommand = CommunityToolkit.Mvvm.Input.RelayCommand;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
@@ -14,6 +12,7 @@ public class PatientsViewModel : ViewModelBase {
 
     public ICommand ShowAddNewPatientModal {get; set;}
     public ICommand ShowDeletePatientModal { get; set; }
+    public ICommand ShowPatientDataModal { get; set; }
     private ICommand LoadPatients { get; set; }
     
     private ObservableCollection<Patient> Patients { get; set; } = [];
@@ -36,6 +35,7 @@ public class PatientsViewModel : ViewModelBase {
         LoadPatients = new LoadPatientsCommand(this, patientStore);
         ShowAddNewPatientModal = modalNavigationViewModel.ShowAddNewPatientModal;
         ShowDeletePatientModal = modalNavigationViewModel.ShowDeletePatientModal;
+        ShowPatientDataModal = modalNavigationViewModel.ShowPatientDataModal;
         
         PatientsView = CollectionViewSource.GetDefaultView(Patients);
         PatientsView.Filter = FilterPatients;
@@ -55,6 +55,10 @@ public class PatientsViewModel : ViewModelBase {
 
     public void SetPatientIdToDelete(int patientId) {
         _patientStore.PatientIdToDelete = patientId;
+    }
+
+    public void SetPatientIdToShowDetails(int patientId){
+        _patientStore.PatientIdToShowDetails = patientId;
     }
     
     public override void Dispose(){

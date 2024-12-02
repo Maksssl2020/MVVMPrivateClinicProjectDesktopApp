@@ -8,5 +8,7 @@ public class MapperProfiles : Profile {
         CreateMap<Doctor, DoctorDto>()
             .ForMember(dest => dest.DoctorSpecialization, 
                 opt => opt.Ignore());
+
+        CreateMap<Appointment, AppointmentDto>();
     }
 }

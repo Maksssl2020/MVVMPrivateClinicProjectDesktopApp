@@ -4,12 +4,15 @@ using System.Threading.Channels;
 using System.Windows.Data;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
+using MVVMPrivateClinicProjectDesktopApp.Commands;
 using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
+using MVVMPrivateClinicProjectDesktopApp.Stores;
 using static System.Enum;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
 public class AppointmentsViewModel : ViewModelBase {
+    private readonly AppointmentStore _appointmentStore;
     private readonly ObservableCollection<AppointmentDto> _appointments;
     private ObservableCollection<AppointmentDto> _filteredAppointments;
 
@@ -32,20 +35,54 @@ public class AppointmentsViewModel : ViewModelBase {
         }
     }
 
+    public int UpdateAppointmentStatusId { get; set; }
+    
+    public ICommand LoadAppointmentsCommand { get; set; }
     public ICommand AppendFilterCommand { get; set; }
     public ICommand AcceptAppointmentCommand { get; set; }
     public ICommand CancelAppointmentCommand { get; set; }
     
-    public AppointmentsViewModel(){
-        _appointments = new ObservableCollection<AppointmentDto>(GenerateMockData());
+    public AppointmentsViewModel(AppointmentStore appointmentStore){
+        _appointmentStore = appointmentStore;
+        _appointments = [];
         _filteredAppointments = new ObservableCollection<AppointmentDto>(_appointments);
         
         PageCollection = [];
         AppointmentsView = CollectionViewSource.GetDefaultView(PageCollection);
         
+        LoadAppointmentsCommand = new LoadAppointmentsCommand(this, _appointmentStore);
         AppendFilterCommand = new RelayCommand<string>(SetFilter);
+        AcceptAppointmentCommand = new UpdateAppointmentStatusCommand(this, _appointmentStore, AppointmentStatus.Accepted);
+        CancelAppointmentCommand = new UpdateAppointmentStatusCommand(this, _appointmentStore, AppointmentStatus.Canceled);
         
         ApplyFilter();
+        
+        _appointmentStore.AppointmentStatusUpdated += OnAppointmentStatusUpdated;
+    }
+
+    public static AppointmentsViewModel LoadAppointmentsViewModel(AppointmentStore appointmentStore){
+        var appointmentsViewModel = new AppointmentsViewModel(appointmentStore);
+        
+        appointmentsViewModel.LoadAppointmentsCommand.Execute(null);
+        
+        return appointmentsViewModel;
+    }
+
+    public void UpdateAppointments(IEnumerable<AppointmentDto> appointments){
+        _appointments.Clear();
+
+        foreach (var appointment in appointments) {
+            _appointments.Add(appointment);
+        }
+        
+        ApplyFilter();
+    }
+
+    private void OnAppointmentStatusUpdated(AppointmentDto appointmentDto){
+        var foundAppointment = _appointments.FirstOrDefault(a => a.Id == appointmentDto.Id);
+        if (foundAppointment != null) {
+            foundAppointment.AppointmentStatus = appointmentDto.AppointmentStatus;
+        }
     }
     
     public void NextPage(){
@@ -104,20 +141,5 @@ public class AppointmentsViewModel : ViewModelBase {
         
         OnPropertyChanged(nameof(CurrentPageDisplay));
         AppointmentsView.Refresh();
-    }
-    
-    private static List<AppointmentDto> GenerateMockData() {
-        var random = new Random();
-        return Enumerable.Range(1, 20).Select(i => new AppointmentDto {
-            Id = i,
-            DoctorFirstName = "Jane",
-            DoctorLastName = "Smith",
-            DoctorSpecialization = "Radiolog",
-            PatientFirstName = "John",
-            PatientLastName = "Doe",
-            PatientCode = $"PATJD{i}",
-            AppointmentStatus = AppointmentStatus.Scheduled.ToString(),
-            AppointmentDate = DateTime.Now.AddDays(random.Next(1, 10))
-        }).ToList();
     }
 }

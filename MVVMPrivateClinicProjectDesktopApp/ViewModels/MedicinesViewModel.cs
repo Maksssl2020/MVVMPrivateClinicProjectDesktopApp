@@ -2,11 +2,12 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Data;
 using MVVMPrivateClinicProjectDesktopApp.Repositories.Medicine;
+using MVVMPrivateClinicProjectDesktopApp.UnitOfWork;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
 public class MedicinesViewModel : ViewModelBase {
-    private readonly IMedicineRepository _medicineRepository;
+    private readonly IUnitOfWork _unitOfWork;
     
     private string _medicineFilter = string.Empty;
 
@@ -22,8 +23,8 @@ public class MedicinesViewModel : ViewModelBase {
         }
     }
 
-    public MedicinesViewModel(){
-        _medicineRepository = new MedicineRepository();
+    public MedicinesViewModel(IUnitOfWork unitOfWork){
+        _unitOfWork = unitOfWork;
 
         LoadMedicinesAsync();
         
@@ -33,7 +34,7 @@ public class MedicinesViewModel : ViewModelBase {
     
     private async void LoadMedicinesAsync() {
         try {
-            var medicines = await _medicineRepository.GetAllMedicinesAsync();
+            var medicines = await _unitOfWork.MedicineRepository.GetAllMedicinesAsync();
 
             foreach (var medicine in medicines) {
                 Medicines.Add(medicine);

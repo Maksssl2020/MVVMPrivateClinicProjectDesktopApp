@@ -1,13 +1,14 @@
-using System.Data.Entity;
 using Microsoft.EntityFrameworkCore;
+using MVVMPrivateClinicProjectDesktopApp.DbContext;
 using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
 
 namespace MVVMPrivateClinicProjectDesktopApp.Repositories.Address;
 
-public class AddressRepository : RepositoryBase, IAddressRepository {
-    public async Task<Models.Entities.Address> SaveAddressAsync(SaveAddressRequest address) {
-
-        var foundAddress = await AddressExists(address);
+public class AddressRepository(DbContextFactory dbContextFactory) : IAddressRepository {
+    public async Task<Models.Entities.Address?> SaveAddressAsync(SaveAddressRequest address) {
+        await using var context = dbContextFactory.CreateDbContext();
+        
+        var foundAddress = await AddressExists(context, address);
         
         if (foundAddress != null) {
             return foundAddress;
@@ -21,14 +22,14 @@ public class AddressRepository : RepositoryBase, IAddressRepository {
             LocalNumber = address?.LocalNumber,
         };
         
-        await DbContext.Addresses.AddAsync(createdAddress);
-        await DbContext.SaveChangesAsync();
+        await context.Addresses.AddAsync(createdAddress);
+        await context.SaveChangesAsync();
         
         return createdAddress;
     }
 
-    private async Task<Models.Entities.Address?> AddressExists(SaveAddressRequest address){
-        return await DbContext.Addresses
+    private async Task<Models.Entities.Address?> AddressExists(PrivateClinicContext context, SaveAddressRequest address){
+        return await context.Addresses
             .FirstOrDefaultAsync(
                 a =>
                     a.City == address.City &&
@@ -39,9 +40,10 @@ public class AddressRepository : RepositoryBase, IAddressRepository {
             );
     }
     
-    public Models.Entities.Address? GetAddressByPatientId(int patientId){
-        return DbContext.Addresses
-            .FirstOrDefault(address => address.Patients
-                .Any(patient => patient.Id == patientId));
+    public async Task<Models.Entities.Address?> GetAddressByPatientId(int patientId){
+        await using var context = dbContextFactory.CreateDbContext();
+        return await context.Addresses
+            .Include(address => address.Patients)
+            .FirstOrDefaultAsync(address => address.Patients.Any(p => p.Id == patientId));
     }
 }

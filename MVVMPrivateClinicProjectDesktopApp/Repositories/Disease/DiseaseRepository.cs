@@ -1,9 +1,11 @@
 using Microsoft.EntityFrameworkCore;
+using MVVMPrivateClinicProjectDesktopApp.DbContext;
 
 namespace MVVMPrivateClinicProjectDesktopApp.Repositories.Disease;
 
-public class DiseaseRepository : RepositoryBase, IDiseaseRepository {
+public class DiseaseRepository(DbContextFactory dbContextFactory) : IDiseaseRepository {
     public async Task<IEnumerable<Models.Entities.Disease>> GetAllDiseasesAsync(){
-        return await DbContext.Diseases.ToListAsync();
+        await using var context = dbContextFactory.CreateDbContext();
+        return await context.Diseases.ToListAsync();
     }
 }

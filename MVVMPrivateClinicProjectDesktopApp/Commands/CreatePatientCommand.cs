@@ -8,7 +8,6 @@ namespace MVVMPrivateClinicProjectDesktopApp.Commands;
 
 public class CreatePatientCommand(AddNewPatientViewModel addNewPatientViewModel, PatientStore patientStore)
     : AsyncRelayCommand {
-    private readonly IAddressRepository _addressRepository = new AddressRepository();
     
     public override async Task ExecuteAsync(object? parameter){
         var saveAddressRequest = new SaveAddressRequest {
@@ -18,8 +17,8 @@ public class CreatePatientCommand(AddNewPatientViewModel addNewPatientViewModel,
             BuildingNumber = addNewPatientViewModel.BuildingNumber,
             LocalNumber = addNewPatientViewModel.LocalNumber,
         };
-        
-        var savedAddress = await _addressRepository.SaveAddressAsync(saveAddressRequest);
+
+        var savedAddress = await patientStore.SavePatientAddress(saveAddressRequest);
 
         var savePatientRequest = new SavePatientRequest {
             FirstName = addNewPatientViewModel.FirstName,

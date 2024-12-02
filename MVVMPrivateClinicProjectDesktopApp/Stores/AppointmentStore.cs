@@ -1,29 +1,65 @@
-using MVVMPrivateClinicProjectDesktopApp.Helpers;
 using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
-using MVVMPrivateClinicProjectDesktopApp.Repositories.Appointment;
+using MVVMPrivateClinicProjectDesktopApp.UnitOfWork;
 
 namespace MVVMPrivateClinicProjectDesktopApp.Stores;
 
 public class AppointmentStore {
-    private readonly IAppointmentRepository _appointmentRepository = new AppointmentRepository(MyMapper.Mapper);
+    private readonly IUnitOfWork _unitOfWork;
 
-    private readonly List<AppointmentDto> _appointments;
+    public event Action<AppointmentDto>? AppointmentStatusUpdated;
+    
+    private readonly List<AppointmentDto> _allAppointments;
     private readonly Lazy<Task> _initializeLazy;
-    public IEnumerable<AppointmentDto> Appointments => _appointments;
-
-    public AppointmentStore(){
-        _appointments = [];
+    private readonly List<AppointmentDto> _selectedPatientAllAppointments;
+    private int _selectedPatientId;
+    
+    public IEnumerable<AppointmentDto> AllAppointments => _allAppointments;
+    public IEnumerable<AppointmentDto> SelectedPatientAllAppointments => _selectedPatientAllAppointments;
+    
+    public int SelectedPatientId {
+        get => _selectedPatientId;
+        set {
+            _selectedPatientId = value;
+            _selectedPatientAllAppointments.Clear();
+        }
+    }
+    
+    public AppointmentStore(IUnitOfWork unitOfWork){
+        _unitOfWork = unitOfWork;
+        _allAppointments = [];
+        _selectedPatientAllAppointments = [];
         _initializeLazy = new Lazy<Task>(InitializeAppointments);
     }
 
+    public async Task LoadPatientAppointments(){
+        var foundAppointments = await _unitOfWork.AppointmentRepository.GetAppointmentsByPatientIdAsync(SelectedPatientId);
+        _selectedPatientAllAppointments.AddRange(foundAppointments);
+
+        Console.WriteLine(_selectedPatientAllAppointments.Count);
+    }
+    
     public async Task LoadAppointments(){
         await _initializeLazy.Value;
     }
 
-    private async Task InitializeAppointments(){
-        var loadedAppointments = await _appointmentRepository.GetAllAppointmentsAsync();
+    public async Task UpdateAppointmentStatus(int appointmentId, AppointmentStatus appointmentStatus){
+        var appointment = _allAppointments.SingleOrDefault(a => a.Id == appointmentId);
+        if (appointment == null) return;
         
-        _appointments.Clear();
-        _appointments.AddRange(loadedAppointments);
+        appointment.AppointmentStatus = appointmentStatus.ToString();
+        await _unitOfWork.AppointmentRepository.UpdateAppointmentStatusAsync(appointmentId, appointmentStatus);
+        
+        OnAppointmentStatusUpdated(appointment);
+    }
+
+    private void OnAppointmentStatusUpdated(AppointmentDto appointmentDto){
+        AppointmentStatusUpdated?.Invoke(appointmentDto);
+    }
+    
+    private async Task InitializeAppointments(){
+        var loadedAppointments = await _unitOfWork.AppointmentRepository.GetAllAppointmentsAsync();
+        
+        _allAppointments.Clear();
+        _allAppointments.AddRange(loadedAppointments);
     }
 }

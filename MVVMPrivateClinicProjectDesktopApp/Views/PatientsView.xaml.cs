@@ -10,9 +10,12 @@ public partial class PatientsView : UserControl {
     }
     
     private void SeePatientDetailsButton_OnClick(object sender, RoutedEventArgs e){
-        if (sender is Button { DataContext: Patient patient }) {
-            new PatientDetailsView(patient.Id).ShowDialog();
-        }
+        var viewModel = DataContext as PatientsViewModel;
+        if (sender is not Button { DataContext: Patient patient }) return;
+        if (viewModel is null) return;
+        
+        viewModel.SetPatientIdToShowDetails(patient.Id);
+        viewModel?.ShowPatientDataModal.Execute(null);
     }
 
     private void ShowDeleteWarningModal_OnClick(object sender, RoutedEventArgs e){

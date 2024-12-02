@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace MVVMPrivateClinicProjectDesktopApp.Models.Entities;
 
-public partial class PrivateClinicContext : DbContext
+public partial class PrivateClinicContext : Microsoft.EntityFrameworkCore.DbContext
 {
     public PrivateClinicContext()
     { }
@@ -12,7 +12,7 @@ public partial class PrivateClinicContext : DbContext
         : base(options)
     { }
 
-    public virtual DbSet<Address> Addresses { get; set; }
+    public virtual DbSet<Address?> Addresses { get; set; }
 
     public virtual DbSet<Appointment> Appointments { get; set; }
 
@@ -65,7 +65,7 @@ public partial class PrivateClinicContext : DbContext
 
             entity.Property(e => e.AppointmentCost).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.AppointmentDate).HasColumnType("datetime");
-            entity.Property(e => e.Status).HasMaxLength(50);
+            entity.Property(e => e.AppointmentStatus).HasMaxLength(50);
 
             entity.HasOne(d => d.IdDoctorNavigation).WithMany(p => p.Appointments)
                 .HasForeignKey(d => d.IdDoctor)

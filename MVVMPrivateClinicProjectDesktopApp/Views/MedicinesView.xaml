@@ -13,10 +13,6 @@
              d:DesignHeight="675" 
              d:DesignWidth="1000">
     
-    <UserControl.DataContext>
-        <viewModel:MedicinesViewModel/>
-    </UserControl.DataContext>
-    
     <Border Background="{StaticResource CustomBlackColor1}">
         <Grid>
             <Grid.RowDefinitions>

@@ -2,11 +2,12 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Data;
 using MVVMPrivateClinicProjectDesktopApp.Repositories.Disease;
+using MVVMPrivateClinicProjectDesktopApp.UnitOfWork;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
 public class DiseasesViewModel : ViewModelBase {
-    private readonly IDiseaseRepository _diseaseRepository;
+    private readonly IUnitOfWork _unitOfWork;
     
     private string _diseasesFilter = string.Empty;
 
@@ -22,8 +23,8 @@ public class DiseasesViewModel : ViewModelBase {
         }
     }
 
-    public DiseasesViewModel(){
-        _diseaseRepository = new DiseaseRepository();
+    public DiseasesViewModel(IUnitOfWork unitOfWork){
+        _unitOfWork = unitOfWork;
         
         LoadDiseasesAsync();
         DiseasesView = CollectionViewSource.GetDefaultView(Diseases);
@@ -32,7 +33,7 @@ public class DiseasesViewModel : ViewModelBase {
 
     private async void LoadDiseasesAsync(){
         try {
-            var diseases = await _diseaseRepository.GetAllDiseasesAsync();
+            var diseases = await _unitOfWork.DiseaseRepository.GetAllDiseasesAsync();
 
             foreach (var disease in diseases) {
                 Diseases.Add(disease);

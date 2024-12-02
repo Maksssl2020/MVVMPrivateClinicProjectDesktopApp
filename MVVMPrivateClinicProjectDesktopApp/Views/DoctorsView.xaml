@@ -15,10 +15,6 @@
              d:DesignWidth="1000"
              >
     
-    <UserControl.DataContext>
-        <viewModel:DoctorsViewModel/>
-    </UserControl.DataContext>
-    
     <Border Background="{StaticResource CustomBlackColor1}">
         <Grid>
             <Grid.RowDefinitions>

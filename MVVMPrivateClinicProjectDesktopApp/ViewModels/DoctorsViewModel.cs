@@ -6,11 +6,12 @@ using MVVMPrivateClinicProjectDesktopApp.Helpers;
 using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
 using MVVMPrivateClinicProjectDesktopApp.Repositories.Doctor;
 using MVVMPrivateClinicProjectDesktopApp.Repositories.DoctorSpecialization;
+using MVVMPrivateClinicProjectDesktopApp.UnitOfWork;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
 public class DoctorsViewModel : ViewModelBase {
-    private readonly IDoctorRepository _doctorRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
     private string _doctorsFilter = string.Empty;
     
@@ -35,8 +36,8 @@ public class DoctorsViewModel : ViewModelBase {
         }
     }
     
-    public DoctorsViewModel() {
-        _doctorRepository = new DoctorRepository(MyMapper.Mapper ,new DoctorSpecializationRepository());
+    public DoctorsViewModel(IUnitOfWork unitOfWork) {
+        _unitOfWork = unitOfWork;
         
         LoadDoctorsAsync();
         
@@ -46,7 +47,7 @@ public class DoctorsViewModel : ViewModelBase {
     
     private async void LoadDoctorsAsync() {
         try {
-            var doctors = await _doctorRepository.GetAllDoctors();
+            var doctors = await _unitOfWork.DoctorRepository.GetAllDoctors();
 
             foreach (var doctor in doctors) {
                 Doctors.Add(doctor);

@@ -1,18 +1,22 @@
-using MVVMPrivateClinicProjectDesktopApp.Repositories.Address;
-using MVVMPrivateClinicProjectDesktopApp.Repositories.Patient;
+using System.Collections.ObjectModel;
+using System.Windows.Input;
+using MVVMPrivateClinicProjectDesktopApp.Commands;
+using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
+using MVVMPrivateClinicProjectDesktopApp.Stores;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
 public class PatientDetailsViewModel : ViewModelBase {
-    private readonly IPatientRepository _patientRepository;
-    private readonly IAddressRepository _addressRepository;
-    
+    private readonly PatientStore _patientStore;
+    private readonly AppointmentStore _appointmentStore;
+
     private Patient _selectedPatient = null!;
     private Address _selectedPatientAddress = null!;
+    private readonly ICommand LoadPatientDetailsCommand;
     
     public Patient SelectedPatient {
         get => _selectedPatient;
-        set {
+        private set {
             _selectedPatient = value;
             OnPropertyChanged();
         }
@@ -20,40 +24,37 @@ public class PatientDetailsViewModel : ViewModelBase {
 
     public Address SelectedPatientAddress {
         get => _selectedPatientAddress;
-        set {
+        private set {
             _selectedPatientAddress = value;
             OnPropertyChanged();
         }
     }
 
-    public PatientDetailsViewModel() {
-        _patientRepository = new PatientRepository();
-        _addressRepository = new AddressRepository();
+    public ObservableCollection<AppointmentDto> SelectedPatientAppointments { get; }
+
+    private PatientDetailsViewModel(PatientStore patientStore, AppointmentStore appointmentStore) {
+        _patientStore = patientStore;
+        _appointmentStore = appointmentStore;
+        SelectedPatientAppointments = [];
+        
+        LoadPatientDetailsCommand = new LoadPatientDetailsCommand(this, patientStore, appointmentStore);
     }
 
-    public PatientDetailsViewModel(int patientId) {
-        _patientRepository = new PatientRepository();
-        _addressRepository = new AddressRepository();
+    public static PatientDetailsViewModel LoadPatientDetailsViewModel(PatientStore patientStore, AppointmentStore appointmentStore){
+        var patientDetailsViewModel = new PatientDetailsViewModel(patientStore, appointmentStore);
         
-        LoadSelectedPatient(patientId);
+        patientDetailsViewModel.LoadPatientDetailsCommand.Execute(null);
+        
+        return patientDetailsViewModel;
     }
     
-    private async void LoadSelectedPatient(int patientId){
-        try {
-            Console.WriteLine(patientId);
-            var foundPatient = await _patientRepository.GetPatientById(patientId);
-            if (foundPatient == null) return;
+    public void UpdatePatientDetails(Patient patient, Address address, IEnumerable<AppointmentDto> appointments) {
+        SelectedPatient = patient;
+        SelectedPatientAddress = address;
+        SelectedPatientAppointments.Clear();
         
-            SelectedPatient = foundPatient;
-            SelectedPatientAddress = LoadSelectedPatientAddress(patientId);
+        foreach (var appointment in appointments) {
+            SelectedPatientAppointments.Add(appointment);
         }
-        catch (Exception e) {
-            Console.WriteLine("Something went wrong... {0}", e.Message);
-        }
-    }
-
-    private Address LoadSelectedPatientAddress(int patientId){
-        var foundAddress = _addressRepository.GetAddressByPatientId(patientId)!;
-        return foundAddress;
     }
 }

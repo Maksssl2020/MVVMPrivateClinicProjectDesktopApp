@@ -1,10 +1,12 @@
 using Microsoft.EntityFrameworkCore;
+using MVVMPrivateClinicProjectDesktopApp.DbContext;
 using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
 
 namespace MVVMPrivateClinicProjectDesktopApp.Repositories.Patient;
 
-public class PatientRepository : RepositoryBase, IPatientRepository {
+public class PatientRepository(DbContextFactory dbContextFactory) : IPatientRepository {
     public async Task<Models.Entities.Patient> SavePatientAsync(SavePatientRequest patient){
+        await using var context = dbContextFactory.CreateDbContext();
         var createdPatient = new Models.Entities.Patient {
             FirstName = patient.FirstName,
             LastName = patient.LastName,
@@ -13,23 +15,26 @@ public class PatientRepository : RepositoryBase, IPatientRepository {
             IdAddress = patient.AddressId
         };
         
-        await DbContext.Patients.AddAsync(createdPatient);
-        await DbContext.SaveChangesAsync();
+        await context.Patients.AddAsync(createdPatient);
+        await context.SaveChangesAsync();
         
         return createdPatient;
     }
 
     public async Task<IEnumerable<Models.Entities.Patient>> GetAllPatientsAsync(){
-        return await DbContext.Patients.ToListAsync();
+        await using var context = dbContextFactory.CreateDbContext();
+        return await context.Patients.ToListAsync();
     }
 
-    public async Task<Models.Entities.Patient?> GetPatientById(int id){
-        return await DbContext.Patients
+    public async Task<Models.Entities.Patient?> GetPatientByIdAsync(int id){
+        await using var context = dbContextFactory.CreateDbContext();
+        return await context.Patients
             .FirstOrDefaultAsync(patient => patient.Id == id);
     }
 
     public void DeletePatient(int id){
-        DbContext.Patients
+        using var context = dbContextFactory.CreateDbContext();
+        context.Patients
             .Where(patient => patient.Id == id)
             .ExecuteDelete();
     }

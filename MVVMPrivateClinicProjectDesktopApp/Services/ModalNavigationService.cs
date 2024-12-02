@@ -16,6 +16,7 @@ public class ModalNavigationService(ModalNavigationStore modalNavigationStore, F
     private static Window GetModalViewDependsOnViewModel(ViewModelBase viewModel) => viewModel switch {
         AddNewPatientViewModel => new AddNewPatientView(),
         DeletePatientViewModel => new DeletePatientView(),
+        PatientDataModalViewModel => new PatientDataModalView(),
         _ => new AddNewPatientView()
     };
 }
