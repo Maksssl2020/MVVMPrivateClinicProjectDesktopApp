@@ -21,6 +21,30 @@ public class DoctorRepository(DbContextFactory dbContextFactory, IMapper mapper,
         }).ToList();
     }
 
+    public async Task<IEnumerable<DoctorDto>> GetAllFamilyMedicineDoctors(){
+        await using var context = dbContextFactory.CreateDbContext();
+        var doctors = await context.Doctors.ToListAsync();
+        var specializations = await doctorSpecializationRepository.GetAllDoctorSpecializations();
+
+        return doctors
+            .Where(doctor => {
+                var specialization = specializations.FirstOrDefault(s => s.Id == doctor.IdDoctorSpecialization);
+
+                return specialization is { Name: "Family Medicine" };
+            })
+            .Select(doctor => {
+                var doctorDto = mapper.Map<DoctorDto>(doctor);
+                var doctorDtoDoctorSpecialization =
+                    specializations.FirstOrDefault(s => s.Id == doctor.IdDoctorSpecialization)?.Name;
+                
+                doctorDto.DoctorSpecialization =
+                    doctorDtoDoctorSpecialization;
+
+                return doctorDto;
+            })
+            .ToList();
+    }
+
     public async Task<DoctorDto?> GetDoctorByIdAsync(int id){
         await using var context = dbContextFactory.CreateDbContext();
         var foundDoctor = await context.Doctors.FirstOrDefaultAsync(doctor => doctor.Id == id);

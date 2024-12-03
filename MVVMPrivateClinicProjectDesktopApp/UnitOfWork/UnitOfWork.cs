@@ -20,7 +20,7 @@ public class UnitOfWork(DbContextFactory dbContextFactory) : IUnitOfWork {
     public IDoctorRepository DoctorRepository =>
         new DoctorRepository(dbContextFactory, _mapper, DoctorSpecializationRepository);
     public IDoctorSpecializationRepository DoctorSpecializationRepository => new DoctorSpecializationRepository(dbContextFactory);
-    public IMedicineRepository MedicineRepository => new MedicineRepository(dbContextFactory);
+    public IMedicineRepository MedicineRepository => new MedicineRepository(dbContextFactory, _mapper);
     public IPatientRepository PatientRepository => new PatientRepository(dbContextFactory);
 
     public async Task SaveChangesAsync(){

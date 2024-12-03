@@ -10,5 +10,6 @@ public class MapperProfiles : Profile {
                 opt => opt.Ignore());
 
         CreateMap<Appointment, AppointmentDto>();
+        CreateMap<Medicine, MedicineDto>();
     }
 }

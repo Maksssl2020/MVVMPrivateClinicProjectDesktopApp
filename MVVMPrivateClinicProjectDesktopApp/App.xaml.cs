@@ -25,6 +25,8 @@ public partial class App : Application {
     private readonly ModalNavigationStore _modalNavigationStore;
     private readonly PatientStore _patientStore;
     private readonly AppointmentStore _appointmentStore;
+    private readonly MedicineStore _medicineStore;
+    private readonly DoctorStore _doctorStore;
     private readonly PatientDataModalNavigationStore _patientDataModalNavigationStore;
     private readonly NavigationBarViewModel _navigationBarViewModel;
     private readonly ModalNavigationViewModel _modalNavigationViewModel;
@@ -43,6 +45,8 @@ public partial class App : Application {
         _modalNavigationStore = new ModalNavigationStore();
         _appointmentStore = new AppointmentStore(_unitOfWork);
         _patientDataModalNavigationStore = new PatientDataModalNavigationStore();
+        _medicineStore = new MedicineStore(_unitOfWork);
+        _doctorStore = new DoctorStore(_unitOfWork);
         _navigationBarViewModel = new NavigationBarViewModel(
             CreateHomeNavigationService(),
             CreatePatientsNavigationService(),
@@ -116,6 +120,6 @@ public partial class App : Application {
     }
     
     private NavigationServiceBase CreateIssuePrescriptionsNavigationService(){
-        return new PatientDataModalNavigationService(_patientDataModalNavigationStore, () => new IssuePrescriptionViewModel());
+        return new PatientDataModalNavigationService(_patientDataModalNavigationStore, () => IssuePrescriptionViewModel.LoadIssuePrescriptionViewModel(_medicineStore, _doctorStore));
     }
 }

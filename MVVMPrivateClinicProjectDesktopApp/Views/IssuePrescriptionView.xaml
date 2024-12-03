@@ -3,40 +3,154 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewModel="clr-namespace:MVVMPrivateClinicProjectDesktopApp.ViewModels"
+             xmlns:dto="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Models.DTOs"
+             xmlns:components="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Views.Components"
              xmlns:local="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Views"
              mc:Ignorable="d"
              d:DesignHeight="550"
              d:DesignWidth="1205"
+             d:DataContext="{d:DesignInstance viewModel:IssuePrescriptionViewModel}"
              Background="Transparent">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="475"/>
         </Grid.ColumnDefinitions>
+        
+       
+            <Border Grid.Column="0" Padding="15">
+                <StackPanel Orientation="Vertical">
+                    <Label FontSize="24" Foreground="White" Content="New Prescription Form"/>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="125"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                        
+                            <StackPanel Grid.Column="0" HorizontalAlignment="Left" Orientation="Vertical">
+                                <StackPanel HorizontalAlignment="Left">
+                                    <Label FontSize="15" Foreground="White" Content="Prescription Issue Date:"/>
+                                    <Border Width="345" Height="50" HorizontalAlignment="Center" BorderBrush="{StaticResource CustomGrayColor1}" BorderThickness="2" CornerRadius="5" Margin="0 15 0 0">
+                                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="15" Foreground="White" Text="{Binding Today}"/>
+                                    </Border>
+                                </StackPanel>
+                            </StackPanel>
+                        
+                            <StackPanel Grid.Column="1" HorizontalAlignment="Right">
+                                <Label Foreground="White" FontSize="15" Content="Prescription's Author ( Doctor ):"/>
+                                <ComboBox Margin="0 15 0 0" 
+                                          Width="345" 
+                                          VerticalAlignment="Center" 
+                                          ItemsSource="{Binding DoctorsDtoView}" 
+                                          SelectedItem="{Binding SelectedDoctor, Mode=TwoWay}"
+                                          Style="{StaticResource ComboBoxStyle}">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate DataType="{x:Type dto:DoctorDto}">
+                                            <TextBlock VerticalAlignment="Center" Height="35" Padding="5 8" Foreground="White" FontSize="14" >
+                                                <Run Text="{Binding FirstName}"/>
+                                                <Run Text="{Binding LastName}"/>
+                                                <Run Text="-"/>
+                                                <Run Text="{Binding DoctorSpecialization}"/>
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                            </StackPanel>
+                        </Grid>
+                    
+                        <StackPanel Margin="0 15 0 0" Grid.Row="1" >
+                            <Label FontSize="15" Foreground="White" Content="Prescription Validity"/>
+                            <Grid Margin="0 15 0 0" >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                
+                                <StackPanel Grid.Column="0" HorizontalAlignment="Left">
+                                    <Border  BorderThickness="2" CornerRadius="5" BorderBrush="{StaticResource CustomGrayColor1}" Height="50" Width="345">
+                                        <ToggleButton BorderThickness="0" BorderBrush="Transparent"  Background="Transparent" >
+                                            <TextBlock Foreground="White" FontWeight="Bold" FontSize="15" Text="1 YEAR"/>
+                                        </ToggleButton>
+                                    </Border>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" HorizontalAlignment="Right">
+                                    <Border BorderThickness="2" CornerRadius="5" BorderBrush="{StaticResource CustomGrayColor1}" Height="50" Width="345">
+                                        <ToggleButton  BorderThickness="0" BorderBrush="Transparent"  Background="Transparent">
+                                            <TextBlock Foreground="White" FontWeight="Bold" FontSize="15" Text="1 MONTH"/>
+                                        </ToggleButton>
+                                    </Border>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                        
+                        <StackPanel Grid.Row="2">
+                            <Label FontSize="15" Foreground="White" Content="Prescription Description:"/>
+                            <Border Padding="5" Margin="0 15 0 0" CornerRadius="15" Background="{StaticResource CustomGrayColor1}">
+                                <TextBox Background="Transparent" BorderBrush="Transparent" BorderThickness="0" FontSize="15" Foreground="White" Height="150" />
+                            </Border>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </Border>
+        
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="75"/>
+                <RowDefinition Height="50"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
             
-            <Grid Grid.Row="0" VerticalAlignment="Center">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="50"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+            <Border Grid.Row="0" Background="{StaticResource CustomGrayColor1}" Padding="10 0" Margin="0 0 15 0" CornerRadius="15">
+                <Grid VerticalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition Width="195"/>
+                        <ColumnDefinition Width="195"/>
+                    </Grid.ColumnDefinitions>
                 
-                <TextBlock FontSize="18" Text="Id" Foreground="White" Grid.Column="0"/>
-                <TextBlock FontSize="18" Text="Medicine Name" Foreground="White" Grid.Column="1"/>
-                <TextBlock FontSize="18" Text="Medicine Type" Foreground="White" Grid.Column="2"/>
-            </Grid>
+                    <TextBlock FontSize="18" Text="Id" Foreground="White" Grid.Column="0"/>
+                    <TextBlock FontSize="18" Text="Medicine Name" Foreground="White" Grid.Column="1"/>
+                    <TextBlock FontSize="18" Text="Medicine Type" Foreground="White" Grid.Column="2"/>
+                </Grid>
+            </Border>
             
-            <ListView SelectionMode="Multiple" Grid.Row="1" Background="Transparent" Foreground="White">
-                <ListViewItem>ITEM 1</ListViewItem>
-                <ListViewItem>ITEM 1</ListViewItem>
-                <ListViewItem>ITEM 1</ListViewItem>
-            </ListView>
+            <ScrollViewer Grid.Row="1" Style="{StaticResource ScrollBarTheme}" >
+                <ListView   ItemsSource="{Binding MedicinesDtoView}" 
+                            BorderBrush="Transparent" 
+                            BorderThickness="0" 
+                            SelectionMode="Multiple"  
+                            Background="Transparent" 
+                            Foreground="White"
+                            Margin="0 15 0 0"
+                            ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                            ScrollViewer.CanContentScroll="False"
+                >
+                    <ListView.ItemTemplate>
+                        <DataTemplate DataType="{x:Type dto:MedicineDto}">
+                            <Border Width="440" Height="35" Padding="5 0" VerticalAlignment="Center" BorderBrush="{StaticResource CustomGrayColor1}" BorderThickness="0 0 0 2">
+                                <Grid VerticalAlignment="Center">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="50"/>
+                                        <ColumnDefinition Width="195"/>
+                                        <ColumnDefinition Width="195"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Foreground="White" Text="{Binding Id}"/>
+                                    <TextBlock Grid.Column="1" Foreground="White" Text="{Binding Name}"/>
+                                    <TextBlock Grid.Column="2" Foreground="White" Text="{Binding Type}"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </ScrollViewer>
         </Grid>
     </Grid>
 </UserControl>
