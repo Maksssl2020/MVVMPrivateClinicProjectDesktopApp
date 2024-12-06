@@ -37,7 +37,7 @@
                         </Border>
                     </Border>
                     
-                    <components:ButtonWithIcon Grid.Column="1"
+                    <components:ButtonWithIcon ButtonWidth="200" Grid.Column="1"
                                                ButtonText="Add New Medicine"
                                                TextColor="{StaticResource CustomPlumColor1}"/>
                 </Grid>
@@ -47,16 +47,14 @@
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="35"/>
-                        <ColumnDefinition Width="125"/>
-                        <ColumnDefinition Width="125"/>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="45"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock FontSize="15" Foreground="White" VerticalAlignment="Center" Grid.Column="0" Text="Id"/>
                     <TextBlock FontSize="15" Foreground="White" VerticalAlignment="Center" Grid.Column="1" Text="Medicine Type"/>
                     <TextBlock FontSize="15" Foreground="White" VerticalAlignment="Center" Grid.Column="2" Text="Medicine Name"/>
                     <TextBlock FontSize="15" Foreground="White" VerticalAlignment="Center" Grid.Column="3" Text="Description"/>
-                    <TextBlock FontSize="15" Foreground="White" VerticalAlignment="Center" Grid.Column="4"/>
                 </Grid>
             </Border>
             <ScrollViewer  Style="{StaticResource ScrollBarTheme}" Grid.Row="2">
@@ -67,21 +65,14 @@
                                 <Grid  VerticalAlignment="Center">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="35"/>
-                                        <ColumnDefinition Width="125"/>
-                                        <ColumnDefinition Width="125"/>
                                         <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="45"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock VerticalAlignment="Center" Foreground="White" Grid.Column="0" Text="{Binding Id}"/>
                                     <TextBlock VerticalAlignment="Center" Foreground="White" Grid.Column="1" Text="{Binding Type}"/>
                                     <TextBlock VerticalAlignment="Center" Foreground="White" Grid.Column="2" Text="{Binding Name}"/>
                                     <TextBlock VerticalAlignment="Center" Foreground="White" Grid.Column="3" Text="{Binding Description}"/>
-                                    <!-- <Button Grid.Column="6"  -->
-                                    <!--         Style="{StaticResource ButtonWithIconSmall}" -->
-                                    <!--         Tag="{StaticResource CustomBlueColor1}"  -->
-                                    <!--         > -->
-                                    <!--     <fa:IconImage Style="{StaticResource IconButtonSmall}" Icon="Eye"/> -->
-                                    <!-- </Button> -->
                                 </Grid>
                             </Border>
                         </DataTemplate>

@@ -11,5 +11,23 @@ public class MapperProfiles : Profile {
 
         CreateMap<Appointment, AppointmentDto>();
         CreateMap<Medicine, MedicineDto>();
+        
+        CreateMap<Prescription, PrescriptionDto>()
+            .ForMember(dest => dest.PatientCode, opt => opt.Ignore())
+            .ForMember(dest => dest.DoctorCode, opt => opt.Ignore());
+
+        CreateMap<Referral, ReferralDto>()
+            .ForMember(dest => dest.PatientCode, opt => opt.Ignore())
+            .ForMember(dest => dest.DoctorCode, opt => opt.Ignore())
+            .ForMember(dest => dest.DiseaseCode, opt => opt.Ignore());
+
+        CreateMap<Invoice, InvoiceDto>()
+            .ForMember(dest => dest.PatientCode, opt => opt.Ignore())
+            .ForMember(dest => dest.Status, opt => opt.Ignore());
+
+        CreateMap<Pricing, PricingDto>();
+        CreateMap<PatientNote, PatientNoteDto>()
+            .ForMember(dest => dest.PatientCode, opt => opt.Ignore())
+            .ForMember(dest => dest.DoctorCode, opt => opt.Ignore());
     }
 }

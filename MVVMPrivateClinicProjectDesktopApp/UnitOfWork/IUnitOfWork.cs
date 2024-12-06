@@ -3,8 +3,13 @@ using MVVMPrivateClinicProjectDesktopApp.Repositories.Appointment;
 using MVVMPrivateClinicProjectDesktopApp.Repositories.Disease;
 using MVVMPrivateClinicProjectDesktopApp.Repositories.Doctor;
 using MVVMPrivateClinicProjectDesktopApp.Repositories.DoctorSpecialization;
+using MVVMPrivateClinicProjectDesktopApp.Repositories.Invoice;
 using MVVMPrivateClinicProjectDesktopApp.Repositories.Medicine;
+using MVVMPrivateClinicProjectDesktopApp.Repositories.Note;
 using MVVMPrivateClinicProjectDesktopApp.Repositories.Patient;
+using MVVMPrivateClinicProjectDesktopApp.Repositories.Prescription;
+using MVVMPrivateClinicProjectDesktopApp.Repositories.Pricing;
+using MVVMPrivateClinicProjectDesktopApp.Repositories.Referral;
 
 namespace MVVMPrivateClinicProjectDesktopApp.UnitOfWork;
 
@@ -16,5 +21,10 @@ public interface IUnitOfWork {
     IDoctorSpecializationRepository DoctorSpecializationRepository { get; }
     IMedicineRepository MedicineRepository { get; }
     IPatientRepository PatientRepository { get; }
+    IPrescriptionRepository PrescriptionRepository { get; }
+    IReferralRepository ReferralRepository { get; }
+    IInvoiceRepository InvoiceRepository { get; }
+    IPricingRepository PricingRepository { get; }
+    IPatientNoteRepository PatientNoteRepository { get; }
     Task SaveChangesAsync();
 }

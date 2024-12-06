@@ -1,17 +1,20 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Data;
+using System.Windows.Input;
+using MVVMPrivateClinicProjectDesktopApp.Commands;
 using MVVMPrivateClinicProjectDesktopApp.Repositories.Disease;
+using MVVMPrivateClinicProjectDesktopApp.Stores;
 using MVVMPrivateClinicProjectDesktopApp.UnitOfWork;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
 public class DiseasesViewModel : ViewModelBase {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly DiseaseStore _diseaseStore;
     
     private string _diseasesFilter = string.Empty;
 
-    private ObservableCollection<Disease> Diseases { get; set; } = [];
+    private ObservableCollection<Disease> _diseases; 
     public ICollectionView DiseasesView  { get; set; }
 
     public string DiseasesFilter {
@@ -23,27 +26,34 @@ public class DiseasesViewModel : ViewModelBase {
         }
     }
 
-    public DiseasesViewModel(IUnitOfWork unitOfWork){
-        _unitOfWork = unitOfWork;
+    public ICommand LoadDiseasesCommand { get; set; }
+    
+    private DiseasesViewModel(DiseaseStore diseaseStore){
+        _diseaseStore = diseaseStore;
+        _diseases = [];
         
-        LoadDiseasesAsync();
-        DiseasesView = CollectionViewSource.GetDefaultView(Diseases);
+        DiseasesView = CollectionViewSource.GetDefaultView(_diseases);
         DiseasesView.Filter = FilterDiseases;
+
+        LoadDiseasesCommand = new LoadDiseasesCommand(this, _diseaseStore);
     }
 
-    private async void LoadDiseasesAsync(){
-        try {
-            var diseases = await _unitOfWork.DiseaseRepository.GetAllDiseasesAsync();
+    public static DiseasesViewModel LoadDiseasesViewModel(DiseaseStore diseaseStore){
+        var diseasesViewModel = new DiseasesViewModel(diseaseStore);
+        
+        diseasesViewModel.LoadDiseasesCommand.Execute(null);
 
-            foreach (var disease in diseases) {
-                Diseases.Add(disease);
-            }
-        }
-        catch (Exception e) {
-            Console.WriteLine("Something went wrong... " + e.Message);
-        }
+        return diseasesViewModel;
     }
 
+    public void UpdateDiseases(IEnumerable<Disease> diseases){
+        _diseases.Clear();
+
+        foreach (var disease in diseases) {
+            _diseases.Add(disease);
+        }
+    }
+    
     private bool FilterDiseases(object obj){
         if (obj is not Disease disease) {
             return false;

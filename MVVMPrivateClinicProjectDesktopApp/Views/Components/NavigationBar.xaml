@@ -57,6 +57,15 @@
                         </RadioButton>
                         
                         <RadioButton Style="{StaticResource MenuButtonTheme}"
+                                     Tag="{StaticResource CustomPaleGoldColor1}"
+                                     Command="{Binding ShowPricingViewCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <fa:IconImage Icon="MoneyBills" Style="{StaticResource  MenuButtonIcon}"/>
+                                <TextBlock Text="Pricing" Style="{StaticResource MenuButtonText}"/> 
+                            </StackPanel>
+                        </RadioButton>
+                        
+                        <RadioButton Style="{StaticResource MenuButtonTheme}"
                                      Tag="{StaticResource CustomRedColor1}"
                                      Command="{Binding ShowAppointmentsViewCommand}">
                             <StackPanel Orientation="Horizontal">
@@ -66,7 +75,8 @@
                         </RadioButton>
                         
                         <RadioButton Style="{StaticResource MenuButtonTheme}"
-                                     Tag="{StaticResource CustomOrangeColor1}">
+                                     Tag="{StaticResource CustomOrangeColor1}"
+                                     Command="{Binding ShowPrescriptionsViewCommand}">
                             <StackPanel Orientation="Horizontal">
                                 <fa:IconImage Icon="PrescriptionBottleMedical" Style="{StaticResource  MenuButtonIcon}"/>
                                 <TextBlock Text="Prescriptions" Style="{StaticResource MenuButtonText}"/> 
@@ -74,15 +84,17 @@
                         </RadioButton>
                         
                         <RadioButton Style="{StaticResource MenuButtonTheme}"
-                                     Tag="{StaticResource CustomBlueColor1}">
+                                     Tag="{StaticResource CustomBlueColor1}"
+                                     Command="{Binding ShowPatientsNotesViewCommand}">
                             <StackPanel Orientation="Horizontal">
                                 <fa:IconImage Icon="NotesMedical" Style="{StaticResource  MenuButtonIcon}"/>
-                                <TextBlock Text="Notes" Style="{StaticResource MenuButtonText}"/> 
+                                <TextBlock Text="Patients Notes" Style="{StaticResource MenuButtonText}"/> 
                             </StackPanel>
                         </RadioButton>
                         
                         <RadioButton Style="{StaticResource MenuButtonTheme}"
-                                     Tag="{StaticResource CustomYellowColor1}">
+                                     Tag="{StaticResource CustomYellowColor1}"
+                                     Command="{Binding ShowReferralsViewCommand}">
                             <StackPanel Orientation="Horizontal">
                                 <fa:IconImage Icon="Receipt" Style="{StaticResource  MenuButtonIcon}"/>
                                 <TextBlock Text="Referrals" Style="{StaticResource MenuButtonText}"/> 
@@ -90,7 +102,8 @@
                         </RadioButton>
                         
                         <RadioButton Style="{StaticResource MenuButtonTheme}"
-                                     Tag="{StaticResource CustomCoralColor1}">
+                                     Tag="{StaticResource CustomCoralColor1}"
+                                     Command="{Binding ShowInvoicesViewCommand}">
                             <StackPanel Orientation="Horizontal">
                                 <fa:IconImage Icon="FileInvoiceDollar" Style="{StaticResource  MenuButtonIcon}"/>
                                 <TextBlock Text="Invoices" Style="{StaticResource MenuButtonText}"/> 

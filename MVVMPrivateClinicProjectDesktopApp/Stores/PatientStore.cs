@@ -1,5 +1,4 @@
 using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
-using MVVMPrivateClinicProjectDesktopApp.Repositories.Patient;
 using MVVMPrivateClinicProjectDesktopApp.UnitOfWork;
 
 namespace MVVMPrivateClinicProjectDesktopApp.Stores;

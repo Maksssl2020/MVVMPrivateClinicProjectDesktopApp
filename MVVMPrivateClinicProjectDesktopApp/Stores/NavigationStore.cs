@@ -52,6 +52,26 @@ public class NavigationStore : NavigationStoreBase {
                 HeaderBrush = (SolidColorBrush)Application.Current.Resources["CustomPlumColor1"]!;
                 break;
             }
+            case "Prescriptions": {
+             ViewIcon = IconChar.PrescriptionBottleMedical;
+             HeaderBrush = (SolidColorBrush)Application.Current.Resources["CustomOrangeColor1"]!;
+             break;
+            }
+            case "Referrals": {
+                ViewIcon = IconChar.Receipt;
+                HeaderBrush = (SolidColorBrush)Application.Current.Resources["CustomYellowColor1"]!;
+                break;
+            }
+            case "Invoices": {
+                ViewIcon = IconChar.FileInvoiceDollar;
+                HeaderBrush = (SolidColorBrush)Application.Current.Resources["CustomCoralColor1"]!;
+                break;
+            }
+            case "Pricing": {
+                ViewIcon = IconChar.MoneyBills;
+                HeaderBrush = (SolidColorBrush)Application.Current.Resources["CustomPaleGoldColor1"]!;
+                break;
+            }
             default: {
                 ViewIcon = IconChar.House;
                 HeaderBrush = (SolidColorBrush)Application.Current.Resources["CustomLavenderColor1"]!;

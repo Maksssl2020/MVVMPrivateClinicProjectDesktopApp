@@ -187,3 +187,13 @@ C:\Users\maksy\RiderProjects\MVVMPrivateClinicProjectDesktopApp\MVVMPrivateClini
 C:\Users\maksy\RiderProjects\MVVMPrivateClinicProjectDesktopApp\MVVMPrivateClinicProjectDesktopApp\obj\Debug\net8.0-windows\Views\IssuePrescriptionView.g.cs
 C:\Users\maksy\RiderProjects\MVVMPrivateClinicProjectDesktopApp\MVVMPrivateClinicProjectDesktopApp\obj\Debug\net8.0-windows\Views\IssuePrescriptionView.baml
 C:\Users\maksy\RiderProjects\MVVMPrivateClinicProjectDesktopApp\MVVMPrivateClinicProjectDesktopApp\obj\Debug\net8.0-windows\Themes\ComboBoxTheme.baml
+C:\Users\maksy\RiderProjects\MVVMPrivateClinicProjectDesktopApp\MVVMPrivateClinicProjectDesktopApp\obj\Debug\net8.0-windows\Views\PrescriptionsView.g.cs
+C:\Users\maksy\RiderProjects\MVVMPrivateClinicProjectDesktopApp\MVVMPrivateClinicProjectDesktopApp\obj\Debug\net8.0-windows\Views\PrescriptionsView.baml
+C:\Users\maksy\RiderProjects\MVVMPrivateClinicProjectDesktopApp\MVVMPrivateClinicProjectDesktopApp\obj\Debug\net8.0-windows\Views\ReferralsView.g.cs
+C:\Users\maksy\RiderProjects\MVVMPrivateClinicProjectDesktopApp\MVVMPrivateClinicProjectDesktopApp\obj\Debug\net8.0-windows\Views\ReferralsView.baml
+C:\Users\maksy\RiderProjects\MVVMPrivateClinicProjectDesktopApp\MVVMPrivateClinicProjectDesktopApp\obj\Debug\net8.0-windows\Views\InvoicesView.g.cs
+C:\Users\maksy\RiderProjects\MVVMPrivateClinicProjectDesktopApp\MVVMPrivateClinicProjectDesktopApp\obj\Debug\net8.0-windows\Views\InvoicesView.baml
+C:\Users\maksy\RiderProjects\MVVMPrivateClinicProjectDesktopApp\MVVMPrivateClinicProjectDesktopApp\obj\Debug\net8.0-windows\Views\PricingView.g.cs
+C:\Users\maksy\RiderProjects\MVVMPrivateClinicProjectDesktopApp\MVVMPrivateClinicProjectDesktopApp\obj\Debug\net8.0-windows\Views\PricingView.baml
+C:\Users\maksy\RiderProjects\MVVMPrivateClinicProjectDesktopApp\MVVMPrivateClinicProjectDesktopApp\obj\Debug\net8.0-windows\Views\PatientsNotesView.g.cs
+C:\Users\maksy\RiderProjects\MVVMPrivateClinicProjectDesktopApp\MVVMPrivateClinicProjectDesktopApp\obj\Debug\net8.0-windows\Views\PatientsNotesView.baml

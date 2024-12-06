@@ -1,18 +1,21 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace MVVMPrivateClinicProjectDesktopApp.Models.Entities;
 
 public partial class PrivateClinicContext : Microsoft.EntityFrameworkCore.DbContext
 {
     public PrivateClinicContext()
-    { }
+    {
+    }
 
     public PrivateClinicContext(DbContextOptions<PrivateClinicContext> options)
         : base(options)
-    { }
+    {
+    }
 
-    public virtual DbSet<Address?> Addresses { get; set; }
+    public virtual DbSet<Address> Addresses { get; set; }
 
     public virtual DbSet<Appointment> Appointments { get; set; }
 
@@ -40,6 +43,8 @@ public partial class PrivateClinicContext : Microsoft.EntityFrameworkCore.DbCont
 
     public virtual DbSet<Prescription> Prescriptions { get; set; }
 
+    public virtual DbSet<Pricing> Pricings { get; set; }
+
     public virtual DbSet<Referral> Referrals { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -65,7 +70,9 @@ public partial class PrivateClinicContext : Microsoft.EntityFrameworkCore.DbCont
 
             entity.Property(e => e.AppointmentCost).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.AppointmentDate).HasColumnType("datetime");
-            entity.Property(e => e.AppointmentStatus).HasMaxLength(50);
+            entity.Property(e => e.AppointmentStatus)
+                .HasMaxLength(50)
+                .HasDefaultValue("Scheduled");
 
             entity.HasOne(d => d.IdDoctorNavigation).WithMany(p => p.Appointments)
                 .HasForeignKey(d => d.IdDoctor)
@@ -76,6 +83,11 @@ public partial class PrivateClinicContext : Microsoft.EntityFrameworkCore.DbCont
                 .HasForeignKey(d => d.IdPatient)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Appointment_Patient");
+
+            entity.HasOne(d => d.IdPricingNavigation).WithMany(p => p.Appointments)
+                .HasForeignKey(d => d.IdPricing)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Appointment_Pricing");
         });
 
         modelBuilder.Entity<AppointmentCard>(entity =>
@@ -139,16 +151,15 @@ public partial class PrivateClinicContext : Microsoft.EntityFrameworkCore.DbCont
         {
             entity.ToTable("Doctor");
 
-            entity.HasIndex(e => e.DoctorCode, "UK_DoctorCode_Table1").IsUnique();
-
-            entity.Property(e => e.DoctorCode).HasMaxLength(50);
+            entity.Property(e => e.DoctorCode)
+                .HasMaxLength(15)
+                .HasComputedColumnSql("((('DOC'+upper(left([FirstName],(1))))+upper(left([LastName],(1))))+CONVERT([varchar](10),[Id]))", false);
             entity.Property(e => e.FirstName).HasMaxLength(255);
             entity.Property(e => e.LastName).HasMaxLength(255);
             entity.Property(e => e.PhoneNumber).HasMaxLength(50);
 
             entity.HasOne(d => d.IdDoctorCardNavigation).WithMany(p => p.Doctors)
                 .HasForeignKey(d => d.IdDoctorCard)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Doctor_DoctorClinicCard");
 
             entity.HasOne(d => d.IdDoctorSpecializationNavigation).WithMany(p => p.Doctors)
@@ -163,7 +174,6 @@ public partial class PrivateClinicContext : Microsoft.EntityFrameworkCore.DbCont
 
             entity.HasOne(d => d.IdAppointmentNavigation).WithMany(p => p.DoctorClinicCards)
                 .HasForeignKey(d => d.IdAppointment)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_DoctorClinicCard_Appointment");
 
             entity.HasOne(d => d.IdDoctorNavigation).WithMany(p => p.DoctorClinicCards)
@@ -173,7 +183,6 @@ public partial class PrivateClinicContext : Microsoft.EntityFrameworkCore.DbCont
 
             entity.HasOne(d => d.IdPatientNavigation).WithMany(p => p.DoctorClinicCards)
                 .HasForeignKey(d => d.IdPatient)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_DoctorClinicCard_Patient");
         });
 
@@ -190,12 +199,18 @@ public partial class PrivateClinicContext : Microsoft.EntityFrameworkCore.DbCont
 
             entity.Property(e => e.Amount).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.DateIssued).HasColumnType("datetime");
+            entity.Property(e => e.DueDate).HasColumnType("datetime");
             entity.Property(e => e.Status).HasMaxLength(50);
 
             entity.HasOne(d => d.IdPatientNavigation).WithMany(p => p.Invoices)
                 .HasForeignKey(d => d.IdPatient)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Invoice_Patient");
+
+            entity.HasOne(d => d.IdPricingNavigation).WithMany(p => p.Invoices)
+                .HasForeignKey(d => d.IdPricing)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Invoice_Pricing");
         });
 
         modelBuilder.Entity<Medicine>(entity =>
@@ -213,16 +228,12 @@ public partial class PrivateClinicContext : Microsoft.EntityFrameworkCore.DbCont
 
             entity.HasIndex(e => e.EmailAddress, "UK_EmailAddress_Table1").IsUnique();
 
-            entity.HasIndex(e => e.PatientCode, "UK_PatientCode_Table1").IsUnique();
-
             entity.Property(e => e.EmailAddress).HasMaxLength(255);
             entity.Property(e => e.FirstName).HasMaxLength(255);
             entity.Property(e => e.LastName).HasMaxLength(255);
             entity.Property(e => e.PatientCode)
-                .HasMaxLength(50)
-                .ValueGeneratedOnAddOrUpdate()
-                .Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
-            
+                .HasMaxLength(35)
+                .HasComputedColumnSql("(upper((('PAT'+left([FirstName],(1)))+left([LastName],(1)))+CONVERT([nvarchar],[Id])))", true);
             entity.Property(e => e.PhoneNumber).HasMaxLength(50);
 
             entity.HasOne(d => d.IdAddressNavigation).WithMany(p => p.Patients)
@@ -271,7 +282,13 @@ public partial class PrivateClinicContext : Microsoft.EntityFrameworkCore.DbCont
         {
             entity.ToTable("PatientNote");
 
+            entity.Property(e => e.DateIsuued).HasColumnType("datetime");
             entity.Property(e => e.Description).HasMaxLength(1024);
+
+            entity.HasOne(d => d.IdDoctorNavigation).WithMany(p => p.PatientNotes)
+                .HasForeignKey(d => d.IdDoctor)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PatientNote_Doctor");
 
             entity.HasOne(d => d.IdPatientNavigation).WithMany(p => p.PatientNotes)
                 .HasForeignKey(d => d.IdPatient)
@@ -302,6 +319,15 @@ public partial class PrivateClinicContext : Microsoft.EntityFrameworkCore.DbCont
                 .HasForeignKey(d => d.IdPatient)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Prescription_Patient");
+        });
+
+        modelBuilder.Entity<Pricing>(entity =>
+        {
+            entity.ToTable("Pricing");
+
+            entity.Property(e => e.Price).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.ServiceName).HasMaxLength(255);
+            entity.Property(e => e.ServiceType).HasMaxLength(255);
         });
 
         modelBuilder.Entity<Referral>(entity =>

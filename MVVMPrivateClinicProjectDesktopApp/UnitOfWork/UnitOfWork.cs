@@ -6,8 +6,13 @@ using MVVMPrivateClinicProjectDesktopApp.Repositories.Appointment;
 using MVVMPrivateClinicProjectDesktopApp.Repositories.Disease;
 using MVVMPrivateClinicProjectDesktopApp.Repositories.Doctor;
 using MVVMPrivateClinicProjectDesktopApp.Repositories.DoctorSpecialization;
+using MVVMPrivateClinicProjectDesktopApp.Repositories.Invoice;
 using MVVMPrivateClinicProjectDesktopApp.Repositories.Medicine;
+using MVVMPrivateClinicProjectDesktopApp.Repositories.Note;
 using MVVMPrivateClinicProjectDesktopApp.Repositories.Patient;
+using MVVMPrivateClinicProjectDesktopApp.Repositories.Prescription;
+using MVVMPrivateClinicProjectDesktopApp.Repositories.Pricing;
+using MVVMPrivateClinicProjectDesktopApp.Repositories.Referral;
 
 namespace MVVMPrivateClinicProjectDesktopApp.UnitOfWork;
 
@@ -22,6 +27,13 @@ public class UnitOfWork(DbContextFactory dbContextFactory) : IUnitOfWork {
     public IDoctorSpecializationRepository DoctorSpecializationRepository => new DoctorSpecializationRepository(dbContextFactory);
     public IMedicineRepository MedicineRepository => new MedicineRepository(dbContextFactory, _mapper);
     public IPatientRepository PatientRepository => new PatientRepository(dbContextFactory);
+    public IPrescriptionRepository PrescriptionRepository =>
+        new PrescriptionRepository(dbContextFactory, _mapper, PatientRepository, DoctorRepository);
+    public IReferralRepository ReferralRepository => new ReferralRepository(dbContextFactory, _mapper,
+        PatientRepository, DoctorRepository, DiseaseRepository);
+    public IInvoiceRepository InvoiceRepository => new InvoiceRepository(dbContextFactory, _mapper, PatientRepository);
+    public IPricingRepository PricingRepository => new PricingRepository(dbContextFactory, _mapper);
+    public IPatientNoteRepository PatientNoteRepository => new PatientNoteRepository(dbContextFactory, _mapper, PatientRepository, DoctorRepository);
 
     public async Task SaveChangesAsync(){
         await using var context = dbContextFactory.CreateDbContext();

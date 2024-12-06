@@ -38,6 +38,21 @@
         <DataTemplate DataType="{x:Type viewModel:MedicinesViewModel}">
             <local:MedicinesView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:PrescriptionsViewModel}">
+            <local:PrescriptionsView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:ReferralsViewModel}">
+            <local:ReferralsView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:InvoicesViewModel}">
+            <local:InvoicesView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:PricingViewModel}">
+            <local:PricingView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:PatientsNotesViewModel}">
+            <local:PatientsNotesView/>
+        </DataTemplate>
     </Window.Resources>
     
     <Border MouseLeftButtonDown="MouseLeftButtonDown_Press" Background="{StaticResource CustomBlackColor1}" CornerRadius="20">

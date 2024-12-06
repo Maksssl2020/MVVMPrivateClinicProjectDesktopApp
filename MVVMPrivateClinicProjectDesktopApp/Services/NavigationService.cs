@@ -18,6 +18,10 @@ public class NavigationService(NavigationStore navigationStore, Func<ViewModelBa
         AppointmentsViewModel => "Appointments",
         DiseasesViewModel => "Diseases",
         MedicinesViewModel => "Medicines",
+        PrescriptionsViewModel => "Prescriptions",
+        ReferralsViewModel => "Referrals",
+        InvoicesViewModel => "Invoices",
+        PricingViewModel => "Pricing",
         _ => "Home",
     };
 }

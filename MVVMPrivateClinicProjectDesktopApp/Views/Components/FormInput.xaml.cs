@@ -19,6 +19,10 @@ public partial class FormInput : UserControl {
         DependencyProperty.Register(nameof(ErrorMessage), typeof(string), typeof(FormInput),
             new PropertyMetadata(string.Empty));
     
+    public static readonly DependencyProperty InputHeightProperty = 
+        DependencyProperty.Register(nameof(InputHeight), typeof(double), typeof(FormInput),
+            new PropertyMetadata(35.0d));
+    
     public string LabelTitle {
         get => (string)GetValue(LabelTitleProperty);
         set => SetValue(LabelTitleProperty, value);
@@ -32,11 +36,14 @@ public partial class FormInput : UserControl {
     public string ErrorMessage {
         get => (string)GetValue(ErrorMessageProperty);
         set => SetValue(ErrorMessageProperty, value);
-    } 
+    }
+
+    public double InputHeight {
+        get => (double) GetValue(InputHeightProperty);
+        set => SetValue(InputHeightProperty, value);
+    }
     
     public FormInput(){
         InitializeComponent();
     }
-
-
 }

@@ -4,10 +4,9 @@ using System.Windows.Media;
 
 namespace MVVMPrivateClinicProjectDesktopApp.Views;
 
-public partial class AddNewPatientView : Window {
-    public AddNewPatientView(){
+public partial class AddNewPatientView : WindowViewBase {
+    public AddNewPatientView() {
         InitializeComponent();
-        ResizeMode = ResizeMode.NoResize;
     }
 
     private void buttonClearForm_Click(object sender, RoutedEventArgs e){
@@ -21,7 +20,4 @@ public partial class AddNewPatientView : Window {
         BuildingNumberInput.FormText = "";
         LocalNumberInput.FormText = "";
     }
-    
-    private void buttonClose_Click(object sender, RoutedEventArgs e) => Close();
-    private void MouseLeftButtonDown_Hold(object sender, MouseButtonEventArgs e) => DragMove();
 }

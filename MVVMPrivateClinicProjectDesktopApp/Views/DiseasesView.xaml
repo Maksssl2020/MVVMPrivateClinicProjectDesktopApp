@@ -38,6 +38,7 @@
                     </Border>
                     
                     <components:ButtonWithIcon Grid.Column="1"
+                                               ButtonWidth="200"
                                                ButtonText="Add New Disease"
                                                TextColor="{StaticResource CustomTurquoiseColor1}"/>
                 </Grid>
