@@ -1,18 +1,16 @@
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using MVVMPrivateClinicProjectDesktopApp.Commands;
+using MVVMPrivateClinicProjectDesktopApp.Interfaces;
 using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
 using MVVMPrivateClinicProjectDesktopApp.Stores;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
 public class PatientDetailsViewModel : ViewModelBase {
-    private readonly PatientStore _patientStore;
-    private readonly AppointmentStore _appointmentStore;
-
     private Patient _selectedPatient = null!;
     private Address _selectedPatientAddress = null!;
-    private readonly ICommand LoadPatientDetailsCommand;
+    public int SelectedPatientId { get; set; }
     
     public Patient SelectedPatient {
         get => _selectedPatient;
@@ -32,9 +30,9 @@ public class PatientDetailsViewModel : ViewModelBase {
 
     public ObservableCollection<AppointmentDto> SelectedPatientAppointments { get; }
 
+    private ICommand LoadPatientDetailsCommand {get; }
+    
     private PatientDetailsViewModel(PatientStore patientStore, AppointmentStore appointmentStore) {
-        _patientStore = patientStore;
-        _appointmentStore = appointmentStore;
         SelectedPatientAppointments = [];
         
         LoadPatientDetailsCommand = new LoadPatientDetailsCommand(this, patientStore, appointmentStore);

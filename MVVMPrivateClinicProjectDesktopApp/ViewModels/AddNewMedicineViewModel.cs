@@ -76,7 +76,7 @@ public class AddNewMedicineViewModel : ViewModelBase {
 
         SubmitCommand = new SubmitCommand(Submit, CanSubmit);
         LoadMedicineTypesCommand = new LoadMedicineTypesCommand(this, medicineStore);
-        CreateMedicineCommand = new CreateMedicineCommand(this, medicineStore);
+        CreateMedicineCommand = new CreateMedicineCommand(this, medicineStore, ResetForm);
     }
     
     public static AddNewMedicineViewModel LoadAddNewMedicineViewModel(MedicineStore medicineStore){
@@ -104,7 +104,6 @@ public class AddNewMedicineViewModel : ViewModelBase {
 
     private void Submit(){
         CreateMedicineCommand.Execute(null);
-        ResetForm();
     }
 
     private void ResetForm(){

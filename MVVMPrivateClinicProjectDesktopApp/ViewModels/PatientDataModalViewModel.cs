@@ -1,12 +1,13 @@
 using System.Windows.Input;
 using MVVMPrivateClinicProjectDesktopApp.Commands;
+using MVVMPrivateClinicProjectDesktopApp.Interfaces;
 using MVVMPrivateClinicProjectDesktopApp.Stores;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
 public class PatientDataModalViewModel : ViewModelBase {
     private readonly PatientDataModalNavigationStore _patientDataModalNavigationStore;
-    private readonly PatientStore _patientStore;
+
     public PatientDataModalNavigationViewModel PatientDataModalNavigationViewModel { get; }
     public ViewModelBase CurrentViewModel => _patientDataModalNavigationStore.CurrentViewModel!;
 
@@ -19,14 +20,13 @@ public class PatientDataModalViewModel : ViewModelBase {
         }
     }
 
-    private readonly ICommand LoadPatientCommand;
+    private ICommand LoadPatientCommand {get; set;}
     
     private PatientDataModalViewModel(PatientDataModalNavigationStore patientDataModalNavigationStore, PatientDataModalNavigationViewModel patientDataModalNavigationViewModel, PatientStore patientStore){
         _patientDataModalNavigationStore = patientDataModalNavigationStore;
         PatientDataModalNavigationViewModel = patientDataModalNavigationViewModel;
-        _patientStore = patientStore;
 
-        LoadPatientCommand = new LoadPatientCommand(this, _patientStore);
+        LoadPatientCommand = new LoadPatientCommand(this, patientStore);
         
         _patientDataModalNavigationStore.CurrentViewModelChanged += OnCurrentViewModelChanged;
     }
@@ -39,6 +39,9 @@ public class PatientDataModalViewModel : ViewModelBase {
         patientDataModalViewModel.LoadPatientCommand.Execute(null);
         patientDataModalNavigationViewModel.ShowPatientDetailsViewCommand.Execute(null);
         
+        if (patientDataModalViewModel.SelectedPatient != null)
+            patientDataModalNavigationStore.SelectedPatientId = patientDataModalViewModel.SelectedPatient.Id;
+
         return patientDataModalViewModel;
     }
     

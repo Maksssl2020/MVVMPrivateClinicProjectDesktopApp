@@ -30,6 +30,9 @@
         <DataTemplate DataType="{x:Type viewModel:AddNewPatientNoteViewModel}">
             <local:AddNewPatientNoteView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:IssueReferralViewModel}">
+            <local:IssueReferralView/>
+        </DataTemplate>
     </Window.Resources>
     
     <Border MouseLeftButtonDown="MouseLeftButtonDown_Hold" BorderThickness="3" BorderBrush="{StaticResource CustomGrayColor2}" Background="{StaticResource CustomBlackColor1}" CornerRadius="20" Padding="20">
@@ -96,7 +99,8 @@
                         </StackPanel>
                     </RadioButton>
                     <RadioButton Style="{StaticResource FilterToggleButtonStyle}" 
-                                 Tag="{StaticResource CustomYellowColor1}">
+                                 Tag="{StaticResource CustomYellowColor1}"
+                                 Command="{Binding ShowIssueReferralViewCommand}">
                         <StackPanel Style="{StaticResource ToggleButtonStackPanel}">
                             <fa:IconImage Style="{StaticResource ToggleButtonIcon}" Icon="Receipt"/>
                             <TextBlock Text="Issue Referral" Style="{StaticResource ToggleButtonText}"/>

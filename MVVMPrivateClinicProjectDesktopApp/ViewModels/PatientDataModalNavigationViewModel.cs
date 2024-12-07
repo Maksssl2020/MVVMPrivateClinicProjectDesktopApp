@@ -7,9 +7,11 @@ namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 public class PatientDataModalNavigationViewModel(
     NavigationServiceBase patientDetailNavigationService,
     NavigationServiceBase prescriptionNavigationService,
-    NavigationServiceBase addNewPatientNoteNavigationService
+    NavigationServiceBase addNewPatientNoteNavigationService,
+    NavigationServiceBase issueReferralNavigationService
     ) {
     public ICommand ShowPatientDetailsViewCommand { get; } = new NavigateCommand(patientDetailNavigationService);
     public ICommand ShowIssuePrescriptionViewCommand { get; } = new NavigateCommand(prescriptionNavigationService);
     public ICommand ShowAddNewPatientNoteViewCommand { get; } = new NavigateCommand(addNewPatientNoteNavigationService);
+    public ICommand ShowIssueReferralViewCommand { get; } = new NavigateCommand(issueReferralNavigationService);
 }

@@ -10,6 +10,7 @@ using MVVMPrivateClinicProjectDesktopApp.Repositories.Patient;
 using MVVMPrivateClinicProjectDesktopApp.Repositories.Prescription;
 using MVVMPrivateClinicProjectDesktopApp.Repositories.Pricing;
 using MVVMPrivateClinicProjectDesktopApp.Repositories.Referral;
+using MVVMPrivateClinicProjectDesktopApp.Repositories.ReferralTest;
 
 namespace MVVMPrivateClinicProjectDesktopApp.UnitOfWork;
 
@@ -26,5 +27,6 @@ public interface IUnitOfWork {
     IInvoiceRepository InvoiceRepository { get; }
     IPricingRepository PricingRepository { get; }
     IPatientNoteRepository PatientNoteRepository { get; }
+    IReferralTestRepository ReferralTestRepository { get; }
     Task SaveChangesAsync();
 }

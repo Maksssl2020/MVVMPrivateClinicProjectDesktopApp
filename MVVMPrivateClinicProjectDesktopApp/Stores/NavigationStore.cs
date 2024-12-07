@@ -5,7 +5,7 @@ using MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
 namespace MVVMPrivateClinicProjectDesktopApp.Stores;
 
-public class NavigationStore : NavigationStoreBase {
+public class NavigationStore : NavigationStoreBase<ViewModelBase> {
     public string ViewTitle { get; private set; } = null!;
     public IconChar ViewIcon { get; private set; }
     public SolidColorBrush HeaderBrush { get; private set; } = null!;

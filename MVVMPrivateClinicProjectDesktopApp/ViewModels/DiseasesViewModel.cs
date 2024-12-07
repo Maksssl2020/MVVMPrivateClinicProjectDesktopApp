@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Windows.Data;
 using System.Windows.Input;
 using MVVMPrivateClinicProjectDesktopApp.Commands;
+using MVVMPrivateClinicProjectDesktopApp.Interfaces;
 using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
 using MVVMPrivateClinicProjectDesktopApp.Repositories.Disease;
 using MVVMPrivateClinicProjectDesktopApp.Stores;
@@ -10,7 +11,7 @@ using MVVMPrivateClinicProjectDesktopApp.UnitOfWork;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
-public class DiseasesViewModel : ViewModelBase {
+public class DiseasesViewModel : ViewModelBase, IDiseasesViewModel {
     private string _diseasesFilter = string.Empty;
 
     private readonly ObservableCollection<DiseaseDto> _diseases; 
@@ -48,7 +49,7 @@ public class DiseasesViewModel : ViewModelBase {
         return diseasesViewModel;
     }
 
-    public void UpdateDiseases(IEnumerable<DiseaseDto> diseases){
+    public void UpdateDiseasesDto(IEnumerable<DiseaseDto> diseases){
         _diseases.Clear();
 
         foreach (var disease in diseases) {

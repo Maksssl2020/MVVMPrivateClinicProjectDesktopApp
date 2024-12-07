@@ -6,7 +6,7 @@ using MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
 namespace MVVMPrivateClinicProjectDesktopApp.Commands;
 
-public class CreatePatientCommand(AddNewPatientViewModel addNewPatientViewModel, PatientStore patientStore)
+public class CreatePatientCommand(AddNewPatientViewModel addNewPatientViewModel, PatientStore patientStore, Action resetForm)
     : AsyncRelayCommand {
     
     public override async Task ExecuteAsync(object? parameter){
@@ -20,14 +20,18 @@ public class CreatePatientCommand(AddNewPatientViewModel addNewPatientViewModel,
 
         var savedAddress = await patientStore.SavePatientAddress(saveAddressRequest);
 
+        var patientEmail = addNewPatientViewModel.Email != "" ? addNewPatientViewModel.Email : null;
+        
         var savePatientRequest = new SavePatientRequest {
             FirstName = addNewPatientViewModel.FirstName,
             LastName = addNewPatientViewModel.LastName,
             PhoneNumber = addNewPatientViewModel.PhoneNumber,
-            Email = addNewPatientViewModel.Email,
-            AddressId = savedAddress.Id,
+            Email = patientEmail,
+            AddressId = savedAddress!.Id
         };
 
         await patientStore.CreatePatient(savePatientRequest);
+        
+        resetForm.Invoke();
     }
 }

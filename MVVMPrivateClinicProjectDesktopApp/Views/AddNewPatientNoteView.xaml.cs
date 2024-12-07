@@ -10,6 +10,6 @@ public partial class AddNewPatientNoteView : UserControl {
     
     private void buttonClearForm_Click(object sender, RoutedEventArgs e){
         DoctorSelector.SelectedItem = null;
-        NoteDescriptionInput.Text = "";
+        NoteDescriptionInput.FormText = "";
     }
 }

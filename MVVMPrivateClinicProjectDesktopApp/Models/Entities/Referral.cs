@@ -19,6 +19,8 @@ public partial class Referral
 
     public int? IdDisease { get; set; }
 
+    public int IdReferralTest { get; set; }
+
     public virtual ICollection<AppointmentCard> AppointmentCards { get; set; } = new List<AppointmentCard>();
 
     public virtual Disease? IdDiseaseNavigation { get; set; }
@@ -26,6 +28,8 @@ public partial class Referral
     public virtual Doctor IdDoctorNavigation { get; set; } = null!;
 
     public virtual Patient IdPatientNavigation { get; set; } = null!;
+
+    public virtual ReferralTest IdReferralTestNavigation { get; set; } = null!;
 
     public virtual ICollection<PatientClinicCard> PatientClinicCards { get; set; } = new List<PatientClinicCard>();
 }

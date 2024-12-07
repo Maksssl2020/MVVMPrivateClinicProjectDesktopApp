@@ -7,11 +7,17 @@
              xmlns:dto="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Models.DTOs"
              xmlns:components="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Views.Components"
              xmlns:local="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Views"
+             xmlns:converters="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Converters"
              mc:Ignorable="d"
              d:DesignHeight="550"
              d:DesignWidth="1205"
              d:DataContext="{d:DesignInstance viewModel:AddNewPatientNoteViewModel}"
              Background="Transparent">
+    
+    <UserControl.Resources>
+        <converters:DateTimeFormatConverter x:Key="DateTimeFormatConverter"/>
+    </UserControl.Resources>
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -45,7 +51,7 @@
                             </StackPanel>
                         
                             <StackPanel Grid.Column="1" HorizontalAlignment="Right">
-                                <Label Foreground="White" FontSize="15" Content="Patient Note's Author ( Doctor ):"/>
+                                <Label Foreground="White" FontSize="15" Content="Patient Note's Author ( Doctor )*:"/>
                                 <ComboBox Margin="0 15 0 10" 
                                           x:Name="DoctorSelector"
                                           Width="345" 
@@ -75,17 +81,14 @@
                             </StackPanel>
                         </Grid>
                         
-                        <StackPanel Grid.Row="1">
-                            <Label FontSize="15" Foreground="White" Content="Patient Note Description"/>
-                            <Border Padding="5" Margin="0 15 0 10" CornerRadius="15" Background="{StaticResource CustomGrayColor1}">
-                                <TextBox x:Name="NoteDescriptionInput" Text="{Binding PatientNoteDescription, Mode=TwoWay}" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" FontSize="15" Foreground="White" Height="100" />
-                            </Border>
-                            
-                            <Label Foreground="Red" 
-                                   FontSize="14" 
-                                   Height="30"
-                                   Content="{Binding ElementName=NoteDescriptionInput, Path=(Validation.Errors)[0].ErrorContent}"/>
-                        </StackPanel>
+                        <components:FormInput Grid.Row="1"
+                            x:Name="NoteDescriptionInput" 
+                            ErrorMessage="{Binding ElementName=NoteDescriptionInput, Path=(Validation.Errors)[0].ErrorContent}"
+                            Style="{StaticResource FormInputErrorsStyle}" 
+                            FormText="{Binding PatientNoteDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            LabelTitle="Patient Note Description*"
+                            InputHeight="165"
+                            InputBackgroundColor="{StaticResource CustomGrayColor1}"/>
                         
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="2">
                             <Button
@@ -109,5 +112,72 @@
                 </StackPanel>
             </Border>
         
+            <Border Grid.Column="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    
+                    <Border></Border>
+                    <Border Grid.Row="1" 
+                            Padding="10 0" 
+                            Margin="0 0 20 0" 
+                            CornerRadius="15 15 0 0"
+                            Background="{StaticResource CustomGrayColor1}">
+                        <Label FontSize="16" Foreground="White" VerticalAlignment="Center" Content="All Patient Notes"/>
+                    </Border>
+                    <ScrollViewer Grid.Row="2">
+                       <Border BorderBrush="{StaticResource CustomGrayColor1}" 
+                               BorderThickness="5 0 5 5 "
+                               Padding="10"
+                               CornerRadius=" 0 0 15 15">
+                            <ItemsControl ItemsSource="{Binding PatientNotesWithDoctorDataDtoView }">
+                                <ItemsControl.Template>
+                                    <ControlTemplate>
+                                        <StackPanel>
+                                            <TextBlock FontSize="16" Foreground="Gray" HorizontalAlignment="Center" Text="There are no patient notes!"/>
+                                        </StackPanel>
+                                    </ControlTemplate>
+                                </ItemsControl.Template>
+                                
+                                <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="{x:Type dto:PatientNoteWithDoctorDataDto}">
+                                    <Border Padding="5" BorderThickness="2" Margin="0 0 0 10" BorderBrush="{StaticResource CustomBlueColor1}" CornerRadius="10" MinHeight="250">
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="100"/>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
+                                            
+                                            <StackPanel Orientation="Horizontal" Grid.Row="0">
+                                                <StackPanel HorizontalAlignment="Left" Orientation="Vertical">
+                                                    <TextBlock FontSize="15" Foreground="White" Text="{Binding DateIssued, Converter={StaticResource DateTimeFormatConverter}}"/>
+                                                    <TextBlock Margin="0 5 0 0" FontSize="15" Foreground="White">
+                                                        <Run Text="Issued By Doctor:"/>
+                                                        <LineBreak />
+                                                        <Run FontWeight="Bold" Text="#"/>
+                                                        <Run FontWeight="Bold" Text="{Binding DoctorCode}"/>
+                                                        <Run Text="{Binding DoctorFirstName}"/>
+                                                        <Run Text="{Binding DoctorLastName}"/>
+                                                        <LineBreak/>
+                                                        <Run Text="{Binding DoctorSpecialization}"/>
+                                                    </TextBlock>
+                                                </StackPanel>
+                                            </StackPanel>
+                                            
+                                            <Border Grid.Row="1" BorderBrush="{StaticResource CustomBlueColor1}" BorderThickness="0 3 0 0" Padding="0 10 0 5">
+                                                <TextBlock  FontSize="14" TextWrapping="Wrap" Foreground="White" Text="{Binding Description}" />
+                                            </Border>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                       </Border>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
     </Grid>
 </UserControl>

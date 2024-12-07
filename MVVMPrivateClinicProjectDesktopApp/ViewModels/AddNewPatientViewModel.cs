@@ -1,9 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Windows.Input;
 using MVVMPrivateClinicProjectDesktopApp.Commands;
-using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
-using MVVMPrivateClinicProjectDesktopApp.Repositories.Address;
-using MVVMPrivateClinicProjectDesktopApp.Repositories.Patient;
 using MVVMPrivateClinicProjectDesktopApp.Stores;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
@@ -122,7 +119,7 @@ public class AddNewPatientViewModel : ViewModelBase {
     
     public AddNewPatientViewModel(PatientStore patientStore){
         SubmitCommand = new SubmitCommand(Submit, CanSubmit);
-        CreatePatientCommand = new CreatePatientCommand(this, patientStore);
+        CreatePatientCommand = new CreatePatientCommand(this, patientStore, ResetForm);
     }
 
     private bool CanSubmit(){
@@ -133,7 +130,6 @@ public class AddNewPatientViewModel : ViewModelBase {
 
     private void Submit(){
         CreatePatientCommand.Execute(null);
-        ResetForm();
     }
 
     private void ResetForm() {

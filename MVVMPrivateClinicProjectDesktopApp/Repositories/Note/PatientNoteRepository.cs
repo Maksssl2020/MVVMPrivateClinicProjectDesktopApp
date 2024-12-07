@@ -42,11 +42,39 @@ public class PatientNoteRepository(DbContextFactory dbContextFactory, IMapper ma
         return foundPatientsNotes;
     }
 
+    public async Task<IEnumerable<PatientNoteWithDoctorDataDto>> GetAllPatientNotesByPatientIdAsync(int patientId){
+        await using var context = dbContextFactory.CreateDbContext();
+
+        var foundPatientNotes = await context.PatientNotes
+            .Where(p => p.IdPatient == patientId)
+            .ProjectTo<PatientNoteWithDoctorDataDto>(mapper.ConfigurationProvider)
+            .ToListAsync();
+
+        foreach (var patientNote in foundPatientNotes) {
+            await AssignDoctorDataToPatientNoteWithDoctorDataDto(patientNote);
+        }
+        
+        return foundPatientNotes;
+    }
+
     private async Task AssignPatientCodeAndDoctorCodeToPatientNoteDto(PatientNoteDto patientNote){
         var foundPatient = await patientRepository.GetPatientByIdAsync(patientNote.IdPatient);
         var foundDoctor = await doctorRepository.GetDoctorByIdAsync(patientNote.IdDoctor);
 
         if (foundPatient?.PatientCode != null) patientNote.PatientCode = foundPatient.PatientCode;
         if (foundDoctor?.DoctorCode != null) patientNote.DoctorCode = foundDoctor.DoctorCode;  
+    }
+
+    private async Task AssignDoctorDataToPatientNoteWithDoctorDataDto(
+        PatientNoteWithDoctorDataDto patientNoteWithDoctorDataDto){
+        var foundDoctor = await doctorRepository.GetDoctorByIdAsync(patientNoteWithDoctorDataDto.IdDoctor);
+        Console.WriteLine(foundDoctor?.DoctorSpecialization);
+
+        if (foundDoctor != null) {
+            patientNoteWithDoctorDataDto.DoctorFirstName = foundDoctor.FirstName;
+            patientNoteWithDoctorDataDto.DoctorLastName = foundDoctor.LastName;
+            patientNoteWithDoctorDataDto.DoctorCode = foundDoctor.DoctorCode;
+            patientNoteWithDoctorDataDto.DoctorSpecialization = foundDoctor.DoctorSpecialization!;
+        }
     }
 }

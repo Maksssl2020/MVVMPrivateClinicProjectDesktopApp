@@ -13,6 +13,7 @@ using MVVMPrivateClinicProjectDesktopApp.Repositories.Patient;
 using MVVMPrivateClinicProjectDesktopApp.Repositories.Prescription;
 using MVVMPrivateClinicProjectDesktopApp.Repositories.Pricing;
 using MVVMPrivateClinicProjectDesktopApp.Repositories.Referral;
+using MVVMPrivateClinicProjectDesktopApp.Repositories.ReferralTest;
 
 namespace MVVMPrivateClinicProjectDesktopApp.UnitOfWork;
 
@@ -34,6 +35,7 @@ public class UnitOfWork(DbContextFactory dbContextFactory) : IUnitOfWork {
     public IInvoiceRepository InvoiceRepository => new InvoiceRepository(dbContextFactory, _mapper, PatientRepository);
     public IPricingRepository PricingRepository => new PricingRepository(dbContextFactory, _mapper);
     public IPatientNoteRepository PatientNoteRepository => new PatientNoteRepository(dbContextFactory, _mapper, PatientRepository, DoctorRepository);
+    public IReferralTestRepository ReferralTestRepository => new ReferralTestRepository(dbContextFactory, _mapper);
 
     public async Task SaveChangesAsync(){
         await using var context = dbContextFactory.CreateDbContext();

@@ -47,6 +47,8 @@ public partial class PrivateClinicContext : Microsoft.EntityFrameworkCore.DbCont
 
     public virtual DbSet<Referral> Referrals { get; set; }
 
+    public virtual DbSet<ReferralTest> ReferralTests { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Server=localhost;Database=PrivateClinic;Trusted_Connection=True;TrustServerCertificate=True");
@@ -351,6 +353,19 @@ public partial class PrivateClinicContext : Microsoft.EntityFrameworkCore.DbCont
                 .HasForeignKey(d => d.IdPatient)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Referral_Patient");
+
+            entity.HasOne(d => d.IdReferralTestNavigation).WithMany(p => p.Referrals)
+                .HasForeignKey(d => d.IdReferralTest)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Referral_ReferralTest");
+        });
+
+        modelBuilder.Entity<ReferralTest>(entity =>
+        {
+            entity.ToTable("ReferralTest");
+
+            entity.Property(e => e.Description).HasMaxLength(255);
+            entity.Property(e => e.Name).HasMaxLength(255);
         });
 
         OnModelCreatingPartial(modelBuilder);

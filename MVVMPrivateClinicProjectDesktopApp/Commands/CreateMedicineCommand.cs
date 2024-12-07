@@ -4,7 +4,7 @@ using MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
 namespace MVVMPrivateClinicProjectDesktopApp.Commands;
 
-public class CreateMedicineCommand(AddNewMedicineViewModel viewModel, MedicineStore medicineStore) : AsyncRelayCommand {
+public class CreateMedicineCommand(AddNewMedicineViewModel viewModel, MedicineStore medicineStore, Action resetForm) : AsyncRelayCommand {
     public override async Task ExecuteAsync(object? parameter){
         var saveMedicineRequest = new SaveMedicineRequest {
             Name = viewModel.MedicineName,
@@ -13,5 +13,6 @@ public class CreateMedicineCommand(AddNewMedicineViewModel viewModel, MedicineSt
         };
         
         await medicineStore.CreateMedicine(saveMedicineRequest);
+        resetForm.Invoke();
     }
 }

@@ -25,7 +25,7 @@ public class AddNewDiseaseViewModel : ViewModelBase {
     
     public AddNewDiseaseViewModel(DiseaseStore diseaseStore){
         SubmitCommand = new SubmitCommand(Submit, CanSubmit);
-        CreateDiseaseCommand = new CreateDiseaseCommand(this, diseaseStore);
+        CreateDiseaseCommand = new CreateDiseaseCommand(this, diseaseStore, ResetForm);
     }
 
     private bool CanSubmit(){
@@ -36,7 +36,6 @@ public class AddNewDiseaseViewModel : ViewModelBase {
 
     private void Submit(){
         CreateDiseaseCommand.Execute(null);
-        ResetForm();
     }
 
     private void ResetForm(){

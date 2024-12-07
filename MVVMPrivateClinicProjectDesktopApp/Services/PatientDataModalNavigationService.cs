@@ -1,3 +1,4 @@
+using MVVMPrivateClinicProjectDesktopApp.Interfaces;
 using MVVMPrivateClinicProjectDesktopApp.Stores;
 using MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
@@ -10,7 +11,5 @@ public class PatientDataModalNavigationService(
     public override void Navigate(){
         var viewModel = createViewModel();  
         patientDataModalNavigationStore.ChangeCurrentViewModel(viewModel);
-
-        Console.WriteLine("CHANGING!");
     }
 }

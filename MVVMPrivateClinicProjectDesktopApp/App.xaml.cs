@@ -35,6 +35,7 @@ public partial class App : Application {
     private readonly PatientNoteStore _patientNoteStore;
     private readonly DiseaseStore _diseaseStore;
     private readonly DoctorSpecializationStore _doctorSpecializationStore;
+    private readonly ReferralTestStore _referralTestStore;
     private readonly NavigationBarViewModel _navigationBarViewModel;
     private readonly ModalNavigationViewModel _modalNavigationViewModel;
     private readonly PatientDataModalNavigationViewModel _patientDataModalNavigationViewModel;
@@ -61,6 +62,8 @@ public partial class App : Application {
         _patientNoteStore = new PatientNoteStore(_unitOfWork);
         _diseaseStore = new DiseaseStore(_unitOfWork);
         _doctorSpecializationStore = new DoctorSpecializationStore(_unitOfWork);
+        _referralTestStore = new ReferralTestStore(_unitOfWork);
+        
         _navigationBarViewModel = new NavigationBarViewModel(
             CreateHomeNavigationService(),
             CreatePatientsNavigationService(),
@@ -87,7 +90,8 @@ public partial class App : Application {
         _patientDataModalNavigationViewModel = new PatientDataModalNavigationViewModel(
             CreatePatientDetailsNavigationService(),
             CreateIssuePrescriptionsNavigationService(),
-            CreateAddNewPatientNoteNavigationService()
+            CreateAddNewPatientNoteNavigationService(),
+            CreateIssueReferralNavigationService()
         );
     }
     
@@ -187,5 +191,9 @@ public partial class App : Application {
         return new PatientDataModalNavigationService(_patientDataModalNavigationStore,
             () => AddNewPatientNoteViewModel.LoadAddNewPatientNoteViewModel(_doctorStore, _patientStore,
                 _patientNoteStore));
+    }
+
+    private NavigationServiceBase CreateIssueReferralNavigationService(){
+        return new PatientDataModalNavigationService(_patientDataModalNavigationStore, () => IssueReferralViewModel.LoadIssueReferralViewModel(_doctorStore, _diseaseStore, _referralTestStore));
     }
 }

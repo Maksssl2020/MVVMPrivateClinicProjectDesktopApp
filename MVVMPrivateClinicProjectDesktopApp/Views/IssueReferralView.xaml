@@ -1,4 +1,4 @@
-<UserControl x:Class="MVVMPrivateClinicProjectDesktopApp.Views.IssuePrescriptionView"
+<UserControl x:Class="MVVMPrivateClinicProjectDesktopApp.Views.IssueReferralView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -10,7 +10,7 @@
              mc:Ignorable="d"
              d:DesignHeight="550"
              d:DesignWidth="1205"
-             d:DataContext="{d:DesignInstance viewModel:IssuePrescriptionViewModel}"
+             d:DataContext="{d:DesignInstance viewModel:IssueReferralViewModel}"
              Background="Transparent">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -21,12 +21,13 @@
        
             <Border Grid.Column="0" Padding="15">
                 <StackPanel Orientation="Vertical">
-                    <Label FontSize="24" Foreground="White" Content="New Prescription Form"/>
+                    <Label FontSize="24" Foreground="White" Content="New Referral Form"/>
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="100"/>
                             <RowDefinition Height="125"/>
                             <RowDefinition Height="*"/>
+                            <RowDefinition Height="75"/>
                         </Grid.RowDefinitions>
 
                         <Grid Grid.Row="0">
@@ -37,7 +38,7 @@
                         
                             <StackPanel Grid.Column="0" HorizontalAlignment="Left" Orientation="Vertical">
                                 <StackPanel HorizontalAlignment="Left">
-                                    <Label FontSize="15" Foreground="White" Content="Prescription Issue Date:"/>
+                                    <Label FontSize="15" Foreground="White" Content="Referral's Issue Date:"/>
                                     <Border Width="345" Height="50" HorizontalAlignment="Center" BorderBrush="{StaticResource CustomGrayColor1}" BorderThickness="2" CornerRadius="5" Margin="0 15 0 0">
                                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="15" Foreground="White" Text="{Binding Today}"/>
                                     </Border>
@@ -45,13 +46,14 @@
                             </StackPanel>
                         
                             <StackPanel Grid.Column="1" HorizontalAlignment="Right">
-                                <Label Foreground="White" FontSize="15" Content="Prescription's Author ( Doctor ):"/>
+                                <Label Foreground="White" FontSize="15" Content="Referral's Author ( Doctor ):"/>
                                 <ComboBox Margin="0 15 0 0" 
                                           Width="345" 
                                           VerticalAlignment="Center" 
-                                          ItemsSource="{Binding DoctorsDtoView}" 
+                                          ItemsSource="{Binding DoctorsView}" 
                                           SelectedItem="{Binding SelectedDoctor, Mode=TwoWay}"
-                                          Style="{StaticResource ComboBoxStyle}">
+                                          Style="{StaticResource ComboBoxStyle}"
+                                          BorderBrush="{StaticResource CustomYellowColor1}">
                                     <ComboBox.ItemTemplate>
                                         <DataTemplate DataType="{x:Type dto:DoctorDto}">
                                             <TextBlock VerticalAlignment="Center" Height="35" Padding="10 8" Foreground="White" FontSize="14" >
@@ -67,34 +69,13 @@
                         </Grid>
                     
                         <StackPanel Margin="0 15 0 0" Grid.Row="1" >
-                            <Label FontSize="15" Foreground="White" Content="Prescription Validity"/>
-                            <Grid Margin="0 15 0 0" >
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                
-                                <StackPanel Grid.Column="0" HorizontalAlignment="Left">
-                                    <Border  BorderThickness="2" CornerRadius="5" BorderBrush="{StaticResource CustomGrayColor1}" Height="50" Width="345">
-                                        <ToggleButton BorderThickness="0" BorderBrush="Transparent"  Background="Transparent" >
-                                            <TextBlock Foreground="White" FontWeight="Bold" FontSize="15" Text="1 YEAR"/>
-                                        </ToggleButton>
-                                    </Border>
-                                </StackPanel>
-                                <StackPanel Grid.Column="1" HorizontalAlignment="Right">
-                                    <Border BorderThickness="2" CornerRadius="5" BorderBrush="{StaticResource CustomGrayColor1}" Height="50" Width="345">
-                                        <ToggleButton  BorderThickness="0" BorderBrush="Transparent"  Background="Transparent">
-                                            <TextBlock Foreground="White" FontWeight="Bold" FontSize="15" Text="1 MONTH"/>
-                                        </ToggleButton>
-                                    </Border>
-                                </StackPanel>
-                            </Grid>
+                            <components:FormInput LabelTitle="Referral's Name"/>
                         </StackPanel>
                         
                         <StackPanel Grid.Row="2">
-                            <Label FontSize="15" Foreground="White" Content="Prescription Description:"/>
+                            <Label FontSize="15" Foreground="White" Content="Referral's Description:"/>
                             <Border Padding="5" Margin="0 15 0 0" CornerRadius="15" Background="{StaticResource CustomGrayColor1}">
-                                <TextBox Background="Transparent" BorderBrush="Transparent" BorderThickness="0" FontSize="15" Foreground="White" Height="150" />
+                                <TextBox Background="Transparent" BorderBrush="Transparent" BorderThickness="0" FontSize="15" Foreground="White" Height="55" />
                             </Border>
                         </StackPanel>
                     </Grid>
@@ -106,6 +87,7 @@
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="50"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             
             <Border Grid.Row="0" 
@@ -121,13 +103,61 @@
                     </Grid.ColumnDefinitions>
                 
                     <TextBlock FontSize="18" Text="Id" Foreground="White" Grid.Column="0"/>
-                    <TextBlock FontSize="18" Text="Medicine Name" Foreground="White" Grid.Column="1"/>
-                    <TextBlock FontSize="18" Text="Medicine Type" Foreground="White" Grid.Column="2"/>
+                    <TextBlock FontSize="18" Text="Disease Name" Foreground="White" Grid.Column="1"/>
+                    <TextBlock FontSize="18" Text="Disease Code" Foreground="White" Grid.Column="2"/>
                 </Grid>
             </Border>
             
             <ScrollViewer Grid.Row="1" Style="{StaticResource ScrollBarTheme}" >
-                <ListView   ItemsSource="{Binding MedicinesDtoView}" 
+                <ListView  ItemsSource="{Binding DiseasesView}" 
+                           BorderBrush="Transparent" 
+                           BorderThickness="0" 
+                           SelectionMode="Multiple"  
+                           Background="Transparent" 
+                           Foreground="White"
+                           Margin="0 15 0 0"
+                           ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                           ScrollViewer.CanContentScroll="False"
+                >
+                    <ListView.ItemTemplate>
+                        <DataTemplate DataType="{x:Type dto:DiseaseDto}">
+                            <Border Width="440" Height="35" Padding="5 0" VerticalAlignment="Center" BorderBrush="{StaticResource CustomGrayColor1}" BorderThickness="0 0 0 2">
+                                <Grid VerticalAlignment="Center">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="50"/>
+                                        <ColumnDefinition Width="195"/>
+                                        <ColumnDefinition Width="195"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Foreground="White" Text="{Binding Id}"/>
+                                    <TextBlock Grid.Column="1" Foreground="White" Text="{Binding Name}"/>
+                                    <TextBlock Grid.Column="2" Foreground="White" Text="{Binding DiseaseCode}"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </ScrollViewer>
+            
+            <Border Grid.Row="2" 
+                    Background="{StaticResource CustomGrayColor1}" 
+                    Padding="10 0" 
+                    Margin="0 0 15 0" 
+                    CornerRadius="15">
+                <Grid VerticalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition Width="195"/>
+                        <ColumnDefinition Width="195"/>
+                    </Grid.ColumnDefinitions>
+                
+                    <TextBlock FontSize="18" Text="Id" Foreground="White" Grid.Column="0"/>
+                    <TextBlock FontSize="18" Text="Test Name" Foreground="White" Grid.Column="1"/>
+                    <TextBlock FontSize="18" Text="Test Description" Foreground="White" Grid.Column="2"/>
+                </Grid>
+            </Border>
+            
+            <ScrollViewer Grid.Row="3" Style="{StaticResource ScrollBarTheme}" >
+                <ListView   ItemsSource="{Binding ReferralTestsView}" 
                             BorderBrush="Transparent" 
                             BorderThickness="0" 
                             SelectionMode="Multiple"  
@@ -138,7 +168,7 @@
                             ScrollViewer.CanContentScroll="False"
                 >
                     <ListView.ItemTemplate>
-                        <DataTemplate DataType="{x:Type dto:MedicineDto}">
+                        <DataTemplate DataType="{x:Type dto:ReferralTestDto}">
                             <Border Width="440" Height="35" Padding="5 0" VerticalAlignment="Center" BorderBrush="{StaticResource CustomGrayColor1}" BorderThickness="0 0 0 2">
                                 <Grid VerticalAlignment="Center">
                                     <Grid.ColumnDefinitions>
@@ -148,7 +178,7 @@
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0" Foreground="White" Text="{Binding Id}"/>
                                     <TextBlock Grid.Column="1" Foreground="White" Text="{Binding Name}"/>
-                                    <TextBlock Grid.Column="2" Foreground="White" Text="{Binding Type}"/>
+                                    <TextBlock Grid.Column="2" Foreground="White" Text="{Binding Description}"/>
                                 </Grid>
                             </Border>
                         </DataTemplate>

@@ -1,6 +1,6 @@
 using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
 
-namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
+namespace MVVMPrivateClinicProjectDesktopApp.Interfaces;
 
 public interface IMedicinesViewModel {
     public void UpdateMedicines(IEnumerable<MedicineDto> medicinesDto);

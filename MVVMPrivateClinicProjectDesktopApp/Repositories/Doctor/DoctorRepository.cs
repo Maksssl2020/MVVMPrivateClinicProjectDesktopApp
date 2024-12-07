@@ -69,9 +69,10 @@ public class DoctorRepository(DbContextFactory dbContextFactory, IMapper mapper,
     public async Task<DoctorDto?> GetDoctorByIdAsync(int id){
         await using var context = dbContextFactory.CreateDbContext();
         var foundDoctor = await context.Doctors.FirstOrDefaultAsync(doctor => doctor.Id == id);
-        if (foundDoctor == null) return null;
-        var foundSpecialization = await doctorSpecializationRepository.GetDoctorSpecializationById(foundDoctor.Id);
         
+        if (foundDoctor == null) return null;
+        
+        var foundSpecialization = await doctorSpecializationRepository.GetDoctorSpecializationById(foundDoctor.Id);
         var doctorDto = mapper.Map<DoctorDto>(foundDoctor);
         doctorDto.DoctorSpecialization = foundSpecialization?.Name;
         
