@@ -11,7 +11,7 @@
             <Border Grid.Column="0" x:Name="Border"
                     Grid.ColumnSpan="2"
                     CornerRadius="5"
-                    BorderBrush="{StaticResource CustomVioletColor1}"
+                    BorderBrush="{Binding BorderBrush, RelativeSource={RelativeSource AncestorType=ComboBox}}"
                     BorderThickness="2"
                     SnapsToDevicePixels="True"/>
             
@@ -22,7 +22,7 @@
         
         <ControlTemplate.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Foreground" Value="{StaticResource CustomVioletColor1}" TargetName="ChevronIcon"/>
+                <Setter Property="Foreground" Value="{Binding BorderBrush, RelativeSource={RelativeSource AncestorType=ComboBox}}" TargetName="ChevronIcon"/>
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
@@ -76,19 +76,21 @@
                                Focusable="False"
                                PopupAnimation="Slide">
                             <Grid x:Name="DropDown"
-                                  SnapsToDevicePixels="False"
+                                  SnapsToDevicePixels="True"
                                   MinWidth="{TemplateBinding ActualWidth}"
                                   MinHeight="{TemplateBinding ActualHeight}">
                                 <Border x:Name="DropDownBorder"
                                         BorderThickness="1"
-                                        BorderBrush="{StaticResource CustomVioletColor1}"
+                                        BorderBrush="{Binding BorderBrush, RelativeSource={RelativeSource AncestorType=ComboBox}}"
                                         Background="{StaticResource CustomBlackColor1}"/>
-                                <ScrollViewer Margin="4 6 4 6"
+                                <ScrollViewer CanContentScroll="True"
                                               SnapsToDevicePixels="True"
-                                              OverridesDefaultStyle="True"
-                                              Foreground="Transparent"/>
-                                <StackPanel IsItemsHost="True"
-                                            KeyboardNavigation.DirectionalNavigation="Contained"></StackPanel>
+                                              OverridesDefaultStyle="False"
+                                              VerticalScrollBarVisibility="Auto"
+                                              HorizontalScrollBarVisibility="Disabled">
+                                    <StackPanel CanVerticallyScroll="True"  IsItemsHost="True"
+                                                KeyboardNavigation.DirectionalNavigation="Contained"/>
+                                </ScrollViewer>
                             </Grid>
                         </Popup>
                     </Grid>
@@ -103,7 +105,7 @@
                             <Setter TargetName="DropDownBorder" Property="MinHeight" Value="95"/>
                         </Trigger>
                         <Trigger Property="IsGrouping" Value="True">
-                            <Setter Property="ScrollViewer.CanContentScroll" Value="False"/>
+                            <Setter Property="ScrollViewer.CanContentScroll" Value="True"/>
                         </Trigger>
                         <Trigger SourceName="Popup" Property="AllowsTransparency" Value="True">
                             <Setter TargetName="DropDownBorder" Property="CornerRadius" Value="4"/>

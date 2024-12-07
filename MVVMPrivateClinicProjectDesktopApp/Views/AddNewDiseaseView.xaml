@@ -8,9 +8,9 @@
         xmlns:viewModel="clr-namespace:MVVMPrivateClinicProjectDesktopApp.ViewModels"
         xmlns:views="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Views"
         mc:Ignorable="d"
-        Title="AddPatientView" 
-        Height="650" 
-        Width="600"
+        Title="AddNewDiseaseView" 
+        Height="385" 
+        Width="500"
         WindowStyle="None" 
         WindowStartupLocation="CenterScreen"
         Background="Transparent"
@@ -20,7 +20,7 @@
     <Border MouseLeftButtonDown="MouseLeftButtonDown_Hold" BorderThickness="2" BorderBrush="{StaticResource CustomGrayColor1}" Background="{StaticResource CustomBlackColor1}" CornerRadius="20" Padding="20">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="50"/>
+                <RowDefinition Height="35"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
@@ -34,36 +34,48 @@
                     <fa:IconImage Icon="Xmark" Style="{StaticResource ControlBarButtonIcon}"/>
                 </Button>
             </StackPanel>
-
-        
-            <Border Grid.Row="1" Width="450" Height="225" Grid.Column="0"  Padding="5" CornerRadius="15" Background="{StaticResource CustomGrayColor1}">
+            
+            <Border Grid.Row="1" Width="450" Height="225" Grid.Column="0"  Padding="5" BorderThickness="2" BorderBrush="{StaticResource CustomGrayColor1}" CornerRadius="15" Background="Transparent">
                     <StackPanel>
                         <Label FontSize="18" Margin="0 0 0 15" Foreground="White" Content="New Disease Form"/>
                         <components:FormInput 
-                            x:Name="FirstNameInput" 
-                            InputHeight="150"
-                            ErrorMessage="{Binding ElementName=FirstNameInput, Path=(Validation.Errors)[0].ErrorContent}" 
+                            x:Name="DiseaseNameInput" 
+                            InputHeight="100"
+                            ErrorMessage="{Binding ElementName=DiseaseNameInput, Path=(Validation.Errors)[0].ErrorContent}" 
                             Style="{StaticResource FormInputErrorsStyle}" 
-                            FormText="{Binding FirstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                            FormText="{Binding DiseaseName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                            InputBackgroundColor="{StaticResource CustomGrayColor1}"
                             LabelTitle="Disease Name*"/>
                     </StackPanel>
                 </Border>
             
-            <StackPanel Grid.Row="2" HorizontalAlignment="Right" Orientation="Horizontal">
-                <Button
-                    Style="{StaticResource CommonButton}"
-                    Content="Clear Form"
-                    BorderBrush="Transparent"
-                    BorderThickness="0"
-                    Margin="0 0 5 0"
-                    Tag="{StaticResource CustomGreenColor1}"/>
-                <components:ButtonWithIcon
-                    ButtonWidth="200"
-                    ButtonText="Add New Patient"
-                    IconName="Plus"
-                    TextColor="{StaticResource CustomGreenColor1}"
-                    Command="{Binding SubmitCommand}"/>
-            </StackPanel>
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left">
+                    <Button
+                        Style="{StaticResource CommonButton}"
+                        Width="200"
+                        Content="Clear Form"
+                        BorderBrush="Transparent"
+                        BorderThickness="0"
+                        Margin="0 0 5 0"
+                        Click="buttonClearForm_Click"
+                        Tag="{StaticResource CustomTurquoiseColor1}"/>
+                </StackPanel>
+                
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1">
+                    <components:ButtonWithIcon 
+                        ButtonWidth="200"
+                        ButtonText="Add New Disease"
+                        IconName="Plus"
+                        TextColor="{StaticResource CustomTurquoiseColor1}"
+                        Command="{Binding SubmitCommand}"/>
+                </StackPanel>
+            </Grid>
         </Grid>
     </Border>
 </views:WindowViewBase>

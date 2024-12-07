@@ -3,7 +3,7 @@ using MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
 namespace MVVMPrivateClinicProjectDesktopApp.Commands;
 
-public class LoadFamilyDoctorsCommand(IssuePrescriptionViewModel viewModel, DoctorStore doctorStore) : AsyncRelayCommand {
+public class LoadFamilyDoctorsCommand(IDoctorsViewModel viewModel, DoctorStore doctorStore) : AsyncRelayCommand {
     public override async Task ExecuteAsync(object? parameter){
         try {
             await doctorStore.LoadFamilyMedicineDoctorsDto();

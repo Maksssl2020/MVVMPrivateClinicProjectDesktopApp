@@ -7,6 +7,27 @@ using MVVMPrivateClinicProjectDesktopApp.Repositories.DoctorSpecialization;
 namespace MVVMPrivateClinicProjectDesktopApp.Repositories.Doctor;
 
 public class DoctorRepository(DbContextFactory dbContextFactory, IMapper mapper, IDoctorSpecializationRepository doctorSpecializationRepository) : IDoctorRepository {
+    public async Task<DoctorDto> SaveDoctorAsync(SaveDoctorRequest doctorRequest){
+        await using var context = dbContextFactory.CreateDbContext();
+
+        var doctor = new Models.Entities.Doctor {
+            FirstName = doctorRequest.FirstName,
+            LastName = doctorRequest.LastName,
+            PhoneNumber = doctorRequest.PhoneNumber,
+            IdDoctorSpecialization = doctorRequest.DoctorSpecializationId,
+        };
+        
+        await context.Doctors.AddAsync(doctor);
+        await context.SaveChangesAsync();
+
+
+        var doctorDto = mapper.Map<DoctorDto>(doctor);
+        var foundDoctorSpecialization = await doctorSpecializationRepository.GetDoctorSpecializationById(doctorRequest.DoctorSpecializationId);
+        doctorDto.DoctorSpecialization = foundDoctorSpecialization?.Name;
+        
+        return doctorDto;
+    }
+
     public async Task<IEnumerable<DoctorDto>> GetAllDoctors(){
         await using var context = dbContextFactory.CreateDbContext();
         var doctors = await context.Doctors.ToListAsync();

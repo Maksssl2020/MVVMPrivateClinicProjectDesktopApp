@@ -11,7 +11,7 @@ public class DoctorDto {
 
     public string? PhoneNumber { get; set; }
 
-    public string? DoctorSpecialization { get; set; } = null!;
+    public string? DoctorSpecialization { get; set; }
 
     public int IdDoctorCard { get; set; }
 }

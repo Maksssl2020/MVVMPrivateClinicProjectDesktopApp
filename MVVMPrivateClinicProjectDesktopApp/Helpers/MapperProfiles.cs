@@ -29,5 +29,8 @@ public class MapperProfiles : Profile {
         CreateMap<PatientNote, PatientNoteDto>()
             .ForMember(dest => dest.PatientCode, opt => opt.Ignore())
             .ForMember(dest => dest.DoctorCode, opt => opt.Ignore());
+        
+        CreateMap<Disease, DiseaseDto>();
+        CreateMap<DoctorSpecialization, DoctorSpecializationDto>();
     }
 }

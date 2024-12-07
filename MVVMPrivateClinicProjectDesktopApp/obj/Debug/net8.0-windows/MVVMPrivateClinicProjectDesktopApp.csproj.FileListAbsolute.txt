@@ -197,3 +197,13 @@ C:\Users\maksy\RiderProjects\MVVMPrivateClinicProjectDesktopApp\MVVMPrivateClini
 C:\Users\maksy\RiderProjects\MVVMPrivateClinicProjectDesktopApp\MVVMPrivateClinicProjectDesktopApp\obj\Debug\net8.0-windows\Views\PricingView.baml
 C:\Users\maksy\RiderProjects\MVVMPrivateClinicProjectDesktopApp\MVVMPrivateClinicProjectDesktopApp\obj\Debug\net8.0-windows\Views\PatientsNotesView.g.cs
 C:\Users\maksy\RiderProjects\MVVMPrivateClinicProjectDesktopApp\MVVMPrivateClinicProjectDesktopApp\obj\Debug\net8.0-windows\Views\PatientsNotesView.baml
+C:\Users\maksy\RiderProjects\MVVMPrivateClinicProjectDesktopApp\MVVMPrivateClinicProjectDesktopApp\obj\Debug\net8.0-windows\Views\AddNewDiseaseView.g.cs
+C:\Users\maksy\RiderProjects\MVVMPrivateClinicProjectDesktopApp\MVVMPrivateClinicProjectDesktopApp\obj\Debug\net8.0-windows\Views\AddNewDiseaseView.baml
+C:\Users\maksy\RiderProjects\MVVMPrivateClinicProjectDesktopApp\MVVMPrivateClinicProjectDesktopApp\obj\Debug\net8.0-windows\Views\AddNewMedicineView.g.cs
+C:\Users\maksy\RiderProjects\MVVMPrivateClinicProjectDesktopApp\MVVMPrivateClinicProjectDesktopApp\obj\Debug\net8.0-windows\Views\AddNewMedicineView.baml
+C:\Users\maksy\RiderProjects\MVVMPrivateClinicProjectDesktopApp\MVVMPrivateClinicProjectDesktopApp\obj\Debug\net8.0-windows\Views\AddNewDoctorView.g.cs
+C:\Users\maksy\RiderProjects\MVVMPrivateClinicProjectDesktopApp\MVVMPrivateClinicProjectDesktopApp\obj\Debug\net8.0-windows\Views\AddNewDoctorView.baml
+C:\Users\maksy\RiderProjects\MVVMPrivateClinicProjectDesktopApp\MVVMPrivateClinicProjectDesktopApp\obj\Debug\net8.0-windows\Views\AddNewPricingView.g.cs
+C:\Users\maksy\RiderProjects\MVVMPrivateClinicProjectDesktopApp\MVVMPrivateClinicProjectDesktopApp\obj\Debug\net8.0-windows\Views\AddNewPricingView.baml
+C:\Users\maksy\RiderProjects\MVVMPrivateClinicProjectDesktopApp\MVVMPrivateClinicProjectDesktopApp\obj\Debug\net8.0-windows\Views\AddNewPatientNoteView.g.cs
+C:\Users\maksy\RiderProjects\MVVMPrivateClinicProjectDesktopApp\MVVMPrivateClinicProjectDesktopApp\obj\Debug\net8.0-windows\Views\AddNewPatientNoteView.baml

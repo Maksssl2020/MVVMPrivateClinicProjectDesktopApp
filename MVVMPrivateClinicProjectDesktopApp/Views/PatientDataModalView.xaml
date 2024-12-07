@@ -27,6 +27,9 @@
         <DataTemplate DataType="{x:Type viewModel:IssuePrescriptionViewModel}">
             <local:IssuePrescriptionView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:AddNewPatientNoteViewModel}">
+            <local:AddNewPatientNoteView/>
+        </DataTemplate>
     </Window.Resources>
     
     <Border MouseLeftButtonDown="MouseLeftButtonDown_Hold" BorderThickness="3" BorderBrush="{StaticResource CustomGrayColor2}" Background="{StaticResource CustomBlackColor1}" CornerRadius="20" Padding="20">
@@ -85,7 +88,8 @@
                         </StackPanel>
                     </RadioButton>
                     <RadioButton Style="{StaticResource FilterToggleButtonStyle}" 
-                                 Tag="{StaticResource CustomBlueColor1}">
+                                 Tag="{StaticResource CustomBlueColor1}"
+                                 Command="{Binding ShowAddNewPatientNoteViewCommand}">
                         <StackPanel Style="{StaticResource ToggleButtonStackPanel}">
                             <fa:IconImage Style="{StaticResource ToggleButtonIcon}" Icon="NotesMedical"/>
                             <TextBlock Text="Add Note" Style="{StaticResource ToggleButtonText}"/>

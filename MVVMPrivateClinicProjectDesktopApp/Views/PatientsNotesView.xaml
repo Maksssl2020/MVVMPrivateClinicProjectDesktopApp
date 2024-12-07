@@ -8,10 +8,16 @@
              xmlns:viewModel="clr-namespace:MVVMPrivateClinicProjectDesktopApp.ViewModels"
              xmlns:dto="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Models.DTOs"
              xmlns:entities="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Models.Entities"
+             xmlns:converters="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Converters"
              mc:Ignorable="d"
              d:DesignHeight="675" 
              d:DesignWidth="1000"
              d:DataContext="{d:DesignInstance viewModel:PatientsNotesViewModel}">
+    
+    <UserControl.Resources>
+        <converters:DateTimeFormatConverter x:Key="DateTimeFormatConverter"/>
+    </UserControl.Resources>
+    
     <Border Background="{StaticResource CustomBlackColor1}">
         <Grid>
             <Grid.RowDefinitions>
@@ -52,11 +58,9 @@
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="35"/>
-                        <ColumnDefinition Width="125"/>
-                        <ColumnDefinition Width="125"/>
-                        <ColumnDefinition Width="125"/>
-                        <ColumnDefinition Width="125"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="175"/>
+                        <ColumnDefinition Width="250"/>
+                        <ColumnDefinition Width="250"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock FontSize="15" Foreground="White" VerticalAlignment="Center" Grid.Column="0" Text="Id"/>
                     <TextBlock FontSize="15" Foreground="White" VerticalAlignment="Center" Grid.Column="1" Text="Date Issued"/>
@@ -72,15 +76,12 @@
                                 <Grid  VerticalAlignment="Center">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="35"/>
-                                        <ColumnDefinition Width="125"/>
-                                        <ColumnDefinition Width="125"/>
-                                        <ColumnDefinition Width="125"/>
-                                        <ColumnDefinition Width="125"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="100"/>
+                                        <ColumnDefinition Width="175"/>
+                                        <ColumnDefinition Width="250"/>
+                                        <ColumnDefinition Width="250"/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock VerticalAlignment="Center" Foreground="White" Grid.Column="0" Text="{Binding Id}"/>
-                                    <TextBlock VerticalAlignment="Center" Foreground="White" Grid.Column="1" Text="{Binding DateIssued}"/>
+                                    <TextBlock VerticalAlignment="Center" Foreground="White" Grid.Column="1" Text="{Binding DateIssued, Converter={StaticResource DateTimeFormatConverter}}"/>
                                     <TextBlock VerticalAlignment="Center" Foreground="White" Grid.Column="2" Text="{Binding PatientCode}"/>
                                     <TextBlock VerticalAlignment="Center" Foreground="White" Grid.Column="3" Text="{Binding DoctorCode}"/>
                                 </Grid>

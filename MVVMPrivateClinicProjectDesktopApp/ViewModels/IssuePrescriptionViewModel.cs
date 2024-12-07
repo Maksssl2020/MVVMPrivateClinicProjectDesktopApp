@@ -8,10 +8,7 @@ using MVVMPrivateClinicProjectDesktopApp.Stores;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
-public class IssuePrescriptionViewModel : ViewModelBase {
-    private readonly MedicineStore _medicineStore;
-    private readonly DoctorStore _doctorStore;
-    
+public class IssuePrescriptionViewModel : ViewModelBase, IMedicinesViewModel, IDoctorsViewModel {
     private DoctorDto _selectedDoctor = null!;
 
     public DoctorDto SelectedDoctor {
@@ -37,13 +34,11 @@ public class IssuePrescriptionViewModel : ViewModelBase {
     public static string Today => DateTime.Today.ToString("dd-MM-yyyy");
     
     private IssuePrescriptionViewModel(MedicineStore medicineStore, DoctorStore doctorStore){
-        _medicineStore = medicineStore;
-        _doctorStore = doctorStore;
         _medicinesDto = [];
         _doctorsDto = [];
 
-        LoadMedicinesDtoCommand = new LoadMedicinesDtoCommand(this, _medicineStore);
-        LoadDoctorsCommand = new LoadFamilyDoctorsCommand(this, _doctorStore);
+        LoadMedicinesDtoCommand = new LoadMedicinesDtoCommand(this, medicineStore);
+        LoadDoctorsCommand = new LoadFamilyDoctorsCommand(this, doctorStore);
         
         MedicinesDtoView = CollectionViewSource.GetDefaultView(_medicinesDto);
         DoctorsDtoView = CollectionViewSource.GetDefaultView(_doctorsDto);
@@ -58,7 +53,7 @@ public class IssuePrescriptionViewModel : ViewModelBase {
         return viewModel;
     }
 
-    public void UpdateMedicinesDto(IEnumerable<MedicineDto> medicinesDto) {
+    public void UpdateMedicines(IEnumerable<MedicineDto> medicinesDto) {
         _medicinesDto.Clear();
 
         foreach (var medicineDto in medicinesDto) {

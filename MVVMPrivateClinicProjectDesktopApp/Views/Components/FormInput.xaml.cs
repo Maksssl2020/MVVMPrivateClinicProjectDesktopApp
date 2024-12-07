@@ -23,6 +23,10 @@ public partial class FormInput : UserControl {
         DependencyProperty.Register(nameof(InputHeight), typeof(double), typeof(FormInput),
             new PropertyMetadata(35.0d));
     
+    public static readonly DependencyProperty InputBackgroundColorProperty = 
+        DependencyProperty.Register(nameof(InputBackgroundColor), typeof(Brush), typeof(FormInput),
+            new PropertyMetadata(Application.Current.Resources["CustomGrayColor2"]));
+    
     public string LabelTitle {
         get => (string)GetValue(LabelTitleProperty);
         set => SetValue(LabelTitleProperty, value);
@@ -41,6 +45,11 @@ public partial class FormInput : UserControl {
     public double InputHeight {
         get => (double) GetValue(InputHeightProperty);
         set => SetValue(InputHeightProperty, value);
+    }
+
+    public Brush InputBackgroundColor {
+        get => (Brush)GetValue(InputBackgroundColorProperty);
+        set => SetValue(InputBackgroundColorProperty, value);
     }
     
     public FormInput(){

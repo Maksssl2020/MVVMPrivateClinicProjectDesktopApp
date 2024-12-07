@@ -1,17 +1,17 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Data;
-using MVVMPrivateClinicProjectDesktopApp.Repositories.Medicine;
-using MVVMPrivateClinicProjectDesktopApp.UnitOfWork;
+using System.Windows.Input;
+using MVVMPrivateClinicProjectDesktopApp.Commands;
+using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
+using MVVMPrivateClinicProjectDesktopApp.Stores;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
-public class MedicinesViewModel : ViewModelBase {
-    private readonly IUnitOfWork _unitOfWork;
-    
+public class MedicinesViewModel : ViewModelBase, IMedicinesViewModel {
     private string _medicineFilter = string.Empty;
 
-    private ObservableCollection<Medicine> Medicines { get; set; } = [];
+    private readonly ObservableCollection<MedicineDto> _medicines = [];
     public ICollectionView MedicinesView { get; set; }
 
     public string MedicinesFilter {
@@ -23,30 +23,40 @@ public class MedicinesViewModel : ViewModelBase {
         }
     }
 
-    public MedicinesViewModel(IUnitOfWork unitOfWork){
-        _unitOfWork = unitOfWork;
+    private ICommand LoadMedicinesCommand { get; set; }
+    public ICommand ShowAddNewMedicineModal { get; set; }
 
-        LoadMedicinesAsync();
-        
-        MedicinesView = CollectionViewSource.GetDefaultView(Medicines);
+    private MedicinesViewModel(MedicineStore medicineStore, ModalNavigationViewModel modalNavigationViewModel){
+        MedicinesView = CollectionViewSource.GetDefaultView(_medicines);
         MedicinesView.Filter = FilterMedicines;
+
+        LoadMedicinesCommand = new LoadMedicinesDtoCommand(this, medicineStore);
+        ShowAddNewMedicineModal = modalNavigationViewModel.ShowAddNewMedicineModal;
+        medicineStore.MedicineCreated += OnMedicineCreated;
+    }
+
+    public static MedicinesViewModel LoadMedicinesViewModel(MedicineStore medicineStore, ModalNavigationViewModel modalNavigationViewModel){
+        var medicinesViewModel = new MedicinesViewModel(medicineStore, modalNavigationViewModel);
+        
+        medicinesViewModel.LoadMedicinesCommand.Execute(null);
+        
+        return medicinesViewModel;
+    }
+
+    private void OnMedicineCreated(MedicineDto medicineDto){
+        _medicines.Add(medicineDto);
     }
     
-    private async void LoadMedicinesAsync() {
-        try {
-            var medicines = await _unitOfWork.MedicineRepository.GetAllMedicinesAsync();
+    public void UpdateMedicines(IEnumerable<MedicineDto> medicinesDto){
+        _medicines.Clear();
 
-            foreach (var medicine in medicines) {
-                Medicines.Add(medicine);
-            }
-        }
-        catch (Exception e) {
-            Console.WriteLine("Something went wrong... " + e.Message);
+        foreach (var medicineDto in medicinesDto) {
+            _medicines.Add(medicineDto);
         }
     }
     
     private bool FilterMedicines(object obj){
-        if (obj is not Medicine medicine) {
+        if (obj is not MedicineDto medicine) {
             return false;
         }
 

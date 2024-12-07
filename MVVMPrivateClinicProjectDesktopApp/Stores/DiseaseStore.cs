@@ -1,3 +1,4 @@
+using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
 using MVVMPrivateClinicProjectDesktopApp.UnitOfWork;
 
 namespace MVVMPrivateClinicProjectDesktopApp.Stores;
@@ -5,15 +6,17 @@ namespace MVVMPrivateClinicProjectDesktopApp.Stores;
 public class DiseaseStore {
     private readonly IUnitOfWork _unitOfWork;
 
-    private readonly List<Disease> _diseases;
+    private readonly List<DiseaseDto> _diseasesDto;
     private readonly Lazy<Task> _initializeLazy;
 
-    public IEnumerable<Disease> Diseases => _diseases;
+    public IEnumerable<DiseaseDto> DiseasesDto => _diseasesDto;
 
+    public event Action<DiseaseDto>? DiseaseCreated;
+    
     public DiseaseStore(IUnitOfWork unitOfWork){
         _unitOfWork = unitOfWork;
 
-        _diseases = [];
+        _diseasesDto = [];
         _initializeLazy = new Lazy<Task>(InitializeDiseases);
     }
 
@@ -21,10 +24,21 @@ public class DiseaseStore {
         await _initializeLazy.Value;
     }
 
+    public async Task CreateDisease(SaveDiseaseRequest diseaseRequest){
+        var savedDisease = await _unitOfWork.DiseaseRepository.SaveDiseaseAsync(diseaseRequest);
+        _diseasesDto.Add(savedDisease);
+        
+        OnDiseaseCreated(savedDisease);
+    }
+    
+    private void OnDiseaseCreated(DiseaseDto diseaseDto){
+        DiseaseCreated?.Invoke(diseaseDto);
+    }
+    
     private async Task InitializeDiseases(){
         var loadedDiseases = await _unitOfWork.DiseaseRepository.GetAllDiseasesAsync();
         
-        _diseases.Clear();
-        _diseases.AddRange(loadedDiseases);
+        _diseasesDto.Clear();
+        _diseasesDto.AddRange(loadedDiseases);
     }
 }

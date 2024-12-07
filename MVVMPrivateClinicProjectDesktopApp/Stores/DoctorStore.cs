@@ -13,6 +13,8 @@ public class DoctorStore {
 
     public IEnumerable<DoctorDto> AllDoctorsDto => _allDoctorsDto;
     public IEnumerable<DoctorDto> FamilyMedicineDoctorsDto => _familyMedicineDoctorsDto;
+
+    public event Action<DoctorDto>? DoctorCreated;
     
     public DoctorStore(IUnitOfWork unitOfWork){
         _unitOfWork = unitOfWork;
@@ -28,6 +30,17 @@ public class DoctorStore {
 
     public async Task LoadFamilyMedicineDoctorsDto(){
         await _initializeLazyFamilyMedicineDoctors.Value;
+    }
+
+    public async Task CreateDoctor(SaveDoctorRequest doctorRequest){
+        var savedDoctor = await _unitOfWork.DoctorRepository.SaveDoctorAsync(doctorRequest);
+        _allDoctorsDto.Add(savedDoctor);
+        
+        OnDoctorCreated(savedDoctor);
+    }
+
+    private void OnDoctorCreated(DoctorDto doctor){
+        DoctorCreated?.Invoke(doctor);
     }
     
     private async Task InitializeAllDoctorsDto(){

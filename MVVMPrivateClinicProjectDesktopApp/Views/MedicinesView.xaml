@@ -7,11 +7,13 @@
              xmlns:entities="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Models.Entities"
              xmlns:components="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Views.Components"
              xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+             xmlns:dto="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Models.DTOs"
              xmlns:local="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Views"
              mc:Ignorable="d"
              FontFamily="/Fonts/#OpenSans"
              d:DesignHeight="675" 
-             d:DesignWidth="1000">
+             d:DesignWidth="1000"
+             d:DataContext="{d:DesignInstance viewModel:MedicinesViewModel}">
     
     <Border Background="{StaticResource CustomBlackColor1}">
         <Grid>
@@ -39,7 +41,8 @@
                     
                     <components:ButtonWithIcon ButtonWidth="200" Grid.Column="1"
                                                ButtonText="Add New Medicine"
-                                               TextColor="{StaticResource CustomPlumColor1}"/>
+                                               TextColor="{StaticResource CustomPlumColor1}"
+                                               Command="{Binding ShowAddNewMedicineModal}"/>
                 </Grid>
             </Border>
             
@@ -60,7 +63,7 @@
             <ScrollViewer  Style="{StaticResource ScrollBarTheme}" Grid.Row="2">
                 <ItemsControl ItemsSource="{Binding MedicinesView}" Padding="10 0" Margin="0 25 0 0">
                     <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="{x:Type entities:Medicine}">
+                        <DataTemplate DataType="{x:Type dto:MedicineDto}">
                             <Border Padding="5 0 5 0" BorderBrush="{StaticResource CustomGrayColor1}" BorderThickness="0 0 0 2" Height="45">
                                 <Grid  VerticalAlignment="Center">
                                     <Grid.ColumnDefinitions>

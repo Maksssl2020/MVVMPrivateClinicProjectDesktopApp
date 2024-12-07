@@ -34,6 +34,7 @@ public partial class App : Application {
     private readonly PricingStore _pricingStore;
     private readonly PatientNoteStore _patientNoteStore;
     private readonly DiseaseStore _diseaseStore;
+    private readonly DoctorSpecializationStore _doctorSpecializationStore;
     private readonly NavigationBarViewModel _navigationBarViewModel;
     private readonly ModalNavigationViewModel _modalNavigationViewModel;
     private readonly PatientDataModalNavigationViewModel _patientDataModalNavigationViewModel;
@@ -59,6 +60,7 @@ public partial class App : Application {
         _pricingStore = new PricingStore(_unitOfWork);
         _patientNoteStore = new PatientNoteStore(_unitOfWork);
         _diseaseStore = new DiseaseStore(_unitOfWork);
+        _doctorSpecializationStore = new DoctorSpecializationStore(_unitOfWork);
         _navigationBarViewModel = new NavigationBarViewModel(
             CreateHomeNavigationService(),
             CreatePatientsNavigationService(),
@@ -75,12 +77,17 @@ public partial class App : Application {
         _modalNavigationViewModel = new ModalNavigationViewModel(
             CreateAddNewPatientsNavigationService(),
             CreateDeletePatientsNavigationService(),
-            CreatePatientDataModalNavigationService()
+            CreatePatientDataModalNavigationService(),
+            CreateAddNewDiseaseNavigationService(),
+            CreateAddNewMedicineNavigationService(),
+            CreateAddNewDoctorNavigationService(),
+            CreateAddNewPricingNavigationService()
             );
 
         _patientDataModalNavigationViewModel = new PatientDataModalNavigationViewModel(
             CreatePatientDetailsNavigationService(),
-            CreateIssuePrescriptionsNavigationService()
+            CreateIssuePrescriptionsNavigationService(),
+            CreateAddNewPatientNoteNavigationService()
         );
     }
     
@@ -105,7 +112,7 @@ public partial class App : Application {
     }
     
     private NavigationServiceBase CreateDoctorsNavigationService(){
-        return new NavigationService(_navigationStore, () => new DoctorsViewModel(_unitOfWork));
+        return new NavigationService(_navigationStore, () => DoctorsViewModel.LoadDoctorsViewModel(_doctorStore, _modalNavigationViewModel));
     }
 
     private NavigationService CreateAppointmentsNavigationService(){
@@ -113,11 +120,11 @@ public partial class App : Application {
     }
     
     private NavigationServiceBase CreateDiseasesNavigationService(){
-        return new NavigationService(_navigationStore, () => DiseasesViewModel.LoadDiseasesViewModel(_diseaseStore));
+        return new NavigationService(_navigationStore, () => DiseasesViewModel.LoadDiseasesViewModel(_diseaseStore, _modalNavigationViewModel));
     }
     
     private NavigationServiceBase CreateMedicinesNavigationService(){
-        return new NavigationService(_navigationStore, () => new MedicinesViewModel(_unitOfWork));
+        return new NavigationService(_navigationStore, () => MedicinesViewModel.LoadMedicinesViewModel(_medicineStore, _modalNavigationViewModel));
     }
 
     private NavigationServiceBase CreatePrescriptionsNavigationService(){
@@ -133,11 +140,11 @@ public partial class App : Application {
     }
 
     private NavigationServiceBase CreatePricingNavigationService(){
-        return new NavigationService(_navigationStore, () => PricingViewModel.LoadPricingViewModel(_pricingStore));
+        return new NavigationService(_navigationStore, () => PricingViewModel.LoadPricingViewModel(_pricingStore, _modalNavigationViewModel));
     }
 
     private NavigationServiceBase CreatePatientsNotesNavigationService(){
-        return new NavigationService(_navigationStore, () => PatientsNotesViewModel.LoadPatientNoteViewModel(_patientNoteStore));
+        return new NavigationService(_navigationStore, () => PatientsNotesViewModel.LoadPatientNoteViewModel(_patientNoteStore, _patientDataModalNavigationViewModel));
     }
     
     private NavigationServiceBase CreateAddNewPatientsNavigationService(){
@@ -152,11 +159,33 @@ public partial class App : Application {
         return new ModalNavigationService(_modalNavigationStore, () =>  PatientDataModalViewModel.LoadPatientDataModalViewModel(_patientDataModalNavigationStore, _patientDataModalNavigationViewModel, _patientStore));
     }
     
+    private NavigationServiceBase CreateAddNewDiseaseNavigationService(){
+        return new ModalNavigationService(_modalNavigationStore, () => new AddNewDiseaseViewModel(_diseaseStore));
+    }
+
+    private NavigationServiceBase CreateAddNewMedicineNavigationService(){
+        return new ModalNavigationService(_modalNavigationStore, () => AddNewMedicineViewModel.LoadAddNewMedicineViewModel(_medicineStore));
+    }
+
+    private NavigationServiceBase CreateAddNewDoctorNavigationService(){
+        return new ModalNavigationService(_modalNavigationStore, () => AddNewDoctorViewModel.LoadAddNewDoctorViewModel(_doctorStore, _doctorSpecializationStore));
+    }
+
+    private NavigationServiceBase CreateAddNewPricingNavigationService(){
+        return new ModalNavigationService(_modalNavigationStore, () => AddNewPricingViewModel.LoadAddNewPricingViewModel(_pricingStore));
+    }
+    
     private NavigationServiceBase CreatePatientDetailsNavigationService(){
         return new PatientDataModalNavigationService(_patientDataModalNavigationStore, () => PatientDetailsViewModel.LoadPatientDetailsViewModel(_patientStore, _appointmentStore));
     }
     
     private NavigationServiceBase CreateIssuePrescriptionsNavigationService(){
         return new PatientDataModalNavigationService(_patientDataModalNavigationStore, () => IssuePrescriptionViewModel.LoadIssuePrescriptionViewModel(_medicineStore, _doctorStore));
+    }
+
+    private NavigationServiceBase CreateAddNewPatientNoteNavigationService(){
+        return new PatientDataModalNavigationService(_patientDataModalNavigationStore,
+            () => AddNewPatientNoteViewModel.LoadAddNewPatientNoteViewModel(_doctorStore, _patientStore,
+                _patientNoteStore));
     }
 }

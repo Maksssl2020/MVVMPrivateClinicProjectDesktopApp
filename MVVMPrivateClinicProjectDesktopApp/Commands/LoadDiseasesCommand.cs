@@ -7,7 +7,7 @@ public class LoadDiseasesCommand(DiseasesViewModel viewModel, DiseaseStore disea
     public override async Task ExecuteAsync(object? parameter){
         try {
             await diseaseStore.LoadDiseases();
-            viewModel.UpdateDiseases(diseaseStore.Diseases);
+            viewModel.UpdateDiseases(diseaseStore.DiseasesDto);
         }
         catch (Exception e) {
             Console.WriteLine(e);

@@ -11,6 +11,8 @@ public class PatientNoteStore {
 
     public IEnumerable<PatientNoteDto> PatientsNotesDto => _patientsNotesDto;
 
+    public event Action<PatientNoteDto>? PatientNoteCreated;
+    
     public PatientNoteStore(IUnitOfWork unitOfWork){
         _unitOfWork = unitOfWork;
 
@@ -20,6 +22,17 @@ public class PatientNoteStore {
 
     public async Task LoadPatientsNotes(){
         await _initializeLazy.Value;
+    }
+
+    public async Task CreatePatientNote(SavePatientNoteRequest patientNoteRequest){
+        var savedPatientNoteDto = await _unitOfWork.PatientNoteRepository.SavePatientNoteAsync(patientNoteRequest);
+        _patientsNotesDto.Add(savedPatientNoteDto);
+
+        OnPatientNoteCreated(savedPatientNoteDto);
+    }
+
+    private void OnPatientNoteCreated(PatientNoteDto savedPatientNoteDto){
+        PatientNoteCreated?.Invoke(savedPatientNoteDto);
     }
 
     private async Task InitializePatientsNotes(){

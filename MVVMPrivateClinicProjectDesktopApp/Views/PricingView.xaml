@@ -8,6 +8,7 @@
              xmlns:viewModel="clr-namespace:MVVMPrivateClinicProjectDesktopApp.ViewModels"
              xmlns:dto="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Models.DTOs"
              xmlns:entities="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Models.Entities"
+             xmlns:components="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Views.Components"
              xmlns:converters="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Converters"
              mc:Ignorable="d"
              d:DesignHeight="675" 
@@ -42,14 +43,10 @@
                         </Border>
                     </Border>
                     
-                    <Button Grid.Column="1" 
-                            Style="{StaticResource ButtonWithIconLarge}"
-                            Tag="{StaticResource CustomPaleGoldColor1}">
-                        <StackPanel Style="{StaticResource ButtonStackPanel}">
-                            <fa:IconImage Margin="0 0 5 0" Icon="Plus" Style="{StaticResource IconButtonLarge}"/>
-                            <TextBox Margin="5 0 0 0" Text="Add New Pricing" Style="{StaticResource ButtonTextLarge}"/>
-                        </StackPanel>
-                    </Button>
+                    <components:ButtonWithIcon ButtonWidth="200" Grid.Column="1"
+                                               ButtonText="Add New Pricing"
+                                               TextColor="{StaticResource CustomPaleGoldColor1}"
+                                               Command="{Binding ShowAddNewPricingViewCommand}"/>
                 </Grid>
             </Border>
             

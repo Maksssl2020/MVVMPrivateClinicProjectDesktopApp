@@ -9,30 +9,33 @@ using MVVMPrivateClinicProjectDesktopApp.Stores;
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
 public class PricingViewModel : ViewModelBase {
-    private readonly PricingStore _pricingStore;
-    
     private readonly ObservableCollection<PricingDto> _pricingDto;
     public ICollectionView PricingView { get; set; }
 
     private ICommand LoadPricingCommand { get; set; }
+    public ICommand ShowAddNewPricingViewCommand { get; set; }
 
-    private PricingViewModel(PricingStore pricingStore){
-        _pricingStore = pricingStore;
-        
+    private PricingViewModel(PricingStore pricingStore, ModalNavigationViewModel modalNavigationViewModel){
         _pricingDto = [];
         PricingView = CollectionViewSource.GetDefaultView(_pricingDto);
 
-        LoadPricingCommand = new LoadPricingDtoCommand(this, _pricingStore);
+        LoadPricingCommand = new LoadPricingDtoCommand(this, pricingStore);
+        ShowAddNewPricingViewCommand = modalNavigationViewModel.ShowAddNewPricingModal;
+        pricingStore.PricingCreated += OnPricingCreated;
     }
 
-    public static PricingViewModel LoadPricingViewModel(PricingStore pricingStore){
-        var pricingViewModel = new PricingViewModel(pricingStore);
+    public static PricingViewModel LoadPricingViewModel(PricingStore pricingStore, ModalNavigationViewModel modalNavigationViewModel){
+        var pricingViewModel = new PricingViewModel(pricingStore, modalNavigationViewModel);
         
         pricingViewModel.LoadPricingCommand.Execute(null);
         
         return pricingViewModel;
     }
 
+    private void OnPricingCreated(PricingDto pricingDto){
+        _pricingDto.Add(pricingDto);
+    }
+    
     public void UpdatePricing(IEnumerable<PricingDto> pricingDto){
         _pricingDto.Clear();
 

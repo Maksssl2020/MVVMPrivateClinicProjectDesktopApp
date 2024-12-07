@@ -12,7 +12,7 @@ public class AddNewPatientViewModel : ViewModelBase {
     private string _firstName = string.Empty;
 
     [Required(ErrorMessage = "First name is required!")]
-    [RegularExpression("^[a-zA-Z]+$", ErrorMessage = "Use letters only please!")]
+    [RegularExpression(@"([\p{L}]+[\s]?)+", ErrorMessage = "Use letters only please!")]
     public string FirstName {
         get => _firstName;
         set {
@@ -25,7 +25,7 @@ public class AddNewPatientViewModel : ViewModelBase {
     private string _lastName = string.Empty;
 
     [Required(ErrorMessage = "Last name is required!")]
-    [RegularExpression("^[a-zA-Z]+$", ErrorMessage = "Use letters only please!")]
+    [RegularExpression(@"([\p{L}]+[\s]?)+", ErrorMessage = "Use letters only please!")]
     public string LastName {
         get => _lastName;
         set {
@@ -64,7 +64,7 @@ public class AddNewPatientViewModel : ViewModelBase {
     private string _city = string.Empty;
 
     [Required(ErrorMessage = "City is required!")]
-    [RegularExpression("^[a-zA-Z]+$", ErrorMessage = "Use letters only please!")]
+    [RegularExpression(@"([\p{L}]+[\s]?)+", ErrorMessage = "Use letters only please!")]
     public string City {
         get => _city;
         set {
@@ -91,7 +91,7 @@ public class AddNewPatientViewModel : ViewModelBase {
     private string _street = string.Empty;
 
     [Required(ErrorMessage = "Street is required!")]
-    [RegularExpression("^[a-zA-Z]+$", ErrorMessage = "Use letters only please!")]
+    [RegularExpression(@"([\p{L}]+[\s]?)+", ErrorMessage = "Use letters only please!")]
     public string Street {
         get => _street;
         set {
@@ -105,7 +105,7 @@ public class AddNewPatientViewModel : ViewModelBase {
     private string _buildingNumber = string.Empty;
 
     [Required(ErrorMessage = "Building number is required!")]
-    [RegularExpression(@"\d+[a-zA-Z]?", ErrorMessage = "Invalid building number!")]
+    [RegularExpression(@"\d+([\p{L}]+[\s]?)*", ErrorMessage = "Invalid building number!")]
     public string BuildingNumber {
         get => _buildingNumber;
         set {

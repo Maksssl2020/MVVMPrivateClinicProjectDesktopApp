@@ -21,10 +21,10 @@ public class UnitOfWork(DbContextFactory dbContextFactory) : IUnitOfWork {
     
     public IAddressRepository AddressRepository => new AddressRepository(dbContextFactory);
     public IAppointmentRepository AppointmentRepository => new AppointmentRepository(dbContextFactory, PatientRepository, DoctorRepository);
-    public IDiseaseRepository DiseaseRepository => new DiseaseRepository(dbContextFactory);
+    public IDiseaseRepository DiseaseRepository => new DiseaseRepository(dbContextFactory, _mapper);
     public IDoctorRepository DoctorRepository =>
         new DoctorRepository(dbContextFactory, _mapper, DoctorSpecializationRepository);
-    public IDoctorSpecializationRepository DoctorSpecializationRepository => new DoctorSpecializationRepository(dbContextFactory);
+    public IDoctorSpecializationRepository DoctorSpecializationRepository => new DoctorSpecializationRepository(dbContextFactory, _mapper);
     public IMedicineRepository MedicineRepository => new MedicineRepository(dbContextFactory, _mapper);
     public IPatientRepository PatientRepository => new PatientRepository(dbContextFactory);
     public IPrescriptionRepository PrescriptionRepository =>
