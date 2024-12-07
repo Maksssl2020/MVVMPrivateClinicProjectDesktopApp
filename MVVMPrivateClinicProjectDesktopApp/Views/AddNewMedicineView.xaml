@@ -65,7 +65,7 @@
                                       VerticalAlignment="Center"
                                       Style="{StaticResource ComboBoxStyle}"
                                       ItemsSource="{Binding MedicineTypes}"
-                                      SelectedItem="{Binding MedicineType, Mode=OneWayToSource}">
+                                      SelectedItem="{Binding SelectedMedicineType, Mode=OneWayToSource}">
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate DataType="{x:Type dto:MedicineTypeDto}">
                                         <ScrollViewer CanContentScroll="True" VerticalScrollBarVisibility="Visible" >

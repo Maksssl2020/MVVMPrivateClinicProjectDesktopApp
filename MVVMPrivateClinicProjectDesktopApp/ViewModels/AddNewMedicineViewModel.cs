@@ -27,6 +27,17 @@ public class AddNewMedicineViewModel : ViewModelBase {
         }
     }
 
+    private MedicineTypeDto _selectedMedicineType = null!;
+
+    public MedicineTypeDto SelectedMedicineType {
+        get => _selectedMedicineType;
+        set {
+            _selectedMedicineType = value;
+            SubmitCommand.OnCanExecuteChanged();
+            MedicineType = value.Type;
+        }
+    }
+    
     private string _medicineType = string.Empty;
 
     [Required(ErrorMessage = "Medicine Type is required!")]

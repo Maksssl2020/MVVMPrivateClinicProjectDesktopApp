@@ -60,8 +60,6 @@ public class AddNewDoctorViewModel : ViewModelBase {
             _selectedSelectedDoctorSpecialization = value;
             SubmitCommand.OnCanExecuteChanged();
             DoctorSpecialization = value.Name;
-            
-            Console.WriteLine(value.Name);
         }
     }
     

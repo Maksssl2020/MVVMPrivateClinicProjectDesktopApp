@@ -44,7 +44,7 @@
                     
                 <Border Width="450" Height="475" Grid.Column="0"  Padding="5" CornerRadius="15" Background="{StaticResource CustomGrayColor1}">
                     <StackPanel>
-                        <Label FontSize="18" Margin="0 0 0 15" Foreground="{StaticResource CustomGreenColor1}" Content="Patient Personal Data"/>
+                        <Label FontSize="18" Margin="0 0 0 15" Foreground="White" Content="Patient Personal Data"/>
                         <components:FormInput 
                             x:Name="FirstNameInput"  
                             ErrorMessage="{Binding ElementName=FirstNameInput, Path=(Validation.Errors)[0].ErrorContent}" 
@@ -74,7 +74,7 @@
             
                 <Border Width="450" Height="475" Grid.Column="1"  Padding="5" CornerRadius="15" Background="{StaticResource CustomGrayColor1}">
                     <StackPanel >
-                        <Label FontSize="18" Margin="0 0 0 15" Foreground="{StaticResource CustomGreenColor1}" Content="Patient Address Data"/>
+                        <Label FontSize="18" Margin="0 0 0 15" Foreground="White" Content="Patient Address Data"/>
                         <components:FormInput 
                             x:Name="CityInput"
                             ErrorMessage="{Binding ElementName=CityInput, Path=(Validation.Errors)[0].ErrorContent}"
