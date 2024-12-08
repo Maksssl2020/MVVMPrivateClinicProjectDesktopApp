@@ -24,7 +24,7 @@
                     <Label FontSize="24" Foreground="White" Content="New Referral Form"/>
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="100"/>
+                            <RowDefinition Height="135"/>
                             <RowDefinition Height="125"/>
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="75"/>
@@ -49,9 +49,10 @@
                                 <Label Foreground="White" FontSize="15" Content="Referral's Author ( Doctor ):"/>
                                 <ComboBox Margin="0 15 0 0" 
                                           Width="345" 
+                                          x:Name="DoctorSelector"
                                           VerticalAlignment="Center" 
                                           ItemsSource="{Binding DoctorsView}" 
-                                          SelectedItem="{Binding SelectedDoctor, Mode=TwoWay}"
+                                          SelectedItem="{Binding SelectedDoctor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
                                           Style="{StaticResource ComboBoxStyle}"
                                           BorderBrush="{StaticResource CustomYellowColor1}">
                                     <ComboBox.ItemTemplate>
@@ -65,18 +66,44 @@
                                         </DataTemplate>
                                     </ComboBox.ItemTemplate>
                                 </ComboBox>
+                                <Label Height="35" Content="{Binding ElementName=DoctorSelector, Path=(Validation.Errors)[0].ErrorContent}" FontSize="15" Foreground="Red" Margin="0 10 0 0"/>
                             </StackPanel>
                         </Grid>
                     
-                        <StackPanel Margin="0 15 0 0" Grid.Row="1" >
-                            <components:FormInput LabelTitle="Referral's Name"/>
-                        </StackPanel>
+                        <components:FormInput Grid.Row="1" 
+                                              LabelTitle="Referral's Name"
+                                              InputBackgroundColor="{StaticResource CustomGrayColor1}"
+                                              Style="{StaticResource FormInputErrorsStyle}" 
+                                              x:Name="ReferralNameInput"
+                                              ErrorMessage="{Binding ElementName=ReferralNameInput, Path=(Validation.Errors)[0].ErrorContent}" 
+                                              FormText="{Binding ReferralName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         
-                        <StackPanel Grid.Row="2">
-                            <Label FontSize="15" Foreground="White" Content="Referral's Description:"/>
-                            <Border Padding="5" Margin="0 15 0 0" CornerRadius="15" Background="{StaticResource CustomGrayColor1}">
-                                <TextBox Background="Transparent" BorderBrush="Transparent" BorderThickness="0" FontSize="15" Foreground="White" Height="55" />
-                            </Border>
+                        <components:FormInput Grid.Row="2" 
+                                              LabelTitle="Referral's Description"
+                                              InputBackgroundColor="{StaticResource CustomGrayColor1}"
+                                              InputHeight="75"
+                                              Style="{StaticResource FormInputErrorsStyle}" 
+                                              x:Name="ReferralDescriptionInput"
+                                              ErrorMessage="{Binding ElementName=ReferralDescriptionInput, Path=(Validation.Errors)[0].ErrorContent}" 
+                                              FormText="{Binding ReferralDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="3">
+                            <Button
+                                Style="{StaticResource CommonButton}"
+                                Width="220"
+                                Content="Clear Form"
+                                BorderBrush="Transparent"
+                                BorderThickness="0"
+                                Margin="0 0 5 0"
+                                Click="buttonClearForm_Click"
+                                Tag="{StaticResource CustomYellowColor1}"/>
+                
+                            <components:ButtonWithIcon 
+                                ButtonWidth="220"
+                                ButtonText="Issue Referral"
+                                IconName="Plus"
+                                TextColor="{StaticResource CustomYellowColor1}"
+                                Command="{Binding SubmitCommand}"/>
                         </StackPanel>
                     </Grid>
                 </StackPanel>
@@ -84,107 +111,138 @@
         
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="50"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="50"/>
-                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             
-            <Border Grid.Row="0" 
-                    Background="{StaticResource CustomGrayColor1}" 
-                    Padding="10 0" 
-                    Margin="0 0 15 0" 
-                    CornerRadius="15">
-                <Grid VerticalAlignment="Center">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="50"/>
-                        <ColumnDefinition Width="195"/>
-                        <ColumnDefinition Width="195"/>
-                    </Grid.ColumnDefinitions>
+            <TabControl Grid.Row="0" BorderBrush="Transparent" 
+                        BorderThickness="0" 
+                        Background="Transparent" 
+                        Foreground="White">
+                <TabItem Style="{StaticResource TabItemStyle}" 
+                         Header="Diseases"
+                         Tag="{StaticResource CustomTurquoiseColor1}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        
+                        <Border Grid.Row="0" 
+                                Background="{StaticResource CustomGrayColor1}" 
+                                Padding="10 0" 
+                                Margin="0 0 15 0" 
+                                CornerRadius="15">
+                        <Grid VerticalAlignment="Center">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition Width="195"/>
+                                <ColumnDefinition Width="195"/>
+                            </Grid.ColumnDefinitions>
                 
-                    <TextBlock FontSize="18" Text="Id" Foreground="White" Grid.Column="0"/>
-                    <TextBlock FontSize="18" Text="Disease Name" Foreground="White" Grid.Column="1"/>
-                    <TextBlock FontSize="18" Text="Disease Code" Foreground="White" Grid.Column="2"/>
-                </Grid>
-            </Border>
-            
-            <ScrollViewer Grid.Row="1" Style="{StaticResource ScrollBarTheme}" >
-                <ListView  ItemsSource="{Binding DiseasesView}" 
-                           BorderBrush="Transparent" 
-                           BorderThickness="0" 
-                           SelectionMode="Multiple"  
-                           Background="Transparent" 
-                           Foreground="White"
-                           Margin="0 15 0 0"
-                           ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                           ScrollViewer.CanContentScroll="False"
-                >
-                    <ListView.ItemTemplate>
-                        <DataTemplate DataType="{x:Type dto:DiseaseDto}">
-                            <Border Width="440" Height="35" Padding="5 0" VerticalAlignment="Center" BorderBrush="{StaticResource CustomGrayColor1}" BorderThickness="0 0 0 2">
-                                <Grid VerticalAlignment="Center">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="50"/>
-                                        <ColumnDefinition Width="195"/>
-                                        <ColumnDefinition Width="195"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="0" Foreground="White" Text="{Binding Id}"/>
-                                    <TextBlock Grid.Column="1" Foreground="White" Text="{Binding Name}"/>
-                                    <TextBlock Grid.Column="2" Foreground="White" Text="{Binding DiseaseCode}"/>
-                                </Grid>
-                            </Border>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            </ScrollViewer>
-            
-            <Border Grid.Row="2" 
-                    Background="{StaticResource CustomGrayColor1}" 
-                    Padding="10 0" 
-                    Margin="0 0 15 0" 
-                    CornerRadius="15">
-                <Grid VerticalAlignment="Center">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="50"/>
-                        <ColumnDefinition Width="195"/>
-                        <ColumnDefinition Width="195"/>
-                    </Grid.ColumnDefinitions>
+                            <TextBlock FontSize="18" Text="Id" Foreground="White" Grid.Column="0"/>
+                            <TextBlock FontSize="18" Text="Disease Name" Foreground="White" Grid.Column="1"/>
+                            <TextBlock FontSize="18" Text="Disease Code" Foreground="White" Grid.Column="2"/>
+                        </Grid>
+                    </Border>
+                    
+                    <ScrollViewer Grid.Row="1" Style="{StaticResource ScrollBarTheme}" >
+                        <ListView  ItemsSource="{Binding DiseasesView}"
+                                   BorderBrush="Transparent"
+                                   BorderThickness="0"
+                                   SelectionMode="Single"
+                                   Background="Transparent"
+                                   Foreground="White"
+                                   Margin="0 15 0 0"
+                                   x:Name="DiseaseSelector"
+                                   SelectedItem="{Binding SelectedDisease}"
+                                   ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                                   ScrollViewer.CanContentScroll="False"
+                        >
+                            <ListView.ItemTemplate>
+                                <DataTemplate DataType="{x:Type dto:DiseaseDto}">
+                                    <Border Width="440" Height="35" Padding="5 0" VerticalAlignment="Center" BorderBrush="{StaticResource CustomGrayColor1}" BorderThickness="0 0 0 2">
+                                        <Grid VerticalAlignment="Center">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="50"/>
+                                                <ColumnDefinition Width="195"/>
+                                                <ColumnDefinition Width="195"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Grid.Column="0" Foreground="White" Text="{Binding Id}"/>
+                                            <TextBlock Grid.Column="1" Foreground="White" Text="{Binding Name}"/>
+                                            <TextBlock Grid.Column="2" Foreground="White" Text="{Binding DiseaseCode}"/>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </ScrollViewer>
+                    </Grid>
+                </TabItem>
                 
-                    <TextBlock FontSize="18" Text="Id" Foreground="White" Grid.Column="0"/>
-                    <TextBlock FontSize="18" Text="Test Name" Foreground="White" Grid.Column="1"/>
-                    <TextBlock FontSize="18" Text="Test Description" Foreground="White" Grid.Column="2"/>
-                </Grid>
-            </Border>
-            
-            <ScrollViewer Grid.Row="3" Style="{StaticResource ScrollBarTheme}" >
-                <ListView   ItemsSource="{Binding ReferralTestsView}" 
-                            BorderBrush="Transparent" 
-                            BorderThickness="0" 
-                            SelectionMode="Multiple"  
-                            Background="Transparent" 
-                            Foreground="White"
-                            Margin="0 15 0 0"
-                            ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                            ScrollViewer.CanContentScroll="False"
-                >
-                    <ListView.ItemTemplate>
-                        <DataTemplate DataType="{x:Type dto:ReferralTestDto}">
-                            <Border Width="440" Height="35" Padding="5 0" VerticalAlignment="Center" BorderBrush="{StaticResource CustomGrayColor1}" BorderThickness="0 0 0 2">
-                                <Grid VerticalAlignment="Center">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="50"/>
-                                        <ColumnDefinition Width="195"/>
-                                        <ColumnDefinition Width="195"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="0" Foreground="White" Text="{Binding Id}"/>
-                                    <TextBlock Grid.Column="1" Foreground="White" Text="{Binding Name}"/>
-                                    <TextBlock Grid.Column="2" Foreground="White" Text="{Binding Description}"/>
-                                </Grid>
+                <TabItem Style="{StaticResource TabItemStyle}"  Tag="{StaticResource CustomCoralColor1}" Header="Referral Tests">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        
+                        <Border Grid.Row="0" 
+                                Background="{StaticResource CustomGrayColor1}" 
+                                Padding="10 0" 
+                                Margin="0 0 15 0" 
+                                CornerRadius="15">
+                            
+                            <Grid VerticalAlignment="Center">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition Width="195"/>
+                                    <ColumnDefinition Width="195"/>
+                                </Grid.ColumnDefinitions>
+                            
+                                <TextBlock FontSize="18" Text="Id" Foreground="White" Grid.Column="0"/>
+                                <TextBlock FontSize="18" Text="Test Name" Foreground="White" Grid.Column="1"/>
+                                <TextBlock FontSize="18" Text="Test Description" Foreground="White" Grid.Column="2"/>
+                             </Grid>
                             </Border>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            </ScrollViewer>
+            
+                            <ScrollViewer Grid.Row="1" Style="{StaticResource ScrollBarTheme}" >
+                                <ListView   ItemsSource="{Binding ReferralTestsView}" 
+                                            BorderBrush="Transparent" 
+                                            BorderThickness="0" 
+                                            SelectionMode="Single"  
+                                            Background="Transparent" 
+                                            Foreground="White"
+                                            Margin="0 15 0 0"
+                                            x:Name="ReferralTestSelector"
+                                            Style="{StaticResource ListViewErrorStyle}"
+                                            SelectedItem="{Binding SelectedReferralTest}"
+                                            ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                                            ScrollViewer.CanContentScroll="False"
+                                >
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate DataType="{x:Type dto:ReferralTestDto}">
+                                            <Border Width="440" Height="35" Padding="5 0" VerticalAlignment="Center" BorderBrush="{StaticResource CustomGrayColor1}" BorderThickness="0 0 0 2">
+                                                <Grid VerticalAlignment="Center">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="50"/>
+                                                        <ColumnDefinition Width="195"/>
+                                                        <ColumnDefinition Width="195"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Grid.Column="0" Foreground="White" Text="{Binding Id}"/>
+                                                    <TextBlock Grid.Column="1" Foreground="White" Text="{Binding Name}"/>
+                                                    <TextBlock Grid.Column="2" Foreground="White" Text="{Binding Description}"/>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </ScrollViewer>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+            
+            <Label Height="35" FontSize="15" Content="{Binding ElementName=ReferralTestSelector, Path=(Validation.Errors)[0].ErrorContent}" Foreground="Red" Grid.Row="1"/>
         </Grid>
     </Grid>
 </UserControl>

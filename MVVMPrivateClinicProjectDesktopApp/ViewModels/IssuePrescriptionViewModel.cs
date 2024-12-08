@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Windows.Data;
 using System.Windows.Input;
 using MVVMPrivateClinicProjectDesktopApp.Commands;
@@ -10,27 +11,54 @@ using MVVMPrivateClinicProjectDesktopApp.Stores;
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
 public class IssuePrescriptionViewModel : ViewModelBase, IMedicinesViewModel, IDoctorsViewModel {
-    private DoctorDto _selectedDoctor = null!;
 
+    private readonly ObservableCollection<MedicineDto> _medicinesDto;
+    private readonly ObservableCollection<DoctorDto> _doctorsDto;
+    public ICollectionView MedicinesDtoView { get; set; }
+    public ICollectionView DoctorsDtoView { get; set; }
+    
+    private DoctorDto _selectedDoctor = null!;
+    
+    [Required(ErrorMessage = "Doctor is required!")]
     public DoctorDto SelectedDoctor {
         get => _selectedDoctor;
         set {
             _selectedDoctor = value;
-            OnPropertyChanged();
-            Console.WriteLine(_selectedDoctor.FirstName);
+            Validate(nameof(SelectedDoctor), value);
+            SubmitCommand.OnCanExecuteChanged();
         }
     }
-
-    private ObservableCollection<MedicineDto> _medicinesDto {get; set;}
-    private ObservableCollection<DoctorDto> _doctorsDto {get; set;}
     
-    public ICollectionView MedicinesDtoView { get; set; }
-    public ICollectionView DoctorsDtoView { get; set; }
+    private string _prescriptionDescription = string.Empty;
 
-    public bool IsOpen { get; set; } = false;
+    [Required(ErrorMessage = "Prescription Description is required!")]
+    [RegularExpression(@"([\p{L}]+[\s]?)+", ErrorMessage = "Use letters only please!")]
+    public string PrescriptionDescription {
+        get => _prescriptionDescription;
+        set {
+            _prescriptionDescription = value;
+            Validate(nameof(PrescriptionDescription), value);
+            SubmitCommand.OnCanExecuteChanged();
+        }
+    }
+    
+    private List<MedicineDto> _selectedMedicines = [];
 
+    [Required(ErrorMessage = "Medicines are required!")]
+    public List<MedicineDto> SelectedMedicines {
+        get => _selectedMedicines;
+        set {
+            _selectedMedicines = value;
+            Validate(nameof(SelectedMedicines), value);
+            SubmitCommand.OnCanExecuteChanged();
+
+            Console.WriteLine(_selectedMedicines.Count);
+        }
+    }
+    
     private ICommand LoadMedicinesDtoCommand { get; set; }
     private ICommand LoadDoctorsCommand { get; set; }
+    public SubmitCommand SubmitCommand { get; set; }
 
     public static string Today => DateTime.Today.ToString("dd-MM-yyyy");
     
@@ -40,9 +68,20 @@ public class IssuePrescriptionViewModel : ViewModelBase, IMedicinesViewModel, ID
 
         LoadMedicinesDtoCommand = new LoadMedicinesDtoCommand(this, medicineStore);
         LoadDoctorsCommand = new LoadFamilyDoctorsCommand(this, doctorStore);
+        SubmitCommand = new SubmitCommand(Submit, CanSubmit);
         
         MedicinesDtoView = CollectionViewSource.GetDefaultView(_medicinesDto);
         DoctorsDtoView = CollectionViewSource.GetDefaultView(_doctorsDto);
+    }
+    
+    private bool CanSubmit(){
+        var context = new ValidationContext(this);
+        var results = new List<ValidationResult>();
+        return Validator.TryValidateObject(this, context, results, true);
+    }
+    
+    private void Submit(){
+        Console.WriteLine("SUBMIT!");
     }
 
     public static IssuePrescriptionViewModel LoadIssuePrescriptionViewModel(MedicineStore medicineStore, DoctorStore doctorStore){
@@ -68,9 +107,5 @@ public class IssuePrescriptionViewModel : ViewModelBase, IMedicinesViewModel, ID
         foreach (var doctorDto in doctorsDto) {
             _doctorsDto.Add(doctorDto);
         }
-    }
-
-    public void ToggleIsOpen(){
-        IsOpen = !IsOpen;
     }
 }

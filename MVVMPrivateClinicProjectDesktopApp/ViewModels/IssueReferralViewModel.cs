@@ -22,8 +22,64 @@ public class IssueReferralViewModel : ViewModelBase, IDiseasesViewModel, IDoctor
     public static string Today => DateTime.Today.ToString("dd-MM-yyyy");
 
 
-    public DoctorDto SelectedDoctor { get; set; } = null!;
+    private DoctorDto _selectedDoctor = null!;
+
+    [Required(ErrorMessage = "Doctor is required!")]
+    public DoctorDto SelectedDoctor {
+        get => _selectedDoctor;
+        set {
+            _selectedDoctor = value;
+            Validate(nameof(SelectedDoctor), value);
+            SubmitCommand.OnCanExecuteChanged();
+        }
+    }
     
+    private ReferralTestDto _selectedReferralTest  = null!;
+
+    [Required(ErrorMessage = "Referral Test is required!")]
+    public ReferralTestDto SelectedReferralTest {
+        get => _selectedReferralTest;
+        set {
+            _selectedReferralTest = value;
+            Validate(nameof(SelectedReferralTest), value);
+            SubmitCommand.OnCanExecuteChanged();
+        }
+    }
+
+    private DiseaseDto _selectedDisease  = null!;
+    public DiseaseDto SelectedDisease {
+        get => _selectedDisease;
+        set {
+            _selectedDisease  = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private string _referralName = string.Empty;
+
+    [Required(ErrorMessage = "Referral's Name is required!")]
+    [RegularExpression(@"([\p{L}]+[\s]?)+", ErrorMessage = "Use letters only please!")]
+    public string ReferralName {
+        get => _referralName;
+        set {
+            _referralName = value;
+            Validate(nameof(ReferralName), value);
+            SubmitCommand.OnCanExecuteChanged();
+        }
+    }
+    
+    private string _referralDescription = string.Empty;
+    
+    [Required(ErrorMessage = "Referral's Description is required!")]
+    [RegularExpression(@"([\p{L}]+[\s]?)+", ErrorMessage = "Use letters only please!")]
+    public string ReferralDescription { 
+        get => _referralDescription;
+        set {
+            _referralDescription = value;
+            Validate(nameof(ReferralDescription), value);
+            SubmitCommand.OnCanExecuteChanged();
+        }
+    }
     
     private ICommand LoadFamilyDoctorsCommand { get; set; }
     private ICommand LoadDiseasesCommand { get; }
