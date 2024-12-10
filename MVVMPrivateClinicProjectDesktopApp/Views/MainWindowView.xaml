@@ -53,6 +53,9 @@
         <DataTemplate DataType="{x:Type viewModel:PatientsNotesViewModel}">
             <local:PatientsNotesView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:ReferralTestsViewModel}">
+            <local:ReferralTestsView/>
+        </DataTemplate>
     </Window.Resources>
     
     <Border MouseLeftButtonDown="MouseLeftButtonDown_Press" Background="{StaticResource CustomBlackColor1}" CornerRadius="20">

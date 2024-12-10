@@ -22,6 +22,7 @@ public class NavigationService(NavigationStore navigationStore, Func<ViewModelBa
         ReferralsViewModel => "Referrals",
         InvoicesViewModel => "Invoices",
         PricingViewModel => "Pricing",
+        ReferralTestsViewModel => "Referral Tests",
         _ => "Home",
     };
 }

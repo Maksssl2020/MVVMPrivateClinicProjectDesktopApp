@@ -1,5 +1,6 @@
 using MVVMPrivateClinicProjectDesktopApp.Repositories.Address;
 using MVVMPrivateClinicProjectDesktopApp.Repositories.Appointment;
+using MVVMPrivateClinicProjectDesktopApp.Repositories.Diagnosis;
 using MVVMPrivateClinicProjectDesktopApp.Repositories.Disease;
 using MVVMPrivateClinicProjectDesktopApp.Repositories.Doctor;
 using MVVMPrivateClinicProjectDesktopApp.Repositories.DoctorSpecialization;
@@ -28,5 +29,6 @@ public interface IUnitOfWork {
     IPricingRepository PricingRepository { get; }
     IPatientNoteRepository PatientNoteRepository { get; }
     IReferralTestRepository ReferralTestRepository { get; }
+    IDiagnosisRepository DiagnosisRepository { get; }
     Task SaveChangesAsync();
 }

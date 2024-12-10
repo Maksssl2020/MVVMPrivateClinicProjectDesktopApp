@@ -67,6 +67,29 @@
             <Border Grid.Row="1" Padding="10" Margin="0 5 0 0" BorderThickness="2" BorderBrush="{StaticResource CustomOrangeColor1}" CornerRadius="15">
                 <StackPanel >
                     <Label FontSize="18" Foreground="White" Margin="0 0 0 10" Content="Patient Prescriptions"/>
+                    <ScrollViewer Height="200" Style="{StaticResource ScrollBarTheme}">
+                        <ItemsControl ItemsSource="{Binding SelectedPatientPrescriptionsView}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="{x:Type dto:PrescriptionDto}">
+                                    <Border Padding="5" BorderBrush="{StaticResource CustomGrayColor1}" BorderThickness="0 0 0 5">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="50"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                                
+                                            <TextBlock Grid.Column="0" Text="{Binding Id}" Foreground="White"/>
+                                            <TextBlock Grid.Column="1" Text="{Binding DateIssued, Converter={StaticResource DateTimeFormatConverter}}" FontWeight="Bold" Foreground="White"/>
+                                            <TextBlock Grid.Column="2" Text="{Binding ExpirationDate, Converter={StaticResource DateTimeFormatConverter}}" FontWeight="Bold" Foreground="White"/>
+                                            <TextBlock Grid.Column="3" Text="{Binding DoctorCode}" FontWeight="Bold" Foreground="White"/>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
                 </StackPanel>
             </Border>
         </Grid>    
@@ -80,8 +103,8 @@
             <Border Grid.Row="0"  Padding="10" Margin="0 0 0 5" BorderThickness="2" BorderBrush="{StaticResource CustomRedColor1}" CornerRadius="15">
                 <StackPanel >
                     <Label FontSize="18" Foreground="White" Margin="0 0 0 10" Content="Patient Appointments"/>
-                    <ScrollViewer Height="125" Style="{StaticResource ScrollBarTheme}">
-                        <ItemsControl ItemsSource="{Binding SelectedPatientAppointments}">
+                    <ScrollViewer Height="200" Style="{StaticResource ScrollBarTheme}">
+                        <ItemsControl ItemsSource="{Binding SelectedPatientAppointmentsView}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate DataType="{x:Type dto:AppointmentDto}">
                                     <Border Padding="5" BorderBrush="{StaticResource CustomGrayColor1}" BorderThickness="0 0 0 5">
@@ -107,6 +130,29 @@
             <Border Grid.Row="1"  Padding="10" Margin="0 5 0 0" BorderThickness="2" BorderBrush="{StaticResource CustomYellowColor1}" CornerRadius="15">
                 <StackPanel>
                     <Label FontSize="18" Foreground="White" Margin="0 0 0 10" Content="Patient Referrals"/>
+                    <ScrollViewer Height="200" Style="{StaticResource ScrollBarTheme}">
+                        <ItemsControl ItemsSource="{Binding SelectedPatientPrescriptionsView}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="{x:Type dto:PrescriptionDto}">
+                                    <Border Padding="5" BorderBrush="{StaticResource CustomGrayColor1}" BorderThickness="0 0 0 5">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="50"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                                
+                                            <TextBlock Grid.Column="0" Text="{Binding Id}" Foreground="White"/>
+                                            <TextBlock Grid.Column="1" Text="{Binding DateIssued, Converter={StaticResource DateTimeFormatConverter}}" FontWeight="Bold" Foreground="White"/>
+                                            <TextBlock Grid.Column="2" Text="{Binding ExpirationDate, Converter={StaticResource DateTimeFormatConverter}}" FontWeight="Bold" Foreground="White"/>
+                                            <TextBlock Grid.Column="3" Text="{Binding DoctorCode}" FontWeight="Bold" Foreground="White"/>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
                 </StackPanel>
             </Border>
         </Grid>
@@ -114,6 +160,31 @@
         <Border Grid.Column="2" Margin="5 0 0 5" Padding="10" BorderThickness="2" BorderBrush="{StaticResource CustomPlumColor1}" CornerRadius="15">
             <StackPanel>
                 <Label FontSize="18" Foreground="White" Margin="0 0 0 10" Content="Patient Diagnosis"/>
+                <ScrollViewer Height="475" Style="{StaticResource ScrollBarTheme}">
+                    <ItemsControl ItemsSource="{Binding SelectedPatientDiagnosesView}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="{x:Type dto:DiagnosisDto}">
+                                <Border Padding="5" BorderBrush="{StaticResource CustomGrayColor1}" BorderThickness="0 0 0 5">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="50"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                                
+                                        <TextBlock Grid.Column="0" Text="{Binding Id}" Foreground="White"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding DiagnosisDate, Converter={StaticResource DateTimeFormatConverter}}" FontWeight="Bold" Foreground="White"/>
+                                        <TextBlock Grid.Column="2" Text="{Binding DoctorCode}" FontWeight="Bold" Foreground="White"/>
+                                        <TextBlock Grid.Column="3" Text="{Binding DiseaseCode}" FontWeight="Bold" Foreground="White"/>
+                                        <TextBlock Grid.Column="4" Text="{Binding Description}" FontWeight="Bold" Foreground="White"/>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
             </StackPanel>
         </Border>
     </Grid>

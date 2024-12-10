@@ -15,15 +15,13 @@ public partial class Prescription
 
     public string PrescriptionCode { get; set; } = null!;
 
-    public int IdMedicine { get; set; }
-
     public int IdPatient { get; set; }
 
     public int IdDoctor { get; set; }
 
     public virtual Doctor IdDoctorNavigation { get; set; } = null!;
 
-    public virtual Medicine IdMedicineNavigation { get; set; } = null!;
-
     public virtual Patient IdPatientNavigation { get; set; } = null!;
+
+    public virtual ICollection<Medicine> Medicines { get; set; } = new List<Medicine>();
 }

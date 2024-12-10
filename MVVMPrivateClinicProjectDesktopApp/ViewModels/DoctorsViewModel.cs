@@ -3,12 +3,13 @@ using System.ComponentModel;
 using System.Windows.Data;
 using System.Windows.Input;
 using MVVMPrivateClinicProjectDesktopApp.Commands;
+using MVVMPrivateClinicProjectDesktopApp.Interfaces;
 using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
 using MVVMPrivateClinicProjectDesktopApp.Stores;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
-public class DoctorsViewModel : ViewModelBase {
+public class DoctorsViewModel : ViewModelBase, IDoctorsViewModel {
     private ObservableCollection<DoctorDto> _doctors { get; set; }
     public ICollectionView DoctorsView { get; set; }
     
@@ -74,7 +75,7 @@ public class DoctorsViewModel : ViewModelBase {
                doctorDto.LastName.Contains(filter, StringComparison.CurrentCultureIgnoreCase);
     }
 
-    public void UpdateDoctors(IEnumerable<DoctorDto> allDoctors){
+    public void UpdateDoctorsDto(IEnumerable<DoctorDto> allDoctors){
         _doctors.Clear();
 
         foreach (var doctorDto in allDoctors) {

@@ -10,7 +10,9 @@ using MVVMPrivateClinicProjectDesktopApp.Stores;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
-public class IssueReferralViewModel : ViewModelBase, IDiseasesViewModel, IDoctorsViewModel {
+public class IssueReferralViewModel : ViewModelBase, IDiseasesViewModel, IDoctorsViewModel, IReferralTestsViewModel {
+    public static string Today => DateTime.Today.ToString("dd-MM-yyyy");
+    
     private readonly ObservableCollection<DoctorDto> _doctors;
     private readonly ObservableCollection<DiseaseDto> _diseases;
     private readonly ObservableCollection<ReferralTestDto> _referralTests;
@@ -18,9 +20,6 @@ public class IssueReferralViewModel : ViewModelBase, IDiseasesViewModel, IDoctor
     public ICollectionView DoctorsView { get; set; }
     public ICollectionView DiseasesView { get; set; }
     public ICollectionView ReferralTestsView { get; set; }
-
-    public static string Today => DateTime.Today.ToString("dd-MM-yyyy");
-
 
     private DoctorDto _selectedDoctor = null!;
 
@@ -85,12 +84,15 @@ public class IssueReferralViewModel : ViewModelBase, IDiseasesViewModel, IDoctor
     private ICommand LoadDiseasesCommand { get; }
     private ICommand LoadReferralTestsCommand { get; }
     public SubmitCommand SubmitCommand { get; set; }
+    public ICommand CreateReferralCommand { get; set; }
+    public int SelectedPatientId { get; set; }
 
-    private IssueReferralViewModel(DoctorStore doctorStore, DiseaseStore diseaseStore, ReferralTestStore referralTestStore){
+    private IssueReferralViewModel(PatientStore patientStore, ReferralStore referralStore,  DoctorStore doctorStore, DiseaseStore diseaseStore, ReferralTestStore referralTestStore){
         _doctors = [];
         _diseases = [];
         _referralTests = [];
-
+        SelectedPatientId = patientStore.PatientIdToShowDetails;
+        
         DoctorsView = CollectionViewSource.GetDefaultView(_doctors);
         DiseasesView = CollectionViewSource.GetDefaultView(_diseases);
         ReferralTestsView = CollectionViewSource.GetDefaultView(_referralTests);
@@ -99,11 +101,12 @@ public class IssueReferralViewModel : ViewModelBase, IDiseasesViewModel, IDoctor
         LoadDiseasesCommand = new LoadDiseasesCommand(this, diseaseStore);
         LoadReferralTestsCommand = new LoadReferralTestsCommand(this, referralTestStore);
         SubmitCommand = new SubmitCommand(Submit, CanSubmit);
+        CreateReferralCommand = new CreateReferralCommand(this, referralStore, ResetForm);
     }
 
-    public static IssueReferralViewModel LoadIssueReferralViewModel(DoctorStore doctorStore, DiseaseStore diseaseStore,
+    public static IssueReferralViewModel LoadIssueReferralViewModel(PatientStore patientStore, ReferralStore referralStore, DoctorStore doctorStore, DiseaseStore diseaseStore,
         ReferralTestStore referralTestStore){
-        var issueReferralViewModel = new IssueReferralViewModel(doctorStore, diseaseStore, referralTestStore);
+        var issueReferralViewModel = new IssueReferralViewModel(patientStore, referralStore, doctorStore, diseaseStore, referralTestStore);
         
         issueReferralViewModel.LoadFamilyDoctorsCommand.Execute(null);
         issueReferralViewModel.LoadDiseasesCommand.Execute(null);
@@ -119,7 +122,7 @@ public class IssueReferralViewModel : ViewModelBase, IDiseasesViewModel, IDoctor
     }
 
     private void Submit() {
-        Console.WriteLine("SUBMIT!");
+        CreateReferralCommand.Execute(null);
     }
 
     public void UpdateDoctorsDto(IEnumerable<DoctorDto> doctorsDto){
@@ -144,5 +147,13 @@ public class IssueReferralViewModel : ViewModelBase, IDiseasesViewModel, IDoctor
         foreach (var referralTest in referralTests) {
             _referralTests.Add(referralTest);
         }
+    }
+
+    private void ResetForm(){
+        SelectedDoctor = null!;
+        SelectedReferralTest = null!;
+        SelectedDisease  = null!;
+        ReferralDescription = string.Empty;
+        ReferralName = string.Empty;
     }
 }

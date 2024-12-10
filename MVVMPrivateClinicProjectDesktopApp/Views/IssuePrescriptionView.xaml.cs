@@ -11,21 +11,30 @@ public partial class IssuePrescriptionView : UserControl {
     }
 
     private void buttonClearForm_Click(object sender, RoutedEventArgs e){
-      
+      PrescriptionDescriptionInput.FormText = "";
+      DoctorSelector.SelectedItem = null;
+      MedicinesSelector.SelectedItem = null;
+
+      if (DataContext is not IssuePrescriptionViewModel viewModel) return;
+      viewModel.SelectedMedicines = [];
     }
 
     private void MedicinesSelector_SelectionChanged(object sender, SelectionChangedEventArgs e){
         if (DataContext is not IssuePrescriptionViewModel viewModel) return;
+        var items = viewModel.SelectedMedicines;
+        
         foreach (var addedItem in e.AddedItems) {
-            if (addedItem is MedicineDto medicineDto && !viewModel.SelectedMedicines.Contains(medicineDto)) {
-                viewModel.SelectedMedicines.Add(medicineDto);
+            if (addedItem is MedicineDto medicine) {
+                items.Add(medicine);
             }
         }
 
         foreach (var removedItem in e.RemovedItems) {
             if (removedItem is MedicineDto medicineDto) {
-                viewModel.SelectedMedicines.Remove(medicineDto);
+                items.Remove(medicineDto);
             }
         }
+        
+        viewModel.SelectedMedicines = items;
     }
 }

@@ -33,6 +33,9 @@
         <DataTemplate DataType="{x:Type viewModel:IssueReferralViewModel}">
             <local:IssueReferralView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:AddNewDiagnosisViewModel}">
+            <local:AddNewDiagnosisView/>
+        </DataTemplate>
     </Window.Resources>
     
     <Border MouseLeftButtonDown="MouseLeftButtonDown_Hold" BorderThickness="3" BorderBrush="{StaticResource CustomGrayColor2}" Background="{StaticResource CustomBlackColor1}" CornerRadius="20" Padding="10">
@@ -72,7 +75,7 @@
             
             <Border Grid.Row="1">
                 <StackPanel DataContext="{Binding PatientDataModalNavigationViewModel}" Orientation="Horizontal">
-                    <RadioButton Style="{StaticResource FilterToggleButtonStyle}" 
+                    <RadioButton Style="{StaticResource FilterRadioButtonStyle}" 
                                  Tag="{StaticResource CustomGreenColor1}"
                                  Command="{Binding ShowPatientDetailsViewCommand}"
                                  IsChecked="True">
@@ -81,7 +84,7 @@
                             <TextBlock Text="Details" Style="{StaticResource ToggleButtonText}"/>
                         </StackPanel>
                     </RadioButton>
-                    <RadioButton Style="{StaticResource FilterToggleButtonStyle}" 
+                    <RadioButton Style="{StaticResource FilterRadioButtonStyle}" 
                                  Tag="{StaticResource CustomOrangeColor1}"
                                  Command="{Binding ShowIssuePrescriptionViewCommand}"
                                  Width="200">
@@ -90,7 +93,7 @@
                             <TextBlock Text="Issue Prescription" Style="{StaticResource ToggleButtonText}"/>
                         </StackPanel>
                     </RadioButton>
-                    <RadioButton Style="{StaticResource FilterToggleButtonStyle}" 
+                    <RadioButton Style="{StaticResource FilterRadioButtonStyle}" 
                                  Tag="{StaticResource CustomBlueColor1}"
                                  Command="{Binding ShowAddNewPatientNoteViewCommand}">
                         <StackPanel Style="{StaticResource ToggleButtonStackPanel}">
@@ -98,7 +101,7 @@
                             <TextBlock Text="Add Note" Style="{StaticResource ToggleButtonText}"/>
                         </StackPanel>
                     </RadioButton>
-                    <RadioButton Style="{StaticResource FilterToggleButtonStyle}" 
+                    <RadioButton Style="{StaticResource FilterRadioButtonStyle}" 
                                  Tag="{StaticResource CustomYellowColor1}"
                                  Command="{Binding ShowIssueReferralViewCommand}">
                         <StackPanel Style="{StaticResource ToggleButtonStackPanel}">
@@ -106,8 +109,9 @@
                             <TextBlock Text="Issue Referral" Style="{StaticResource ToggleButtonText}"/>
                         </StackPanel>
                     </RadioButton>
-                    <RadioButton Style="{StaticResource FilterToggleButtonStyle}" 
-                                 Tag="{StaticResource CustomPlumColor1}">
+                    <RadioButton Style="{StaticResource FilterRadioButtonStyle}" 
+                                 Tag="{StaticResource CustomPlumColor1}"
+                                 Command="{Binding ShowAddDiagnosisViewCommand}">
                         <StackPanel Style="{StaticResource ToggleButtonStackPanel}">
                             <fa:IconImage Style="{StaticResource ToggleButtonIcon}" Icon="FileWaveform"/>
                             <TextBlock Text="Add Diagnosis" Style="{StaticResource ToggleButtonText}"/>

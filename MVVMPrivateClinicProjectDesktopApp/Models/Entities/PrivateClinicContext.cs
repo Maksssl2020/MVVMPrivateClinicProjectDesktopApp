@@ -312,15 +312,25 @@ public partial class PrivateClinicContext : Microsoft.EntityFrameworkCore.DbCont
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Prescription_Doctor");
 
-            entity.HasOne(d => d.IdMedicineNavigation).WithMany(p => p.Prescriptions)
-                .HasForeignKey(d => d.IdMedicine)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Prescription_Medicine");
-
             entity.HasOne(d => d.IdPatientNavigation).WithMany(p => p.Prescriptions)
                 .HasForeignKey(d => d.IdPatient)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Prescription_Patient");
+
+            entity.HasMany(d => d.Medicines).WithMany(p => p.Prescriptions)
+                .UsingEntity<Dictionary<string, object>>(
+                    "PrescriptionMedicine",
+                    r => r.HasOne<Medicine>().WithMany()
+                        .HasForeignKey("MedicineId")
+                        .HasConstraintName("FK__Prescript__Medic__4959E263"),
+                    l => l.HasOne<Prescription>().WithMany()
+                        .HasForeignKey("PrescriptionId")
+                        .HasConstraintName("FK__Prescript__Presc__4865BE2A"),
+                    j =>
+                    {
+                        j.HasKey("PrescriptionId", "MedicineId").HasName("PK__Prescrip__54E11ABB3BD12D4E");
+                        j.ToTable("PrescriptionMedicine");
+                    });
         });
 
         modelBuilder.Entity<Pricing>(entity =>

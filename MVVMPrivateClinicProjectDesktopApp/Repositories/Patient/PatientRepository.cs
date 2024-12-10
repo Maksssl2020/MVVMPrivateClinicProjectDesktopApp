@@ -1,10 +1,12 @@
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using MVVMPrivateClinicProjectDesktopApp.DbContext;
 using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
 
 namespace MVVMPrivateClinicProjectDesktopApp.Repositories.Patient;
 
-public class PatientRepository(DbContextFactory dbContextFactory) : IPatientRepository {
+public class PatientRepository(DbContextFactory dbContextFactory, IMapper mapper) : IPatientRepository {
     public async Task<Models.Entities.Patient> SavePatientAsync(SavePatientRequest patient){
         await using var context = dbContextFactory.CreateDbContext();
         var createdPatient = new Models.Entities.Patient {
@@ -30,6 +32,14 @@ public class PatientRepository(DbContextFactory dbContextFactory) : IPatientRepo
         await using var context = dbContextFactory.CreateDbContext();
         return await context.Patients
             .FirstOrDefaultAsync(patient => patient.Id == id);
+    }
+
+    public async Task<PatientFullNameDto?> GetPatientFullNameDtoByIdAsync(int patientId){
+        await using var context = dbContextFactory.CreateDbContext();
+        
+        return await context.Patients
+            .ProjectTo<PatientFullNameDto>(mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync(patient => patient.Id == patientId);
     }
 
     public void DeletePatient(int id){

@@ -11,7 +11,7 @@ public class MapperProfiles : Profile {
 
         CreateMap<Appointment, AppointmentDto>();
         CreateMap<Medicine, MedicineDto>();
-        
+
         CreateMap<Prescription, PrescriptionDto>()
             .ForMember(dest => dest.PatientCode, opt => opt.Ignore())
             .ForMember(dest => dest.DoctorCode, opt => opt.Ignore());
@@ -38,5 +38,16 @@ public class MapperProfiles : Profile {
         CreateMap<Disease, DiseaseDto>();
         CreateMap<DoctorSpecialization, DoctorSpecializationDto>();
         CreateMap<ReferralTest, ReferralTestDto>();
+        CreateMap<Diagnosis, DiagnosisDto>()
+            .ForMember(dest => dest.PatientCode, opt => opt.Ignore())
+            .ForMember(dest => dest.DoctorCode, opt => opt.Ignore())
+            .ForMember(dest => dest.DiseaseCode, opt => opt.Ignore());
+
+        CreateMap<Doctor, DoctorFullNameAndSpecializationDto>();
+        CreateMap<Patient, PatientFullNameDto>();
+        CreateMap<Prescription, PrescriptionDetailsDto>()
+            .ForMember(dest => dest.MedicinesDto, opt => opt.Ignore())
+            .ForMember(dest => dest.DoctorFullNameAndSpecializationDto, opt => opt.Ignore())
+            .ForMember(dest => dest.PatientFullNameDto, opt => opt.Ignore());
     }
 }

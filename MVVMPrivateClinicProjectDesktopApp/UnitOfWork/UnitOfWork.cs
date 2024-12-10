@@ -3,6 +3,7 @@ using MVVMPrivateClinicProjectDesktopApp.DbContext;
 using MVVMPrivateClinicProjectDesktopApp.Helpers;
 using MVVMPrivateClinicProjectDesktopApp.Repositories.Address;
 using MVVMPrivateClinicProjectDesktopApp.Repositories.Appointment;
+using MVVMPrivateClinicProjectDesktopApp.Repositories.Diagnosis;
 using MVVMPrivateClinicProjectDesktopApp.Repositories.Disease;
 using MVVMPrivateClinicProjectDesktopApp.Repositories.Doctor;
 using MVVMPrivateClinicProjectDesktopApp.Repositories.DoctorSpecialization;
@@ -27,7 +28,7 @@ public class UnitOfWork(DbContextFactory dbContextFactory) : IUnitOfWork {
         new DoctorRepository(dbContextFactory, _mapper, DoctorSpecializationRepository);
     public IDoctorSpecializationRepository DoctorSpecializationRepository => new DoctorSpecializationRepository(dbContextFactory, _mapper);
     public IMedicineRepository MedicineRepository => new MedicineRepository(dbContextFactory, _mapper);
-    public IPatientRepository PatientRepository => new PatientRepository(dbContextFactory);
+    public IPatientRepository PatientRepository => new PatientRepository(dbContextFactory, _mapper);
     public IPrescriptionRepository PrescriptionRepository =>
         new PrescriptionRepository(dbContextFactory, _mapper, PatientRepository, DoctorRepository);
     public IReferralRepository ReferralRepository => new ReferralRepository(dbContextFactory, _mapper,
@@ -36,6 +37,7 @@ public class UnitOfWork(DbContextFactory dbContextFactory) : IUnitOfWork {
     public IPricingRepository PricingRepository => new PricingRepository(dbContextFactory, _mapper);
     public IPatientNoteRepository PatientNoteRepository => new PatientNoteRepository(dbContextFactory, _mapper, PatientRepository, DoctorRepository);
     public IReferralTestRepository ReferralTestRepository => new ReferralTestRepository(dbContextFactory, _mapper);
+    public IDiagnosisRepository DiagnosisRepository => new DiagnosisRepository(dbContextFactory, _mapper, PatientRepository, DoctorRepository, DiseaseRepository);
 
     public async Task SaveChangesAsync(){
         await using var context = dbContextFactory.CreateDbContext();

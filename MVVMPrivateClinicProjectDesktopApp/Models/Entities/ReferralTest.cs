@@ -1,4 +1,7 @@
-﻿namespace MVVMPrivateClinicProjectDesktopApp.Models.Entities;
+﻿using System;
+using System.Collections.Generic;
+
+namespace MVVMPrivateClinicProjectDesktopApp.Models.Entities;
 
 public partial class ReferralTest
 {

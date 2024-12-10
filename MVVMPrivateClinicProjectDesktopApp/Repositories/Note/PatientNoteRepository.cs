@@ -12,8 +12,10 @@ public class PatientNoteRepository(DbContextFactory dbContextFactory, IMapper ma
     public async Task<PatientNoteDto> SavePatientNoteAsync(SavePatientNoteRequest patientNoteRequest){
         await using var context = dbContextFactory.CreateDbContext();
 
+        var dateIssued = DateTime.Now;
+        
         var patientNote = new PatientNote {
-            DateIsuued = patientNoteRequest.DateIssued,
+            DateIsuued = dateIssued,
             Description = patientNoteRequest.Description,
             IdDoctor = patientNoteRequest.IdDoctor,
             IdPatient = patientNoteRequest.IdPatient,

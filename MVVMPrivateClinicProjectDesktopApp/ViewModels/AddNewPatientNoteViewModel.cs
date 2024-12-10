@@ -32,6 +32,7 @@ public class AddNewPatientNoteViewModel : ViewModelBase, IDoctorsViewModel {
     private string _patientNoteDescription = string.Empty;
 
     [Required(ErrorMessage = "Patient Note is required!")]
+    [RegularExpression(@"([\p{L} .,!?]+[\s]?)+", ErrorMessage = "Use letters only please!")]
     public string PatientNoteDescription {
         get => _patientNoteDescription;
         set {
@@ -41,11 +42,10 @@ public class AddNewPatientNoteViewModel : ViewModelBase, IDoctorsViewModel {
         }
     }
 
-    private int _patientId;
-
+    private readonly int _patientId;
     public int SelectedPatientId {
         get => _patientId;
-        set {
+        private init {
             _patientId = value;
             OnPropertyChanged();
         }

@@ -32,7 +32,7 @@
             </Grid.RowDefinitions>
             
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal" Grid.Row="0">
-                <RadioButton Style="{StaticResource FilterToggleButtonStyle}" 
+                <RadioButton Style="{StaticResource FilterRadioButtonStyle}" 
                               Tag="{StaticResource CustomGreenColor1}"
                               Command="{Binding AppendFilterCommand}"
                               CommandParameter="Completed">
@@ -41,7 +41,7 @@
                         <TextBlock Text="Completed" Style="{StaticResource ToggleButtonText}"/>
                     </StackPanel>
                 </RadioButton>
-                <RadioButton Style="{StaticResource FilterToggleButtonStyle}" 
+                <RadioButton Style="{StaticResource FilterRadioButtonStyle}" 
                               Tag="{StaticResource CustomMintBlueColor1}"
                               Command="{Binding AppendFilterCommand}"
                               CommandParameter="Accepted"
@@ -51,7 +51,7 @@
                         <TextBlock Text="Accepted" Style="{StaticResource ToggleButtonText}"/>
                     </StackPanel>
                 </RadioButton>
-                <RadioButton Style="{StaticResource FilterToggleButtonStyle}" 
+                <RadioButton Style="{StaticResource FilterRadioButtonStyle}" 
                               Tag="{StaticResource CustomYellowColor1}"
                               Command="{Binding AppendFilterCommand}"
                               CommandParameter="Scheduled">
@@ -60,7 +60,7 @@
                         <TextBlock Text="Scheduled" Style="{StaticResource ToggleButtonText}"/>
                     </StackPanel>
                 </RadioButton>
-                <RadioButton Style="{StaticResource FilterToggleButtonStyle}" 
+                <RadioButton Style="{StaticResource FilterRadioButtonStyle}" 
                               Tag="{StaticResource CustomOrangeColor1}"
                               Command="{Binding AppendFilterCommand}"
                               CommandParameter="Canceled">
@@ -69,7 +69,7 @@
                         <TextBlock Text="Canceled" Style="{StaticResource ToggleButtonText}"/>
                     </StackPanel>
                 </RadioButton>
-                <RadioButton Style="{StaticResource FilterToggleButtonStyle}" 
+                <RadioButton Style="{StaticResource FilterRadioButtonStyle}" 
                               Tag="{StaticResource CustomRedColor1}"
                               Command="{Binding AppendFilterCommand}"
                               CommandParameter="PatientNoShow">

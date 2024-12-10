@@ -16,7 +16,8 @@ public class NavigationBarViewModel(
     NavigationServiceBase referralsNavigationService,
     NavigationServiceBase invoicesNavigationService,
     NavigationServiceBase pricingNavigationService,
-    NavigationServiceBase patientsNotesNavigationService
+    NavigationServiceBase patientsNotesNavigationService,
+    NavigationServiceBase referralTestsNavigationService
     )
     : ViewModelBase {
     
@@ -31,4 +32,5 @@ public class NavigationBarViewModel(
     public ICommand ShowInvoicesViewCommand { get; set; } = new NavigateCommand(invoicesNavigationService);
     public ICommand ShowPricingViewCommand { get; set; } = new NavigateCommand(pricingNavigationService);
     public ICommand ShowPatientsNotesViewCommand { get; set; } = new NavigateCommand(patientsNotesNavigationService);
+    public ICommand ShowReferralTestsViewCommand { get; set; } = new NavigateCommand(referralTestsNavigationService);
 }

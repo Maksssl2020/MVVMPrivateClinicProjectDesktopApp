@@ -18,7 +18,6 @@
             <ColumnDefinition Width="475"/>
         </Grid.ColumnDefinitions>
         
-       
             <Border Grid.Column="0" Padding="15">
                 <StackPanel Orientation="Vertical">
                     <Label FontSize="24" Foreground="White" Content="New Referral Form"/>
@@ -140,9 +139,9 @@
                                 <ColumnDefinition Width="195"/>
                             </Grid.ColumnDefinitions>
                 
-                            <TextBlock FontSize="18" Text="Id" Foreground="White" Grid.Column="0"/>
-                            <TextBlock FontSize="18" Text="Disease Name" Foreground="White" Grid.Column="1"/>
-                            <TextBlock FontSize="18" Text="Disease Code" Foreground="White" Grid.Column="2"/>
+                            <TextBlock FontSize="18" FontWeight="Normal" Text="Id" Foreground="White" Grid.Column="0"/>
+                            <TextBlock FontSize="18" FontWeight="Normal" Text="Disease Name" Foreground="White" Grid.Column="1"/>
+                            <TextBlock FontSize="18" FontWeight="Normal" Text="Disease Code" Foreground="White" Grid.Column="2"/>
                         </Grid>
                     </Border>
                     
@@ -168,9 +167,9 @@
                                                 <ColumnDefinition Width="195"/>
                                                 <ColumnDefinition Width="195"/>
                                             </Grid.ColumnDefinitions>
-                                            <TextBlock Grid.Column="0" Foreground="White" Text="{Binding Id}"/>
-                                            <TextBlock Grid.Column="1" Foreground="White" Text="{Binding Name}"/>
-                                            <TextBlock Grid.Column="2" Foreground="White" Text="{Binding DiseaseCode}"/>
+                                            <TextBlock Grid.Column="0" FontWeight="Normal" Foreground="White" Text="{Binding Id}"/>
+                                            <TextBlock Grid.Column="1" FontWeight="Normal" Foreground="White" Text="{Binding Name}"/>
+                                            <TextBlock Grid.Column="2" FontWeight="Normal" Foreground="White" Text="{Binding DiseaseCode}"/>
                                         </Grid>
                                     </Border>
                                 </DataTemplate>
@@ -200,9 +199,9 @@
                                     <ColumnDefinition Width="195"/>
                                 </Grid.ColumnDefinitions>
                             
-                                <TextBlock FontSize="18" Text="Id" Foreground="White" Grid.Column="0"/>
-                                <TextBlock FontSize="18" Text="Test Name" Foreground="White" Grid.Column="1"/>
-                                <TextBlock FontSize="18" Text="Test Description" Foreground="White" Grid.Column="2"/>
+                                <TextBlock FontSize="18" FontWeight="Normal" Text="Id" Foreground="White" Grid.Column="0"/>
+                                <TextBlock FontSize="18" FontWeight="Normal" Text="Test Name" Foreground="White" Grid.Column="1"/>
+                                <TextBlock FontSize="18" FontWeight="Normal" Text="Test Description" Foreground="White" Grid.Column="2"/>
                              </Grid>
                             </Border>
             
@@ -229,9 +228,9 @@
                                                         <ColumnDefinition Width="195"/>
                                                         <ColumnDefinition Width="195"/>
                                                     </Grid.ColumnDefinitions>
-                                                    <TextBlock Grid.Column="0" Foreground="White" Text="{Binding Id}"/>
-                                                    <TextBlock Grid.Column="1" Foreground="White" Text="{Binding Name}"/>
-                                                    <TextBlock Grid.Column="2" Foreground="White" Text="{Binding Description}"/>
+                                                    <TextBlock Grid.Column="0" FontWeight="Normal" Foreground="White" Text="{Binding Id}"/>
+                                                    <TextBlock Grid.Column="1" FontWeight="Normal" Foreground="White" Text="{Binding Name}"/>
+                                                    <TextBlock Grid.Column="2" FontWeight="Normal" Foreground="White" Text="{Binding Description}"/>
                                                 </Grid>
                                             </Border>
                                         </DataTemplate>

@@ -34,8 +34,6 @@ public class AppointmentStore {
     public async Task LoadPatientAppointments(){
         var foundAppointments = await _unitOfWork.AppointmentRepository.GetAppointmentsByPatientIdAsync(SelectedPatientId);
         _selectedPatientAllAppointments.AddRange(foundAppointments);
-
-        Console.WriteLine(_selectedPatientAllAppointments.Count);
     }
     
     public async Task LoadAppointments(){

@@ -36,13 +36,13 @@ public class AppointmentsViewModel : ViewModelBase {
     }
 
     public int UpdateAppointmentStatusId { get; set; }
-    
-    public ICommand LoadAppointmentsCommand { get; set; }
+
+    private ICommand LoadAppointmentsCommand { get; set; }
     public ICommand AppendFilterCommand { get; set; }
     public ICommand AcceptAppointmentCommand { get; set; }
     public ICommand CancelAppointmentCommand { get; set; }
-    
-    public AppointmentsViewModel(AppointmentStore appointmentStore){
+
+    private AppointmentsViewModel(AppointmentStore appointmentStore){
         _appointmentStore = appointmentStore;
         _appointments = [];
         _filteredAppointments = new ObservableCollection<AppointmentDto>(_appointments);

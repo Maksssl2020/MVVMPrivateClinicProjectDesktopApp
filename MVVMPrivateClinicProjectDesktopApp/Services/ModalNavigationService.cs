@@ -21,6 +21,7 @@ public class ModalNavigationService(ModalNavigationStore modalNavigationStore, F
         AddNewMedicineViewModel => new AddNewMedicineView(),
         AddNewDoctorViewModel => new AddNewDoctorView(),
         AddNewPricingViewModel => new AddNewPricingView(),
+        PrescriptionDetailsViewModel => new PrescriptionDetailsModalView(),
         _ => new AddNewPatientView()
     };
 }

@@ -6,7 +6,7 @@
              xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
              xmlns:viewModel="clr-namespace:MVVMPrivateClinicProjectDesktopApp.ViewModels"
              mc:Ignorable="d"
-             d:DesignHeight="750" d:DesignWidth="250"
+             d:DesignHeight="800" d:DesignWidth="250"
              d:DataContext="{d:DesignInstance viewModel:NavigationBarViewModel}">
     <Border Background="{StaticResource CustomGrayColor1}"  CornerRadius="20">
                 <Grid >
@@ -98,6 +98,15 @@
                             <StackPanel Orientation="Horizontal">
                                 <fa:IconImage Icon="Receipt" Style="{StaticResource  MenuButtonIcon}"/>
                                 <TextBlock Text="Referrals" Style="{StaticResource MenuButtonText}"/> 
+                            </StackPanel>
+                        </RadioButton>
+                        
+                        <RadioButton Style="{StaticResource MenuButtonTheme}"
+                                     Tag="{StaticResource CustomWarmBeigeColor1}"
+                                     Command="{Binding ShowReferralTestsViewCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <fa:IconImage Icon="Microscope" Style="{StaticResource  MenuButtonIcon}"/>
+                                <TextBlock Text="Referral Tests" Style="{StaticResource MenuButtonText}"/> 
                             </StackPanel>
                         </RadioButton>
                         

@@ -9,20 +9,17 @@ using MVVMPrivateClinicProjectDesktopApp.Stores;
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
 public class ReferralsViewModel : ViewModelBase {
-    private readonly ReferralStore _referralStore;
-    
     private readonly ObservableCollection<ReferralDto> _referralsDto;
     public ICollectionView ReferralsView { get; set; }
 
     private ICommand LoadReferralsCommand { get; set; }
 
     private ReferralsViewModel(ReferralStore referralStore){
-        _referralStore = referralStore;
-
         _referralsDto = [];
         ReferralsView = CollectionViewSource.GetDefaultView(_referralsDto);
 
-        LoadReferralsCommand = new LoadReferralsDtoCommand(this, _referralStore);
+        LoadReferralsCommand = new LoadReferralsDtoCommand(this, referralStore);
+        referralStore.ReferralCreated += OnReferralCreated;
     }
 
     public static ReferralsViewModel LoadReferralsViewModel(ReferralStore referralStore){
@@ -31,6 +28,10 @@ public class ReferralsViewModel : ViewModelBase {
         referralsViewModel.LoadReferralsCommand.Execute(null);
         
         return referralsViewModel;
+    }
+
+    private void OnReferralCreated(ReferralDto referralDto){
+        _referralsDto.Add(referralDto);
     }
     
     public void UpdateReferrals(IEnumerable<ReferralDto> referrals){

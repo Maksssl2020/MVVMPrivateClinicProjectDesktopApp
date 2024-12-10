@@ -17,6 +17,7 @@
                  <ResourceDictionary Source="Themes/ComboBoxTheme.xaml"/>
                  <ResourceDictionary Source="Themes/TabControlTheme.xaml"/>
                  <ResourceDictionary Source="Themes/ListViewErrorTheme.xaml"/>
+                 <ResourceDictionary Source="Themes/OptionRadioButtonTheme.xaml"/>
              </ResourceDictionary.MergedDictionaries>
          </ResourceDictionary>
     </Application.Resources>

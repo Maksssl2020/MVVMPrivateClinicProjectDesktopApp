@@ -16,7 +16,36 @@ public class ReferralRepository(
     IDoctorRepository doctorRepository,
     IDiseaseRepository diseaseRepository
     ) : IReferralRepository {
-    
+    public async Task<ReferralDto> SaveReferral(SaveReferralRequest referralRequest){
+        await using var context = dbContextFactory.CreateDbContext();
+        
+        var dateIssued = DateTime.Now;
+
+        var referral = new Models.Entities.Referral {
+            DateIssued = dateIssued,
+            Description = referralRequest.Description,
+            Name = referralRequest.Name,
+            IdPatient = referralRequest.PatientId,
+            IdDoctor = referralRequest.DoctorId,
+            IdDisease = referralRequest.DiseaseId ?? null,
+            IdReferralTest = referralRequest.ReferralTestId,
+        };
+        
+        await context.AddAsync(referral);
+        await context.SaveChangesAsync();
+        
+        return mapper.Map<Models.Entities.Referral, ReferralDto>(referral);
+    }
+
+    public async Task<IEnumerable<ReferralDto>> GetPatientAllReferrals(int patientId){
+        await using var context = dbContextFactory.CreateDbContext();
+
+        return await context.Referrals
+            .Where(referral => referral.IdPatient == patientId)
+            .ProjectTo<ReferralDto>(mapper.ConfigurationProvider)
+            .ToListAsync();
+    }
+
     public async Task<IEnumerable<ReferralDto>> GetAllReferralsDtoAsync(){
         await using var context = dbContextFactory.CreateDbContext();
 

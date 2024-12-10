@@ -72,6 +72,11 @@ public class NavigationStore : NavigationStoreBase<ViewModelBase> {
                 HeaderBrush = (SolidColorBrush)Application.Current.Resources["CustomPaleGoldColor1"]!;
                 break;
             }
+            case "Referral Tests": {
+                ViewIcon = IconChar.Microscope;
+                HeaderBrush = (SolidColorBrush)Application.Current.Resources["CustomWarmBeigeColor1"]!;
+                break;
+            }
             default: {
                 ViewIcon = IconChar.House;
                 HeaderBrush = (SolidColorBrush)Application.Current.Resources["CustomLavenderColor1"]!;

@@ -1,4 +1,5 @@
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using MVVMPrivateClinicProjectDesktopApp.DbContext;
 using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
@@ -77,5 +78,13 @@ public class DoctorRepository(DbContextFactory dbContextFactory, IMapper mapper,
         doctorDto.DoctorSpecialization = foundSpecialization?.Name;
         
         return doctorDto;
+    }
+
+    public async Task<DoctorFullNameAndSpecializationDto?> GetDoctorFullNameAndSpecializationDtoByIdAsync(int doctorId){
+        await using var context = dbContextFactory.CreateDbContext();
+
+        return await context.Doctors
+            .ProjectTo<DoctorFullNameAndSpecializationDto>(mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync(doctor => doctor.Id == doctorId);
     }
 }

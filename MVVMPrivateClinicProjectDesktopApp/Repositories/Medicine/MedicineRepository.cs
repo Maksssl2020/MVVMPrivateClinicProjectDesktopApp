@@ -22,6 +22,15 @@ public class MedicineRepository(DbContextFactory dbContextFactory, IMapper mappe
         return mapper.Map<MedicineDto>(medicine);
     }
 
+    public async Task<MedicineDto> GetMedicineByIdAsync(int medicineId){
+        await using var context = dbContextFactory.CreateDbContext();
+        
+        var medicine = await context.Medicines
+            .FirstOrDefaultAsync(m => m.Id == medicineId);
+        
+        return mapper.Map<MedicineDto>(medicine);
+    }
+
     public async Task<IEnumerable<MedicineDto>> GetAllMedicinesDtoAsync(){
         await using var context = dbContextFactory.CreateDbContext();
         return await context.Medicines

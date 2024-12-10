@@ -7,7 +7,6 @@ namespace MVVMPrivateClinicProjectDesktopApp.Commands;
 public class CreatePatientNoteCommand(AddNewPatientNoteViewModel viewModel, PatientNoteStore patientNoteStore, Action resetForm) : AsyncRelayCommand {
     public override async Task ExecuteAsync(object? parameter){
         var savePatientNoteRequest = new SavePatientNoteRequest {
-            DateIssued = DateTime.Now,
             Description = viewModel.PatientNoteDescription,
             IdDoctor = viewModel.SelectedDoctor.Id,
             IdPatient = viewModel.SelectedPatientId
