@@ -37,6 +37,7 @@ public partial class App : Application {
     private readonly DoctorSpecializationStore _doctorSpecializationStore;
     private readonly ReferralTestStore _referralTestStore;
     private readonly DiagnosisStore _diagnosisStore;
+    private readonly AppointmentDateStore _appointmentDateStore;
     private readonly NavigationBarViewModel _navigationBarViewModel;
     private readonly ModalNavigationViewModel _modalNavigationViewModel;
     private readonly PatientDataModalNavigationViewModel _patientDataModalNavigationViewModel;
@@ -65,6 +66,7 @@ public partial class App : Application {
         _doctorSpecializationStore = new DoctorSpecializationStore(_unitOfWork);
         _referralTestStore = new ReferralTestStore(_unitOfWork);
         _diagnosisStore = new DiagnosisStore(_unitOfWork);
+        _appointmentDateStore = new AppointmentDateStore(_unitOfWork);
         
         _navigationBarViewModel = new NavigationBarViewModel(
             CreateHomeNavigationService(),
@@ -90,7 +92,8 @@ public partial class App : Application {
             CreateAddNewPricingNavigationService(),
             CreatePrescriptionDetailsNavigationService(),
             CreatePatientNoteDetailsNavigationService(),
-            CreateReferralDetailsNavigationService()
+            CreateReferralDetailsNavigationService(),
+            CreateAddNewAppointmentNavigationService()
             );
 
         _patientDataModalNavigationViewModel = new PatientDataModalNavigationViewModel(
@@ -127,7 +130,7 @@ public partial class App : Application {
     }
 
     private NavigationService CreateAppointmentsNavigationService(){
-        return new NavigationService(_navigationStore, () => AppointmentsViewModel.LoadAppointmentsViewModel(_appointmentStore));
+        return new NavigationService(_navigationStore, () => AppointmentsViewModel.LoadAppointmentsViewModel(_appointmentStore, _modalNavigationViewModel));
     }
     
     private NavigationServiceBase CreateDiseasesNavigationService(){
@@ -201,6 +204,10 @@ public partial class App : Application {
 
     private NavigationServiceBase CreateReferralDetailsNavigationService(){
         return new ModalNavigationService(_modalNavigationStore, () =>  ReferralDetailsViewModel.LoadReferralDetailsViewModel(_referralStore));
+    }
+
+    private NavigationServiceBase CreateAddNewAppointmentNavigationService(){
+        return new ModalNavigationService(_modalNavigationStore, () =>  AddNewAppointmentViewModel.LoadAddNewAppointmentViewModel(_doctorStore, _patientStore, _appointmentStore, _appointmentDateStore, _pricingStore, _invoiceStore));
     }
     
     private NavigationServiceBase CreatePatientDetailsNavigationService(){

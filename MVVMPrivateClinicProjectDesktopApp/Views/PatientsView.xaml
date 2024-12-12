@@ -6,6 +6,7 @@
              xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
              xmlns:viewModel="clr-namespace:MVVMPrivateClinicProjectDesktopApp.ViewModels"
              xmlns:entities="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Models.Entities"
+             xmlns:dto="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Models.DTOs"
              mc:Ignorable="d"
              FontFamily="/Fonts/#OpenSans"
              d:DesignHeight="675" 
@@ -72,7 +73,7 @@
             <ScrollViewer  Style="{StaticResource ScrollBarTheme}" Grid.Row="2">
                 <ItemsControl ItemsSource="{Binding PatientsView}" Padding="10 0" Margin="0 25 0 0">
                     <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="{x:Type entities:Patient}">
+                        <DataTemplate DataType="{x:Type dto:PatientDto}">
                             <Border Padding="5 0 5 0" BorderBrush="{StaticResource CustomGrayColor1}" BorderThickness="0 0 0 2" Height="45">
                                 <Grid  VerticalAlignment="Center">
                                     <Grid.ColumnDefinitions>

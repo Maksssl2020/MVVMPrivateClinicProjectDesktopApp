@@ -90,7 +90,7 @@ public class DoctorRepository(DbContextFactory dbContextFactory, IMapper mapper,
         return doctorDto;
     }
 
-    public async Task<DoctorDetailsDto?> GetDoctorFullNameAndSpecializationDtoByIdAsync(int doctorId){
+    public async Task<DoctorDetailsDto?> GetDoctorDetailsAsync(int doctorId){
         await using var context = dbContextFactory.CreateDbContext();
 
         return await context.Doctors

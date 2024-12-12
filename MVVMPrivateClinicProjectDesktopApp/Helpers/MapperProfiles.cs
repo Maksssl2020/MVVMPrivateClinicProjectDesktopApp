@@ -54,6 +54,7 @@ public class MapperProfiles : Profile {
 
         CreateMap<Doctor, DoctorDetailsDto>();
         CreateMap<Patient, PatientDetailsDto>();
+        CreateMap<Patient, PatientDto>();
         CreateMap<Prescription, PrescriptionDetailsDto>()
             .ForMember(dest => dest.MedicinesDto, opt => opt.Ignore())
             .ForMember(dest => dest.DoctorDetailsDto, opt => opt.Ignore())

@@ -3,9 +3,9 @@ using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
 namespace MVVMPrivateClinicProjectDesktopApp.Repositories.Patient;
 
 public interface IPatientRepository {
-    Task<Models.Entities.Patient> SavePatientAsync(SavePatientRequest patient);
-    Task<IEnumerable<Models.Entities.Patient>> GetAllPatientsAsync();
-    Task<Models.Entities.Patient?> GetPatientByIdAsync(int patientId);
-    Task<PatientDetailsDto?> GetPatientFullNameDtoByIdAsync(int patientId);
+    Task<PatientDto> SavePatientAsync(SavePatientRequest patient);
+    Task<IEnumerable<PatientDto>> GetAllPatientsAsync();
+    Task<PatientDto?> GetPatientByIdAsync(int patientId);
+    Task<PatientDetailsDto?> GetPatientDetailsAsync(int patientId);
     void DeletePatient(int patientId);
 }

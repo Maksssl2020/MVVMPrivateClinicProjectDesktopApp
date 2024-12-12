@@ -24,6 +24,15 @@ public class PricingRepository(DbContextFactory dbContextFactory, IMapper mapper
         return mapper.Map<PricingDto>(pricing);
     }
 
+    public async Task<PricingDto?> GetPricingByIdAsync(int pricingId){
+        await using var context = dbContextFactory.CreateDbContext();
+        
+        return await context.Pricings
+            .Where(p => p.Id == pricingId)
+            .ProjectTo<PricingDto>(mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync();
+    }
+
     public async Task<IEnumerable<PricingDto>> GetAllPricingDtoAsync(){
         await using var context = dbContextFactory.CreateDbContext();
 

@@ -11,6 +11,8 @@ public class InvoiceStore {
 
     public IEnumerable<InvoiceDto> InvoicesDto => _invoicesDto;
 
+    public event Action<InvoiceDto>? InvoiceCreated; 
+    
     public InvoiceStore(IUnitOfWork unitOfWork){
         _unitOfWork = unitOfWork;
 
@@ -22,6 +24,17 @@ public class InvoiceStore {
         await _initializeLazy.Value;
     }
 
+    public async Task CreateInvoice(SaveNewInvoiceRequest invoiceRequest){
+        var savedInvoice = await _unitOfWork.InvoiceRepository.SaveInvoiceAsync(invoiceRequest);
+        _invoicesDto.Add(savedInvoice);
+        
+        OnInvoiceCreated(savedInvoice);
+    }
+
+    private void OnInvoiceCreated(InvoiceDto invoiceDto){
+        InvoiceCreated?.Invoke(invoiceDto);
+    }
+    
     private async Task InitializeInvoices(){
         var loadedInvoices = await _unitOfWork.InvoiceRepository.GetAllInvoicesDtoAsync();
         

@@ -10,10 +10,10 @@ using MVVMPrivateClinicProjectDesktopApp.Stores;
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
 public class PatientDetailsViewModel : ViewModelBase {
-    private Patient _selectedPatient = null!;
+    private PatientDto _selectedPatient = null!;
     private Address _selectedPatientAddress = null!;
     
-    public Patient SelectedPatient {
+    public PatientDto SelectedPatient {
         get => _selectedPatient;
         private set {
             _selectedPatient = value;
@@ -86,7 +86,7 @@ public class PatientDetailsViewModel : ViewModelBase {
         _selectedPatientPrescriptions.Add(prescription);
     }
     
-    public void UpdatePatientDetails(Patient patient, Address address, IEnumerable<AppointmentDto> appointments, IEnumerable<PrescriptionDto> prescriptions, IEnumerable<ReferralDto> referrals, IEnumerable<DiagnosisDto> diagnoses) {
+    public void UpdatePatientDetails(PatientDto patient, Address address, IEnumerable<AppointmentDto> appointments, IEnumerable<PrescriptionDto> prescriptions, IEnumerable<ReferralDto> referrals, IEnumerable<DiagnosisDto> diagnoses) {
         SelectedPatient = patient;
         SelectedPatientAddress = address;
         _selectedPatientAppointments.Clear();

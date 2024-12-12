@@ -1,12 +1,44 @@
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using MVVMPrivateClinicProjectDesktopApp.DbContext;
 using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
 using MVVMPrivateClinicProjectDesktopApp.Repositories.Doctor;
 using MVVMPrivateClinicProjectDesktopApp.Repositories.Patient;
+using MVVMPrivateClinicProjectDesktopApp.Repositories.Pricing;
+using static System.Enum;
 
 namespace MVVMPrivateClinicProjectDesktopApp.Repositories.Appointment;
 
-public class AppointmentRepository(DbContextFactory dbContextFactory, IPatientRepository patientRepository, IDoctorRepository doctorRepository) : IAppointmentRepository {
+public class AppointmentRepository(
+    DbContextFactory dbContextFactory,
+    IMapper mapper,
+    IPatientRepository patientRepository,
+    IDoctorRepository doctorRepository,
+    IPricingRepository pricingRepository
+    ) : IAppointmentRepository {
+    public async Task<AppointmentDto> SaveAppointmentAsync(SaveAppointmentRequest saveAppointmentRequest){
+        await using var context = dbContextFactory.CreateDbContext();
+
+        var appointmentDate =
+            new DateTime(saveAppointmentRequest.AppointmentDate, saveAppointmentRequest.AppointmentTime);
+
+        var appointment = new Models.Entities.Appointment {
+            AppointmentCost = saveAppointmentRequest.AppointmentCost,
+            AppointmentDate = appointmentDate,
+            IdDoctor = saveAppointmentRequest.IdDoctor,
+            IdPatient = saveAppointmentRequest.IdPatient,
+            IdPricing = saveAppointmentRequest.IdPricing,
+        };
+        
+        await context.Appointments.AddAsync(appointment);
+        await context.SaveChangesAsync();
+
+        var appointmentDto = mapper.Map<AppointmentDto>(appointment);
+        await CreateAppointmentDto(appointmentDto, appointment.AppointmentStatus);
+        
+        return appointmentDto;
+    }
+
     public async Task<IEnumerable<AppointmentDto>> GetAllAppointmentsAsync(){
         await using var context = dbContextFactory.CreateDbContext();
         var foundAppointments = await context.Appointments
@@ -30,9 +62,6 @@ public class AppointmentRepository(DbContextFactory dbContextFactory, IPatientRe
         var foundPatientAppointments = await context.Appointments
             .Where(appointment => appointment.IdPatient == patientId)
             .ToListAsync();
-
-        Console.WriteLine(foundPatientAppointments.Count);
-        Console.WriteLine("Patient ID: {0}", patientId);
         
         var appointmentDtos = await CreateAppointmentDtos(foundPatientAppointments);
         return appointmentDtos;
@@ -42,28 +71,24 @@ public class AppointmentRepository(DbContextFactory dbContextFactory, IPatientRe
         var appointmentDtos = new List<AppointmentDto>();
         
         foreach (var appointment in appointments) {
-            var foundPatient = await patientRepository.GetPatientByIdAsync(appointment.IdPatient);
-            var foundDoctor = await doctorRepository.GetDoctorByIdAsync(appointment.IdDoctor);
-
-            if (foundDoctor == null || foundPatient == null) {
-                throw new NullReferenceException("Doctor or Patient not found");
-            };
-
-            var appointmentDto = new AppointmentDto {
-                Id = appointment.Id,
-                AppointmentDate = appointment.AppointmentDate,
-                AppointmentStatus = appointment.AppointmentStatus,
-                DoctorFirstName = foundDoctor.FirstName,
-                DoctorLastName = foundDoctor.LastName,
-                DoctorSpecialization = foundDoctor.DoctorSpecialization!,
-                PatientFirstName = foundPatient.FirstName,
-                PatientLastName = foundPatient.LastName,
-                PatientCode = foundPatient.PatientCode!
-            };
+            var appointmentDto = mapper.Map<AppointmentDto>(appointment);
+            await CreateAppointmentDto(appointmentDto, appointment.AppointmentStatus);
             
             appointmentDtos.Add(appointmentDto);
         }
         
         return appointmentDtos;
+    }
+
+    private async Task CreateAppointmentDto(AppointmentDto appointmentDto, string status){
+        var foundPatient = await patientRepository.GetPatientDetailsAsync(appointmentDto.IdPatient);
+        var foundDoctor = await doctorRepository.GetDoctorDetailsAsync(appointmentDto.IdDoctor);
+        var foundPricing = await pricingRepository.GetPricingByIdAsync(appointmentDto.IdPricing);
+
+        if (foundPatient != null) appointmentDto.PatientDetailsDto = foundPatient;
+        if (foundDoctor != null) appointmentDto.DoctorDetailsDto = foundDoctor;
+        if (foundPricing != null) appointmentDto.PricingDto = foundPricing;
+
+        appointmentDto.AppointmentStatus = status;
     }
 }

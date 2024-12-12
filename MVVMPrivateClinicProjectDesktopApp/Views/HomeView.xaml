@@ -42,7 +42,7 @@
                                     <UniformGrid Columns="2" Rows="2"/>
                                 </ItemsPanelTemplate>
                             </ItemsControl.ItemsPanel>
-                            <ItemsControl.ItemTemplate></ItemsControl.ItemTemplate>
+                            <!-- <ItemsControl.ItemTemplate></ItemsControl.ItemTemplate> -->
                         </ItemsControl>
                     </Grid>
                 </Border>

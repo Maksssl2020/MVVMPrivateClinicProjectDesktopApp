@@ -8,5 +8,5 @@ public interface IDoctorRepository {
     Task<IEnumerable<DoctorDto>> GetAllFamilyMedicineDoctors();
     Task<IEnumerable<DoctorDto>> GetMostPopularDoctors(int size);
     Task<DoctorDto?> GetDoctorByIdAsync(int id);
-    Task<DoctorDetailsDto?> GetDoctorFullNameAndSpecializationDtoByIdAsync(int doctorId);
+    Task<DoctorDetailsDto?> GetDoctorDetailsAsync(int doctorId);
 }

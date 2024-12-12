@@ -9,7 +9,6 @@ public class LoadPatientCommand(PatientDataModalViewModel patientDataModalViewMo
             await patientStore.LoadPatientData();
             if (patientStore.SelectedPatientData != null) {
                 patientDataModalViewModel.SelectedPatient = patientStore.SelectedPatientData;
-                Console.WriteLine($"Selected Patient: {patientStore.SelectedPatientData.FirstName}");
             }
         }
         catch (Exception e) {

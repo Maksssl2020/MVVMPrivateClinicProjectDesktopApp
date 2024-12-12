@@ -49,8 +49,8 @@ public class ReferralRepository(
 
         if (foundReferral is null) return null;
 
-        var foundPatient = await patientRepository.GetPatientFullNameDtoByIdAsync(foundReferral.IdPatient);
-        var foundDoctor = await doctorRepository.GetDoctorFullNameAndSpecializationDtoByIdAsync(foundReferral.IdDoctor);
+        var foundPatient = await patientRepository.GetPatientDetailsAsync(foundReferral.IdPatient);
+        var foundDoctor = await doctorRepository.GetDoctorDetailsAsync(foundReferral.IdDoctor);
         var foundDisease = await diseaseRepository.GetDiseaseByIdAsync(foundReferral.IdDisease);
         var foundReferralTest = await referralTestRepository.GetReferralTestByIdAsync(foundReferral.IdReferralTest);
 

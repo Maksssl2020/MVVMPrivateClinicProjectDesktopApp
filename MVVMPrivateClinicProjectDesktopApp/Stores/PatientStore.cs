@@ -6,18 +6,18 @@ namespace MVVMPrivateClinicProjectDesktopApp.Stores;
 public class PatientStore {
     private readonly IUnitOfWork _unitOfWork;
     
-    public event Action<Patient>? PatientCreated;
+    public event Action<PatientDto>? PatientCreated;
     public event Action<int>? PatientDeleted;
     
-    private readonly List<Patient> _patients;
+    private readonly List<PatientDto> _patients;
     private readonly Lazy<Task> _initializeLazy;
+    
+    public IEnumerable<PatientDto> Patients => _patients;
     
     public int PatientIdToDelete { get; set; }
     public int PatientIdToShowDetails { get; set; }
     
-    public IEnumerable<Patient> Patients => _patients;
-    
-    public Patient? SelectedPatientData { get; set; }
+    public PatientDto? SelectedPatientData { get; set; }
     public Address? SelectedPatientAddress { get; set; }
 
     public PatientStore(IUnitOfWork unitOfWork){
@@ -37,7 +37,7 @@ public class PatientStore {
         OnPatientCreated(savedPatient);
     }
     
-    private void OnPatientCreated(Patient patient){
+    private void OnPatientCreated(PatientDto patient){
         PatientCreated?.Invoke(patient);
     }
     

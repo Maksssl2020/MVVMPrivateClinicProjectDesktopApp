@@ -3,11 +3,13 @@ using System.ComponentModel;
 using System.Windows.Data;
 using System.Windows.Input;
 using MVVMPrivateClinicProjectDesktopApp.Commands;
+using MVVMPrivateClinicProjectDesktopApp.Interfaces;
+using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
 using MVVMPrivateClinicProjectDesktopApp.Stores;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
-public class PatientsViewModel : ViewModelBase {
+public class PatientsViewModel : ViewModelBase, IPatientViewModel {
     private readonly PatientStore _patientStore;
 
     public ICommand ShowAddNewPatientModal {get; set;}
@@ -15,7 +17,7 @@ public class PatientsViewModel : ViewModelBase {
     public ICommand ShowPatientDataModal { get; set; }
     private ICommand LoadPatients { get; set; }
     
-    private ObservableCollection<Patient> Patients { get; set; } = [];
+    private readonly ObservableCollection<PatientDto> _patients = [];
     public ICollectionView PatientsView { get; set; }
     
     
@@ -37,7 +39,7 @@ public class PatientsViewModel : ViewModelBase {
         ShowDeletePatientModal = modalNavigationViewModel.ShowDeletePatientModal;
         ShowPatientDataModal = modalNavigationViewModel.ShowPatientDataModal;
         
-        PatientsView = CollectionViewSource.GetDefaultView(Patients);
+        PatientsView = CollectionViewSource.GetDefaultView(_patients);
         PatientsView.Filter = FilterPatients;
         
         _patientStore.PatientCreated += OnPatientCreated;
@@ -67,25 +69,25 @@ public class PatientsViewModel : ViewModelBase {
         base.Dispose();
     }
 
-    private void OnPatientCreated(Patient patient){
-        Patients.Add(patient);
+    private void OnPatientCreated(PatientDto patient){
+        _patients.Add(patient);
     }
 
     private void OnPatientDeleted(int patientId){
-        var foundPatient = Patients.First(patient => patient.Id == patientId);
-        Patients.Remove(foundPatient);
+        var foundPatient = _patients.First(patient => patient.Id == patientId);
+        _patients.Remove(foundPatient);
     }
 
-    public void UpdatePatients(IEnumerable<Patient> patients){
-        Patients.Clear();
+    public void UpdatePatients(IEnumerable<PatientDto> patients){
+        _patients.Clear();
 
         foreach (var patient in patients) {
-            Patients.Add(patient);
+            _patients.Add(patient);
         }
     }
     
     private bool FilterPatients(object obj){
-        if (obj is not Patient patient) {
+        if (obj is not PatientDto patient) {
             return false;
         }
 

@@ -21,6 +21,8 @@ public partial class Doctor
 
     public virtual ICollection<AppointmentCard> AppointmentCards { get; set; } = new List<AppointmentCard>();
 
+    public virtual ICollection<AppointmentDate> AppointmentDates { get; set; } = new List<AppointmentDate>();
+
     public virtual ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
 
     public virtual ICollection<Diagnosis> Diagnoses { get; set; } = new List<Diagnosis>();

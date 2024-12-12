@@ -7,7 +7,7 @@ using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
 namespace MVVMPrivateClinicProjectDesktopApp.Repositories.Patient;
 
 public class PatientRepository(DbContextFactory dbContextFactory, IMapper mapper) : IPatientRepository {
-    public async Task<Models.Entities.Patient> SavePatientAsync(SavePatientRequest patient){
+    public async Task<PatientDto> SavePatientAsync(SavePatientRequest patient){
         await using var context = dbContextFactory.CreateDbContext();
         var createdPatient = new Models.Entities.Patient {
             FirstName = patient.FirstName,
@@ -20,21 +20,24 @@ public class PatientRepository(DbContextFactory dbContextFactory, IMapper mapper
         await context.Patients.AddAsync(createdPatient);
         await context.SaveChangesAsync();
         
-        return createdPatient;
+        return mapper.Map<PatientDto>(createdPatient);
     }
 
-    public async Task<IEnumerable<Models.Entities.Patient>> GetAllPatientsAsync(){
-        await using var context = dbContextFactory.CreateDbContext();
-        return await context.Patients.ToListAsync();
-    }
-
-    public async Task<Models.Entities.Patient?> GetPatientByIdAsync(int id){
+    public async Task<IEnumerable<PatientDto>> GetAllPatientsAsync(){
         await using var context = dbContextFactory.CreateDbContext();
         return await context.Patients
+            .ProjectTo<PatientDto>(mapper.ConfigurationProvider)
+            .ToListAsync();
+    }
+
+    public async Task<PatientDto?> GetPatientByIdAsync(int id){
+        await using var context = dbContextFactory.CreateDbContext();
+        return await context.Patients
+            .ProjectTo<PatientDto>(mapper.ConfigurationProvider)
             .FirstOrDefaultAsync(patient => patient.Id == id);
     }
 
-    public async Task<PatientDetailsDto?> GetPatientFullNameDtoByIdAsync(int patientId){
+    public async Task<PatientDetailsDto?> GetPatientDetailsAsync(int patientId){
         await using var context = dbContextFactory.CreateDbContext();
         
         return await context.Patients

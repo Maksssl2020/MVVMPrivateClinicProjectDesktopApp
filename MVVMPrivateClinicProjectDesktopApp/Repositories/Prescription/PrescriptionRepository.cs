@@ -67,8 +67,8 @@ public class PrescriptionRepository(
             
 
         var prescriptionDto =  mapper.Map<PrescriptionDetailsDto>(foundPrescription);
-        var foundDoctor = await doctorRepository.GetDoctorFullNameAndSpecializationDtoByIdAsync(prescriptionDto.IdDoctor);
-        var foundPatient = await patientRepository.GetPatientFullNameDtoByIdAsync(prescriptionDto.IdPatient);
+        var foundDoctor = await doctorRepository.GetDoctorDetailsAsync(prescriptionDto.IdDoctor);
+        var foundPatient = await patientRepository.GetPatientDetailsAsync(prescriptionDto.IdPatient);
         
         prescriptionDto.MedicinesDto = medicinesDto;
         if (foundDoctor != null) prescriptionDto.DoctorDetailsDto = foundDoctor;

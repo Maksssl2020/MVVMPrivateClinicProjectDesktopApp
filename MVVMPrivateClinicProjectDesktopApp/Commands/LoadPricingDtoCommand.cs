@@ -1,9 +1,10 @@
+using MVVMPrivateClinicProjectDesktopApp.Interfaces;
 using MVVMPrivateClinicProjectDesktopApp.Stores;
 using MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
 namespace MVVMPrivateClinicProjectDesktopApp.Commands;
 
-public class LoadPricingDtoCommand(PricingViewModel viewModel, PricingStore pricingStore): AsyncRelayCommand {
+public class LoadPricingDtoCommand(IPricingViewModel viewModel, PricingStore pricingStore): AsyncRelayCommand {
     public override async Task ExecuteAsync(object? parameter){
         try {
             await pricingStore.LoadPricingAsync();

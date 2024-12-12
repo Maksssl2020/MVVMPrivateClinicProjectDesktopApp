@@ -5,8 +5,6 @@ namespace MVVMPrivateClinicProjectDesktopApp.Stores;
 
 public class AppointmentStore {
     private readonly IUnitOfWork _unitOfWork;
-
-    public event Action<AppointmentDto>? AppointmentStatusUpdated;
     
     private readonly List<AppointmentDto> _allAppointments;
     private readonly Lazy<Task> _initializeLazy;
@@ -15,6 +13,9 @@ public class AppointmentStore {
     
     public IEnumerable<AppointmentDto> AllAppointments => _allAppointments;
     public IEnumerable<AppointmentDto> SelectedPatientAllAppointments => _selectedPatientAllAppointments;
+    
+    public event Action<AppointmentDto>? AppointmentStatusUpdated;
+    public event Action<AppointmentDto>? AppointmentCreated;
     
     public int SelectedPatientId {
         get => _selectedPatientId;
@@ -50,8 +51,19 @@ public class AppointmentStore {
         OnAppointmentStatusUpdated(appointment);
     }
 
+    public async Task CreateAppointment(SaveAppointmentRequest saveAppointmentRequest){
+        var savedAppointment = await _unitOfWork.AppointmentRepository.SaveAppointmentAsync(saveAppointmentRequest);
+        _allAppointments.Add(savedAppointment);
+        
+        OnAppointmentCreated(savedAppointment);
+    }
+    
     private void OnAppointmentStatusUpdated(AppointmentDto appointmentDto){
         AppointmentStatusUpdated?.Invoke(appointmentDto);
+    }
+
+    private void OnAppointmentCreated(AppointmentDto appointmentDto){
+        AppointmentCreated?.Invoke(appointmentDto);
     }
     
     private async Task InitializeAppointments(){

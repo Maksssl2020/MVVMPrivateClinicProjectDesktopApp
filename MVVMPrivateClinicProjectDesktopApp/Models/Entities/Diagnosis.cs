@@ -17,7 +17,7 @@ public partial class Diagnosis
 
     public int IdDisease { get; set; }
 
-    public virtual Disease? IdDiseaseNavigation { get; set; }
+    public virtual Disease IdDiseaseNavigation { get; set; } = null!;
 
     public virtual Doctor IdDoctorNavigation { get; set; } = null!;
 

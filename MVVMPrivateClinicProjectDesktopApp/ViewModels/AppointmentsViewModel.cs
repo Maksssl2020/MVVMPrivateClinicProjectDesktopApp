@@ -41,8 +41,9 @@ public class AppointmentsViewModel : ViewModelBase {
     public ICommand AppendFilterCommand { get; set; }
     public ICommand AcceptAppointmentCommand { get; set; }
     public ICommand CancelAppointmentCommand { get; set; }
+    public ICommand ShowAddNewAppointmentModalCommand { get; set; }
 
-    private AppointmentsViewModel(AppointmentStore appointmentStore){
+    private AppointmentsViewModel(AppointmentStore appointmentStore, ModalNavigationViewModel modalNavigationViewModel){
         _appointmentStore = appointmentStore;
         _appointments = [];
         _filteredAppointments = new ObservableCollection<AppointmentDto>(_appointments);
@@ -54,14 +55,15 @@ public class AppointmentsViewModel : ViewModelBase {
         AppendFilterCommand = new RelayCommand<string>(SetFilter);
         AcceptAppointmentCommand = new UpdateAppointmentStatusCommand(this, _appointmentStore, AppointmentStatus.Accepted);
         CancelAppointmentCommand = new UpdateAppointmentStatusCommand(this, _appointmentStore, AppointmentStatus.Canceled);
-        
+        ShowAddNewAppointmentModalCommand = modalNavigationViewModel.ShowAddNewAppointmentModal;
+            
         ApplyFilter();
         
         _appointmentStore.AppointmentStatusUpdated += OnAppointmentStatusUpdated;
     }
 
-    public static AppointmentsViewModel LoadAppointmentsViewModel(AppointmentStore appointmentStore){
-        var appointmentsViewModel = new AppointmentsViewModel(appointmentStore);
+    public static AppointmentsViewModel LoadAppointmentsViewModel(AppointmentStore appointmentStore, ModalNavigationViewModel modalNavigationViewModel){
+        var appointmentsViewModel = new AppointmentsViewModel(appointmentStore, modalNavigationViewModel);
         
         appointmentsViewModel.LoadAppointmentsCommand.Execute(null);
         

@@ -1,6 +1,7 @@
 using System.Windows.Input;
 using MVVMPrivateClinicProjectDesktopApp.Commands;
 using MVVMPrivateClinicProjectDesktopApp.Interfaces;
+using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
 using MVVMPrivateClinicProjectDesktopApp.Stores;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
@@ -11,8 +12,8 @@ public class PatientDataModalViewModel : ViewModelBase {
     public PatientDataModalNavigationViewModel PatientDataModalNavigationViewModel { get; }
     public ViewModelBase CurrentViewModel => _patientDataModalNavigationStore.CurrentViewModel!;
 
-    private Patient? _selectedPatient;
-    public Patient? SelectedPatient { 
+    private PatientDto? _selectedPatient;
+    public PatientDto? SelectedPatient { 
         get => _selectedPatient;
         set {
             _selectedPatient = value;

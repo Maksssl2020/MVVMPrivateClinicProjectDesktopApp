@@ -3,12 +3,13 @@ using System.ComponentModel;
 using System.Windows.Data;
 using System.Windows.Input;
 using MVVMPrivateClinicProjectDesktopApp.Commands;
+using MVVMPrivateClinicProjectDesktopApp.Interfaces;
 using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
 using MVVMPrivateClinicProjectDesktopApp.Stores;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
-public class PricingViewModel : ViewModelBase {
+public class PricingViewModel : ViewModelBase, IPricingViewModel {
     private readonly ObservableCollection<PricingDto> _pricingDto;
     public ICollectionView PricingView { get; set; }
 

@@ -21,6 +21,8 @@ public partial class PrivateClinicContext : Microsoft.EntityFrameworkCore.DbCont
 
     public virtual DbSet<AppointmentCard> AppointmentCards { get; set; }
 
+    public virtual DbSet<AppointmentDate> AppointmentDates { get; set; }
+
     public virtual DbSet<Diagnosis> Diagnoses { get; set; }
 
     public virtual DbSet<Disease> Diseases { get; set; }
@@ -118,6 +120,27 @@ public partial class PrivateClinicContext : Microsoft.EntityFrameworkCore.DbCont
                 .HasConstraintName("FK_AppointmentCard_Referral");
         });
 
+        modelBuilder.Entity<AppointmentDate>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Appointm__3214EC070A439F07");
+
+            entity.ToTable("AppointmentDate");
+
+            entity.Property(e => e.AppointmentDate1)
+                .HasColumnType("datetime")
+                .HasColumnName("AppointmentDate");
+
+            entity.HasOne(d => d.IdDoctorNavigation).WithMany(p => p.AppointmentDates)
+                .HasForeignKey(d => d.IdDoctor)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Doctor");
+
+            entity.HasOne(d => d.IdPatientNavigation).WithMany(p => p.AppointmentDates)
+                .HasForeignKey(d => d.IdPatient)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Patient");
+        });
+
         modelBuilder.Entity<Diagnosis>(entity =>
         {
             entity.ToTable("Diagnosis");
@@ -126,6 +149,7 @@ public partial class PrivateClinicContext : Microsoft.EntityFrameworkCore.DbCont
 
             entity.HasOne(d => d.IdDiseaseNavigation).WithMany(p => p.Diagnoses)
                 .HasForeignKey(d => d.IdDisease)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Diagnosis_Disease");
 
             entity.HasOne(d => d.IdDoctorNavigation).WithMany(p => p.Diagnoses)
