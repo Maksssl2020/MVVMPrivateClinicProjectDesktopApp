@@ -34,11 +34,11 @@ public class PatientRepository(DbContextFactory dbContextFactory, IMapper mapper
             .FirstOrDefaultAsync(patient => patient.Id == id);
     }
 
-    public async Task<PatientFullNameDto?> GetPatientFullNameDtoByIdAsync(int patientId){
+    public async Task<PatientDetailsDto?> GetPatientFullNameDtoByIdAsync(int patientId){
         await using var context = dbContextFactory.CreateDbContext();
         
         return await context.Patients
-            .ProjectTo<PatientFullNameDto>(mapper.ConfigurationProvider)
+            .ProjectTo<PatientDetailsDto>(mapper.ConfigurationProvider)
             .FirstOrDefaultAsync(patient => patient.Id == patientId);
     }
 

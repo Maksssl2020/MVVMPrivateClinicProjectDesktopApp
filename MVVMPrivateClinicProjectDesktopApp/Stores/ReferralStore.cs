@@ -24,7 +24,19 @@ public class ReferralStore {
         }
     }
     
-    public event Action<ReferralDto>? ReferralCreated; 
+    public event Action<ReferralDto>? ReferralCreated;
+
+    private int _selectedReferralId;
+
+    public int SelectedReferralId {
+        get => _selectedReferralId;
+        set {
+            _selectedReferralId = value;
+            SelectedReferralDetails = null!;
+        }
+    }
+
+    public ReferralDetailsDto SelectedReferralDetails { get; set; } = null!;
     
     public ReferralStore(IUnitOfWork unitOfWork){
         _unitOfWork = unitOfWork;
@@ -39,18 +51,23 @@ public class ReferralStore {
     }
 
     public async Task LoadPatientReferrals(){
-        var loadedPatientReferrals = await _unitOfWork.ReferralRepository.GetPatientAllReferrals(SelectedPatientId);
+        var loadedPatientReferrals = await _unitOfWork.ReferralRepository.GetPatientAllReferralsAsync(SelectedPatientId);
         _selectedPatientReferralsDto.AddRange(loadedPatientReferrals);
     }
 
     public async Task CreateReferral(SaveReferralRequest referralRequest){
-        var savedReferral = await _unitOfWork.ReferralRepository.SaveReferral(referralRequest);
+        var savedReferral = await _unitOfWork.ReferralRepository.SaveReferralAsync(referralRequest);
         _referralsDto.Add(savedReferral);
         _selectedPatientReferralsDto.Add(savedReferral);
 
         OnReferralCreated(savedReferral);
     }
 
+    public async Task LoadReferralDetails(){
+        var foundReferral = await _unitOfWork.ReferralRepository.GetReferralDetailsByIdAsync(SelectedReferralId);
+        if (foundReferral != null) SelectedReferralDetails = foundReferral;
+    }
+    
     private void OnReferralCreated(ReferralDto savedReferral){
         ReferralCreated?.Invoke(savedReferral);
     }

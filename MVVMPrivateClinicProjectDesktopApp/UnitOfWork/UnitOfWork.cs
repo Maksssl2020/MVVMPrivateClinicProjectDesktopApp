@@ -32,7 +32,7 @@ public class UnitOfWork(DbContextFactory dbContextFactory) : IUnitOfWork {
     public IPrescriptionRepository PrescriptionRepository =>
         new PrescriptionRepository(dbContextFactory, _mapper, PatientRepository, DoctorRepository);
     public IReferralRepository ReferralRepository => new ReferralRepository(dbContextFactory, _mapper,
-        PatientRepository, DoctorRepository, DiseaseRepository);
+        PatientRepository, DoctorRepository, DiseaseRepository, ReferralTestRepository);
     public IInvoiceRepository InvoiceRepository => new InvoiceRepository(dbContextFactory, _mapper, PatientRepository);
     public IPricingRepository PricingRepository => new PricingRepository(dbContextFactory, _mapper);
     public IPatientNoteRepository PatientNoteRepository => new PatientNoteRepository(dbContextFactory, _mapper, PatientRepository, DoctorRepository);

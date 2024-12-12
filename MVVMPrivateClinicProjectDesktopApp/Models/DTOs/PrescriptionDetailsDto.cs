@@ -7,7 +7,7 @@ public class PrescriptionDetailsDto {
     public required string PrescriptionDescription { get; set; }
     public DateOnly DateIssued { get; set; }
     public DateOnly ExpirationDate { get; set; }
-    public PatientFullNameDto PatientFullNameDto { get; set; } = null!;
-    public DoctorFullNameAndSpecializationDto DoctorFullNameAndSpecializationDto { get; set; } = null!;
+    public PatientDetailsDto PatientDetailsCto { get; set; } = null!;
+    public DoctorDetailsDto DoctorDetailsDto { get; set; } = null!;
     public IEnumerable<MedicineDto>? MedicinesDto { get; set; }
 }

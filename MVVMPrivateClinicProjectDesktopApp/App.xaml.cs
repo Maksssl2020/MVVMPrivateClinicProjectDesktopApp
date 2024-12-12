@@ -88,7 +88,9 @@ public partial class App : Application {
             CreateAddNewMedicineNavigationService(),
             CreateAddNewDoctorNavigationService(),
             CreateAddNewPricingNavigationService(),
-            CreatePrescriptionDetailsNavigationService()
+            CreatePrescriptionDetailsNavigationService(),
+            CreatePatientNoteDetailsNavigationService(),
+            CreateReferralDetailsNavigationService()
             );
 
         _patientDataModalNavigationViewModel = new PatientDataModalNavigationViewModel(
@@ -113,7 +115,7 @@ public partial class App : Application {
     }
 
     private NavigationServiceBase CreateHomeNavigationService(){
-        return new NavigationService(_navigationStore, () => new HomeViewModel());
+        return new NavigationService(_navigationStore, () => HomeViewModel.LoadHomeViewModel(_doctorStore));
     }
     
     private NavigationServiceBase CreatePatientsNavigationService(){
@@ -141,7 +143,7 @@ public partial class App : Application {
     }
 
     private NavigationServiceBase CreateReferralsNavigationService(){
-        return new NavigationService(_navigationStore, () => ReferralsViewModel.LoadReferralsViewModel(_referralStore));
+        return new NavigationService(_navigationStore, () => ReferralsViewModel.LoadReferralsViewModel(_referralStore, _modalNavigationViewModel));
     }
 
     private NavigationServiceBase CreateInvoicesNavigationService(){
@@ -153,7 +155,7 @@ public partial class App : Application {
     }
 
     private NavigationServiceBase CreatePatientsNotesNavigationService(){
-        return new NavigationService(_navigationStore, () => PatientsNotesViewModel.LoadPatientNoteViewModel(_patientNoteStore, _patientDataModalNavigationViewModel));
+        return new NavigationService(_navigationStore, () => PatientsNotesViewModel.LoadPatientNoteViewModel(_patientNoteStore, _modalNavigationViewModel));
     }
 
     private NavigationServiceBase CreateReferralTestsNavigationService(){
@@ -190,6 +192,15 @@ public partial class App : Application {
 
     private NavigationServiceBase CreatePrescriptionDetailsNavigationService(){
         return new ModalNavigationService(_modalNavigationStore, () =>  PrescriptionDetailsViewModel.LoadPrescriptionDetailsViewModel(_prescriptionStore));
+    }
+
+    private NavigationServiceBase CreatePatientNoteDetailsNavigationService(){
+        return new ModalNavigationService(_modalNavigationStore,
+            () => PatientNoteDetailsViewModel.LoadPatientNoteDetailsViewModel(_patientNoteStore));
+    }
+
+    private NavigationServiceBase CreateReferralDetailsNavigationService(){
+        return new ModalNavigationService(_modalNavigationStore, () =>  ReferralDetailsViewModel.LoadReferralDetailsViewModel(_referralStore));
     }
     
     private NavigationServiceBase CreatePatientDetailsNavigationService(){

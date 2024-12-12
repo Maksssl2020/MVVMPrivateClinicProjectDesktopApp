@@ -3,11 +3,11 @@ using MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
 namespace MVVMPrivateClinicProjectDesktopApp.Commands;
 
-public class LoadPrescriptionCommand(PrescriptionDetailsViewModel viewModel, PrescriptionStore prescriptionStore): AsyncRelayCommand {
+public class LoadReferralCommand(ReferralDetailsViewModel viewModel, ReferralStore referralStore) : AsyncRelayCommand {
     public override async Task ExecuteAsync(object? parameter){
         try {
-            await prescriptionStore.LoadPrescriptionById();
-            viewModel.UpdatePrescription(prescriptionStore.SelectedPrescription);
+            await referralStore.LoadReferralDetails();
+            viewModel.UpdateReferralDetails(referralStore.SelectedReferralDetails);
         }
         catch (Exception e) {
             Console.WriteLine(e);

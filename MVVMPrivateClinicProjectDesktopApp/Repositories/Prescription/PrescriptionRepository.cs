@@ -71,8 +71,8 @@ public class PrescriptionRepository(
         var foundPatient = await patientRepository.GetPatientFullNameDtoByIdAsync(prescriptionDto.IdPatient);
         
         prescriptionDto.MedicinesDto = medicinesDto;
-        if (foundDoctor != null) prescriptionDto.DoctorFullNameAndSpecializationDto = foundDoctor;
-        if (foundPatient != null) prescriptionDto.PatientFullNameDto = foundPatient;
+        if (foundDoctor != null) prescriptionDto.DoctorDetailsDto = foundDoctor;
+        if (foundPatient != null) prescriptionDto.PatientDetailsCto = foundPatient;
 
 
         return prescriptionDto;

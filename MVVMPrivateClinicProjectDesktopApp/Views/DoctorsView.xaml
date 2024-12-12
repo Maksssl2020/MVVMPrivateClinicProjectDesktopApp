@@ -57,7 +57,7 @@
                         <ColumnDefinition Width="125"/>
                         <ColumnDefinition Width="125"/>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="45"/>
+                        <ColumnDefinition Width="100"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock FontSize="15" Foreground="White" VerticalAlignment="Center" Grid.Column="0" Text="Id"/>
                     <TextBlock FontSize="15" Foreground="White" VerticalAlignment="Center" Grid.Column="1" Text="Doctor Code"/>
@@ -81,7 +81,7 @@
                                         <ColumnDefinition Width="125"/>
                                         <ColumnDefinition Width="125"/>
                                         <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="45"/>
+                                        <ColumnDefinition Width="100"/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock VerticalAlignment="Center" Foreground="White" Grid.Column="0" Text="{Binding Id}"/>
                                     <TextBlock VerticalAlignment="Center" Foreground="White" Grid.Column="1" Text="{Binding DoctorCode}"/>
@@ -89,12 +89,16 @@
                                     <TextBlock VerticalAlignment="Center" Foreground="White" Grid.Column="3" Text="{Binding LastName}"/>
                                     <TextBlock VerticalAlignment="Center" Foreground="White" Grid.Column="4" Text="{Binding PhoneNumber}"/>
                                     <TextBlock VerticalAlignment="Center" Foreground="White" Grid.Column="5" Text="{Binding DoctorSpecialization}"/>
-                                    <!-- <Button Grid.Column="6"  -->
-                                    <!--         Style="{StaticResource ButtonWithIconSmall}" -->
-                                    <!--         Tag="{StaticResource CustomBlueColor1}"  -->
-                                    <!--         > -->
-                                    <!--     <fa:IconImage Style="{StaticResource IconButtonSmall}" Icon="Eye"/> -->
-                                    <!-- </Button> -->
+                                    <StackPanel Orientation="Horizontal" Grid.Column="6">
+                                        <Button Style="{StaticResource ButtonWithIconSmall}"
+                                                Tag="{StaticResource CustomBlueColor1}">
+                                            <fa:IconImage Style="{StaticResource IconButtonSmall}" Icon="Eye"/>
+                                        </Button>
+                                        <Button Style="{StaticResource ButtonWithIconSmall}"
+                                                Tag="{StaticResource CustomRedColor1}">
+                                            <fa:IconImage Style="{StaticResource IconButtonSmall}" Icon="Trash"/>
+                                        </Button>
+                                    </StackPanel>
                                 </Grid>
                             </Border>
                         </DataTemplate>

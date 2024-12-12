@@ -6,6 +6,7 @@ using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
 using MVVMPrivateClinicProjectDesktopApp.Repositories.Disease;
 using MVVMPrivateClinicProjectDesktopApp.Repositories.Doctor;
 using MVVMPrivateClinicProjectDesktopApp.Repositories.Patient;
+using MVVMPrivateClinicProjectDesktopApp.Repositories.ReferralTest;
 
 namespace MVVMPrivateClinicProjectDesktopApp.Repositories.Referral;
 
@@ -14,9 +15,10 @@ public class ReferralRepository(
     IMapper mapper,
     IPatientRepository patientRepository,
     IDoctorRepository doctorRepository,
-    IDiseaseRepository diseaseRepository
+    IDiseaseRepository diseaseRepository,
+    IReferralTestRepository referralTestRepository
     ) : IReferralRepository {
-    public async Task<ReferralDto> SaveReferral(SaveReferralRequest referralRequest){
+    public async Task<ReferralDto> SaveReferralAsync(SaveReferralRequest referralRequest){
         await using var context = dbContextFactory.CreateDbContext();
         
         var dateIssued = DateTime.Now;
@@ -37,7 +39,30 @@ public class ReferralRepository(
         return mapper.Map<Models.Entities.Referral, ReferralDto>(referral);
     }
 
-    public async Task<IEnumerable<ReferralDto>> GetPatientAllReferrals(int patientId){
+    public async Task<ReferralDetailsDto?> GetReferralDetailsByIdAsync(int id){
+        await using var context = dbContextFactory.CreateDbContext();
+
+        var foundReferral = await context.Referrals
+            .Where(r => r.Id == id)
+            .ProjectTo<ReferralDetailsDto>(mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync();
+
+        if (foundReferral is null) return null;
+
+        var foundPatient = await patientRepository.GetPatientFullNameDtoByIdAsync(foundReferral.IdPatient);
+        var foundDoctor = await doctorRepository.GetDoctorFullNameAndSpecializationDtoByIdAsync(foundReferral.IdDoctor);
+        var foundDisease = await diseaseRepository.GetDiseaseByIdAsync(foundReferral.IdDisease);
+        var foundReferralTest = await referralTestRepository.GetReferralTestByIdAsync(foundReferral.IdReferralTest);
+
+        if (foundPatient != null) foundReferral.PatientDetailsDto = foundPatient;
+        if (foundDoctor != null) foundReferral.DoctorDetailsDto = foundDoctor;
+        if (foundDisease != null) foundReferral.DiseaseDetailsDto = foundDisease;
+        if (foundReferralTest != null) foundReferral.ReferralTestDetailsDto = foundReferralTest;
+
+        return foundReferral;
+    }
+
+    public async Task<IEnumerable<ReferralDto>> GetPatientAllReferralsAsync(int patientId){
         await using var context = dbContextFactory.CreateDbContext();
 
         return await context.Referrals

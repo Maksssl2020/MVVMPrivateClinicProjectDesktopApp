@@ -46,7 +46,7 @@ public class DiseaseRepository(DbContextFactory dbContextFactory, IMapper mapper
         
         return stringBuilder.ToString();
     }
-    
+
     public async Task<IEnumerable<DiseaseDto>> GetAllDiseasesAsync(){
         await using var context = dbContextFactory.CreateDbContext();
         return await context.Diseases

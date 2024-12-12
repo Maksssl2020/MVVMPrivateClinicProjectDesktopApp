@@ -30,6 +30,26 @@ public class PatientNoteRepository(DbContextFactory dbContextFactory, IMapper ma
         return savedPatientNoteDto;
     }
 
+    public async Task<PatientNoteDetailsDto?> GetPatientNoteDetailsAsync(int patientNoteId){
+        await using var context = dbContextFactory.CreateDbContext();
+        
+        var foundPatientNote = await context.PatientNotes
+            .Where(p => p.Id == patientNoteId)
+            .ProjectTo<PatientNoteDetailsDto>(mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync();
+
+        if (foundPatientNote == null) return null;
+        
+        var foundDoctor =
+            await doctorRepository.GetDoctorFullNameAndSpecializationDtoByIdAsync(foundPatientNote.IdDoctor);
+        var foundPatient = await patientRepository.GetPatientFullNameDtoByIdAsync(foundPatientNote.IdPatient);
+
+        if (foundDoctor != null) foundPatientNote.DoctorDetailsDto = foundDoctor;
+        if (foundPatient != null) foundPatientNote.PatientDetailsDto = foundPatient;
+
+        return foundPatientNote;
+    }
+
     public async Task<IEnumerable<PatientNoteDto>> GetAllPatientsNotesAsync(){
         await using var context = dbContextFactory.CreateDbContext();
 

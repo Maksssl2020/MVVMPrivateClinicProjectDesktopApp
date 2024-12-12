@@ -67,6 +67,16 @@ public class DoctorRepository(DbContextFactory dbContextFactory, IMapper mapper,
             .ToList();
     }
 
+    public async Task<IEnumerable<DoctorDto>> GetMostPopularDoctors(int size){
+        await using var context = dbContextFactory.CreateDbContext();
+        
+        return await context.Doctors
+            .OrderByDescending(doctor => doctor.Appointments.Count)
+            .Take(size)
+            .ProjectTo<DoctorDto>(mapper.ConfigurationProvider)
+            .ToListAsync();
+    }
+
     public async Task<DoctorDto?> GetDoctorByIdAsync(int id){
         await using var context = dbContextFactory.CreateDbContext();
         var foundDoctor = await context.Doctors.FirstOrDefaultAsync(doctor => doctor.Id == id);
@@ -80,11 +90,11 @@ public class DoctorRepository(DbContextFactory dbContextFactory, IMapper mapper,
         return doctorDto;
     }
 
-    public async Task<DoctorFullNameAndSpecializationDto?> GetDoctorFullNameAndSpecializationDtoByIdAsync(int doctorId){
+    public async Task<DoctorDetailsDto?> GetDoctorFullNameAndSpecializationDtoByIdAsync(int doctorId){
         await using var context = dbContextFactory.CreateDbContext();
 
         return await context.Doctors
-            .ProjectTo<DoctorFullNameAndSpecializationDto>(mapper.ConfigurationProvider)
+            .ProjectTo<DoctorDetailsDto>(mapper.ConfigurationProvider)
             .FirstOrDefaultAsync(doctor => doctor.Id == doctorId);
     }
 }

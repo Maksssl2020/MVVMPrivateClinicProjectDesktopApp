@@ -15,9 +15,20 @@ public class PatientNoteStore {
     public IEnumerable<PatientNoteWithDoctorDataDto> SelectedPatientNotes => _selectedPatientNotes;
 
     public int SelectedPatientId { get; set; }
-    
+
+    private int _selectedPatientNoteId;
+
+    public int SelectedPatientNoteId {
+        get => _selectedPatientNoteId;
+        set {
+            _selectedPatientNoteId = value;
+            SelectedPatientNote = null!;
+        }
+    }
+
+    public PatientNoteDetailsDto SelectedPatientNote { get; set; } = null!;
+
     public event Action<PatientNoteDto>? PatientNoteCreated;
-    
     public PatientNoteStore(IUnitOfWork unitOfWork){
         _unitOfWork = unitOfWork;
 
@@ -33,6 +44,11 @@ public class PatientNoteStore {
 
     public async Task LoadSelectedPatientNotes(){
         await _initializeSelectedPatientNotesLazy.Value;
+    }
+
+    public async Task LoadSelectedPatientNote(){
+        var loadedPatientNote = await _unitOfWork.PatientNoteRepository.GetPatientNoteDetailsAsync(SelectedPatientNoteId).ConfigureAwait(false);
+        if (loadedPatientNote != null) SelectedPatientNote = loadedPatientNote;
     }
     
     public async Task CreatePatientNote(SavePatientNoteRequest patientNoteRequest){

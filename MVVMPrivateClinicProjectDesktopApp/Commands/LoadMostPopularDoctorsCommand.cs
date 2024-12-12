@@ -3,11 +3,11 @@ using MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
 namespace MVVMPrivateClinicProjectDesktopApp.Commands;
 
-public class LoadPrescriptionCommand(PrescriptionDetailsViewModel viewModel, PrescriptionStore prescriptionStore): AsyncRelayCommand {
+public class LoadMostPopularDoctorsCommand(HomeViewModel viewModel, DoctorStore doctorStore) : AsyncRelayCommand {
     public override async Task ExecuteAsync(object? parameter){
         try {
-            await prescriptionStore.LoadPrescriptionById();
-            viewModel.UpdatePrescription(prescriptionStore.SelectedPrescription);
+            await doctorStore.LoadMostPopularDoctorsDto();
+            viewModel.UpdateMostPopularDoctors(doctorStore.MostPopularDoctorsDto);
         }
         catch (Exception e) {
             Console.WriteLine(e);
