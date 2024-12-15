@@ -50,6 +50,14 @@ public class InvoiceRepository(DbContextFactory dbContextFactory, IMapper mapper
         return invoicesDto;
     }
 
+    public async Task<decimal> CountTotalInvoicesSumAsync(){
+        await using var context = dbContextFactory.CreateDbContext();
+
+        return await context.Invoices
+            .Select(invoice => invoice.Amount)
+            .SumAsync();
+    }
+
     private async Task AppendPatientCodeAndInvoiceStatusToInvoiceDto(InvoiceDto invoiceDto, string status){
         var foundPatient = await patientRepository.GetPatientByIdAsync(invoiceDto.IdPatient);
 

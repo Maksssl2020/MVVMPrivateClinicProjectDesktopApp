@@ -71,7 +71,7 @@ public class PrescriptionRepository(
         var foundPatient = await patientRepository.GetPatientDetailsAsync(prescriptionDto.IdPatient);
         
         prescriptionDto.MedicinesDto = medicinesDto;
-        if (foundDoctor != null) prescriptionDto.DoctorDetailsDto = foundDoctor;
+        if (foundDoctor != null) prescriptionDto.DoctorDtoBase = foundDoctor;
         if (foundPatient != null) prescriptionDto.PatientDetailsCto = foundPatient;
 
 
@@ -124,6 +124,11 @@ public class PrescriptionRepository(
         }
         
         return foundPrescriptionsDto;
+    }
+
+    public async Task<int> CountIssuedPrescriptionsAsync(){
+        await using var context = dbContextFactory.CreateDbContext();
+        return await context.Prescriptions.CountAsync();
     }
 
     private async Task AppendPatientCodeAndDoctorCodeToPrescriptionDto(PrescriptionDto prescriptionDto){

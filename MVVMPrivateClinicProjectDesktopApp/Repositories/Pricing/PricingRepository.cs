@@ -50,4 +50,15 @@ public class PricingRepository(DbContextFactory dbContextFactory, IMapper mapper
             .Select(type => new ServiceTypeDto {Type = type})
             .ToListAsync();
     }
+
+    public async Task<IEnumerable<TopPricingDto>> GetTopPricingDtoAsync(int amount){
+        await using var context = dbContextFactory.CreateDbContext();
+
+        return await context.Pricings
+            .Include(pricing => pricing.Appointments)
+            .OrderByDescending(pricing => pricing.Appointments.Count)
+            .Take(amount)
+            .ProjectTo<TopPricingDto>(mapper.ConfigurationProvider)
+            .ToListAsync();
+    }
 }

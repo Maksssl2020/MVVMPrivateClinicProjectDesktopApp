@@ -7,12 +7,15 @@ public class AppointmentStore {
     private readonly IUnitOfWork _unitOfWork;
     
     private readonly List<AppointmentDto> _allAppointments;
-    private readonly Lazy<Task> _initializeLazy;
+    private readonly Lazy<Task> _initializeLazyAllAppointments;
     private readonly List<AppointmentDto> _selectedPatientAllAppointments;
+    private readonly List<AppointmentDto> _upcomingAppointments;
+    private readonly Lazy<Task> _initializeLazyUpcomingAppointments;
     private int _selectedPatientId;
     
     public IEnumerable<AppointmentDto> AllAppointments => _allAppointments;
     public IEnumerable<AppointmentDto> SelectedPatientAllAppointments => _selectedPatientAllAppointments;
+    public IEnumerable<AppointmentDto> UpcomingAppointments => _upcomingAppointments;
     
     public event Action<AppointmentDto>? AppointmentStatusUpdated;
     public event Action<AppointmentDto>? AppointmentCreated;
@@ -29,7 +32,10 @@ public class AppointmentStore {
         _unitOfWork = unitOfWork;
         _allAppointments = [];
         _selectedPatientAllAppointments = [];
-        _initializeLazy = new Lazy<Task>(InitializeAppointments);
+        _upcomingAppointments = [];
+        
+        _initializeLazyAllAppointments = new Lazy<Task>(InitializeAppointments);
+        _initializeLazyUpcomingAppointments = new Lazy<Task>(InitializeUpcomingAppointments);
     }
 
     public async Task LoadPatientAppointments(){
@@ -38,9 +44,13 @@ public class AppointmentStore {
     }
     
     public async Task LoadAppointments(){
-        await _initializeLazy.Value;
+        await _initializeLazyAllAppointments.Value;
     }
 
+    public async Task LoadUpcomingAppointments(){
+        await _initializeLazyUpcomingAppointments.Value;
+    }
+    
     public async Task UpdateAppointmentStatus(int appointmentId, AppointmentStatus appointmentStatus){
         var appointment = _allAppointments.SingleOrDefault(a => a.Id == appointmentId);
         if (appointment == null) return;
@@ -71,5 +81,12 @@ public class AppointmentStore {
         
         _allAppointments.Clear();
         _allAppointments.AddRange(loadedAppointments);
+    }
+
+    private async Task InitializeUpcomingAppointments(){
+        var loadedUpcomingAppointments = await _unitOfWork.AppointmentRepository.GetUpcomingAppointmentsAsync(2);
+        
+        _upcomingAppointments.Clear();
+        _upcomingAppointments.AddRange(loadedUpcomingAppointments);
     }
 }

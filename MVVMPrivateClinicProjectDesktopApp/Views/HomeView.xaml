@@ -9,60 +9,226 @@
              xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
              xmlns:dto="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Models.DTOs"
              xmlns:local="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Views"
+             xmlns:converters="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Converters"
              mc:Ignorable="d"
              FontFamily="/Fonts/#OpenSans"
              d:DesignHeight="675" 
              d:DesignWidth="1000"
              d:DataContext="{d:DesignInstance viewModel:HomeViewModel}">
+    
+    <UserControl.Resources>
+        <converters:DecimalConverter x:Key="DecimalConverter"/>
+        <converters:DateTimeFormatConverter x:Key="DateTimeFormatConverter"/>
+    </UserControl.Resources>
+    
     <Border Background="{StaticResource CustomBlackColor1}">
         <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="350"/>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-
-            <Grid Grid.Row="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="300"/>
-                </Grid.ColumnDefinitions>
-                
-                <Border Grid.Column="0" Padding="5" BorderBrush="{StaticResource CustomVioletColor1}" BorderThickness="2" CornerRadius="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="400"/>
+            </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="350"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="300"/>
+                            </Grid.RowDefinitions>
+                            <Border Grid.Row="0" Padding="5" BorderBrush="{StaticResource CustomVioletColor1}" BorderThickness="2" CornerRadius="10">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="50"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                        
+                                    <Label Grid.Row="0" Content="Top Doctors" Foreground="White" FontSize="18" FontWeight="Bold" VerticalAlignment="Center"/>
+                        
+                                    <ItemsControl Grid.Row="1"
+                                                  Padding="10"
+                                                  ItemsSource="{Binding MostPopularDoctorsView}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <UniformGrid Columns="2" Rows="2"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate DataType="{x:Type dto:DoctorDto}">
+                                                <Border Margin="10" Padding="15" BorderBrush="{ StaticResource CustomGrayColor1}" BorderThickness="2" CornerRadius="10">
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="75"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                        </Grid.ColumnDefinitions>
+                                            
+                                                        <Border Width="65" Height="65" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0" BorderThickness="2" BorderBrush="{StaticResource CustomVioletColor1}" CornerRadius="100">
+                                                            <fa:IconImage Icon="UserDoctor" Foreground="{StaticResource CustomVioletColor1}" Height="35" Width="35"/>
+                                                        </Border>
+                                            
+                                                        <StackPanel Margin="10 0 0 0 " VerticalAlignment="Center" Grid.Column="1">
+                                                            <TextBlock Margin="0 0 0 5" Foreground="White" FontSize="15" FontWeight="Bold">
+                                                                <Run Text="Dr."/>
+                                                                <Run Text="{Binding FirstName}"/>
+                                                                <Run Text="{Binding LastName}"/>
+                                                            </TextBlock>
+                                                            <TextBlock Margin="0 0 0 5" Foreground="White" FontSize="15" >
+                                                                <Run Text="{Binding DoctorSpecialization}"/>
+                                                            </TextBlock>
+                                                            <StackPanel Margin="0 0 0 5" VerticalAlignment="Center" Orientation="Horizontal">
+                                                                <fa:IconImage Icon="CalendarCheck" Foreground="{StaticResource CustomRedColor1}" Height="20" Width="20"/>
+                                                                <Label Height="30" VerticalContentAlignment="Bottom" Foreground="{StaticResource CustomRedColor1}" FontSize="15" FontWeight="Bold" Content="{Binding AmountOfAppointments}"/>
+                                                            </StackPanel>
+                                                        </StackPanel>
+                                                    </Grid>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </Grid>
+                            </Border>
+                            <Border Grid.Row="2" Padding="5"  BorderThickness="2" BorderBrush="{StaticResource CustomPaleGoldColor1}" CornerRadius="10">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="50"/>
+                                        <RowDefinition Height="50"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                            
+                                    <Label Grid.Row="0" Content="Top Services" Foreground="White" FontSize="18" FontWeight="Bold" VerticalAlignment="Center"/>
+                                    <Border  Grid.Row="1" Padding="5 0" CornerRadius="10" BorderThickness="2" BorderBrush="{StaticResource CustomGrayColor1}">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="200"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Grid.Column="0" Text="Number" VerticalAlignment="Center" Foreground="White" FontSize="15" FontWeight="Bold"/>
+                                            <TextBlock Grid.Column="1" Text="Service Name" VerticalAlignment="Center" Foreground="White" FontSize="15" FontWeight="Bold"/>
+                                            <TextBlock Grid.Column="2" Text="Price" VerticalAlignment="Center" Foreground="White" FontSize="15" FontWeight="Bold"/>
+                                            <TextBlock Grid.Column="3" Text="Amount" VerticalAlignment="Center" Foreground="White" FontSize="15" FontWeight="Bold"/>
+                                        </Grid>
+                                    </Border>
+                            
+                                    <ItemsControl Grid.Row="2" ItemsSource="{Binding TopPricingView}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate DataType="{x:Type dto:TopPricingDto}">
+                                                <Border Height="35" BorderThickness="0 0 0 2" BorderBrush="{StaticResource CustomGrayColor1}" Padding="5 0">
+                                                    <Grid >
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="200"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                        </Grid.ColumnDefinitions>
+                                                        <TextBlock Grid.Column="0" Text="{Binding Position}" VerticalAlignment="Center" Foreground="White" FontSize="15" FontWeight="Bold"/>
+                                                        <TextBlock Grid.Column="1" Text="{Binding ServiceName}" VerticalAlignment="Center" Foreground="White" FontSize="15" />
+                                                        <TextBlock Grid.Column="2" Text="{Binding Price, Converter={StaticResource DecimalConverter}}" VerticalAlignment="Center" Foreground="White" FontSize="15" />
+                                                        <TextBlock Grid.Column="3" Text="{Binding TotalUseAmount}" VerticalAlignment="Center" Foreground="White" FontSize="15" />
+                                                    </Grid>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </Grid>
+                            </Border>
+                        </Grid>
+            <Grid Grid.Column="1" Margin="10 0 0 0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="350"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="300"/>
+                </Grid.RowDefinitions>
+                <Border Grid.Row="0" Padding="5" BorderThickness="2" CornerRadius="10" BorderBrush="{StaticResource CustomRedColor1}">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="50"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         
-                        <Label Grid.Row="0" Content="Top Doctors" Foreground="White" FontSize="18" FontWeight="Bold" VerticalAlignment="Center"/>
-                        
-                        <ItemsControl Grid.Row="1"
-                                      Padding="10"
-                                      ItemsSource="{Binding MostPopularDoctorsView}">
+                        <Label Grid.Row="0" Content="Upcoming Appointments" Foreground="White" FontSize="18" FontWeight="Bold" VerticalAlignment="Center"/>
+                        <ItemsControl Grid.Row="1" ItemsSource="{Binding UpcomingAppointmentsView }">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
-                                    <UniformGrid Columns="2" Rows="2"/>
+                                    <UniformGrid Rows="2"/>
                                 </ItemsPanelTemplate>
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
-                                <DataTemplate DataType="{x:Type dto:DoctorDto}">
-                                    <Border Margin="10" Padding="15" BorderBrush="{ StaticResource CustomGrayColor1}" BorderThickness="2" CornerRadius="10">
-                                        <StackPanel>
-                                            <TextBlock Foreground="White" FontSize="15" FontWeight="Bold">
-                                                <Run Text="Dr."/>
-                                                <Run Text="{Binding FirstName}"/>
-                                                <Run Text="{Binding LastName}"/>
-                                            </TextBlock>
-                                            <TextBlock Foreground="{StaticResource CustomGrayColor2}" FontSize="15" >
-                                                <Run Text="{Binding DoctorSpecialization}"/>
-                                            </TextBlock>
-                                            <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
-                                                <fa:IconImage Icon="CalendarCheck" Foreground="{StaticResource CustomGrayColor2}" Height="20"/>
-                                                <Label Foreground="{StaticResource CustomGrayColor2}" FontSize="14" FontWeight="Bold" Content="{Binding AmountOfAppointments}"/>
-                                            </StackPanel>
-                                        </StackPanel>
+                                <DataTemplate DataType="{x:Type dto:AppointmentDto}">
+                                    <Border BorderThickness="2" BorderBrush="{StaticResource CustomGrayColor2}" Margin="0 0 0 5" Padding="5" CornerRadius="10">
+                                       <Grid>
+                                           <Grid.RowDefinitions>
+                                               <RowDefinition Height="40"/>
+                                               <RowDefinition Height="*"/>
+                                               <RowDefinition Height="40"/>
+                                           </Grid.RowDefinitions>
+                                           <Grid Grid.Row="0">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="225"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Grid.Column="0"  FontWeight="Bold" FontSize="15" Foreground="White">
+                                                    <Run>Dr.</Run>
+                                                    <Run Text="{Binding DoctorDtoBase.FirstName}"/>
+                                                    <Run Text="{Binding DoctorDtoBase.LastName}"/>
+                                                    <LineBreak/>
+                                                    <Run FontWeight="Normal" FontSize="14" Text="{Binding DoctorDtoBase.DoctorSpecialization}"/>
+                                                </TextBlock>
+                                                <TextBlock FontSize="15" Grid.Column="1">
+                                                    <Run  Foreground="White" >App. Date</Run>
+                                                    <LineBreak/>
+                                                    <Run FontWeight="Bold" Foreground="{StaticResource CustomRedColor1}" Text="{Binding AppointmentDate, Converter={StaticResource DateTimeFormatConverter}}"/>
+                                                </TextBlock>
+                                            </Grid>
+                                           <StackPanel VerticalAlignment="Center" Grid.Row="1">
+                                               <Border Height="10" BorderThickness="0 2 0 0" BorderBrush="{StaticResource CustomRedColor1}"/>
+                                           </StackPanel>
+                                            <Grid Grid.Row="2" >
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="225"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock  Grid.Column="0" FontSize="15" Foreground="White">
+                                                    <Run>Patient -</Run>
+                                                    <Run Text="{Binding PatientDetailsDto.PatientCode}"/>
+                                                    <LineBreak/>
+                                                    <Run FontWeight="Bold" Text="{Binding PatientDetailsDto.FirstName}"/>
+                                                    <Run FontWeight="Bold" Text="{Binding PatientDetailsDto.LastName}"/>
+                                                    <Run FontWeight="Bold" Text="{Binding Id}"/>
+                                                </TextBlock>
+                                                <TextBlock FontSize="15" Foreground="White" Grid.Column="1">
+                                                    <Run Text="App. Status"/>
+                                                    <LineBreak/>
+                                                    <Run FontWeight="Bold" Text="{Binding AppointmentStatus}"/>
+                                                </TextBlock>
+                                            </Grid>
+                                       </Grid>
                                     </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Grid>
+                </Border>
+                <Border Grid.Row="2" Padding="5" BorderBrush="{StaticResource CustomGreenColor1}" BorderThickness="2" CornerRadius="10">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        
+                        <Label Grid.Row="0" Content="Statistics" Foreground="White" FontSize="18" FontWeight="Bold" VerticalAlignment="Center"/>
+                        <ItemsControl ItemsSource="{Binding Statistics}" Grid.Row="1">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="{x:Type dto:StatisticDto}">
+                                    <StackPanel Orientation="Vertical">
+                                        <Grid Height="35">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="6*"/>
+                                                <ColumnDefinition Width="4*"/>
+                                            </Grid.ColumnDefinitions>
+                                
+                                            <TextBlock Grid.Column="0" Text="{Binding StatisticName}" Padding="15 0 0 0" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="White" FontSize="15" FontWeight="Bold"/>
+                                            <TextBlock Grid.Column="1" Text="{Binding StatisticValue}" Padding="0 0 15 0" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="White" FontSize="15"/>
+                                        </Grid>
+                                    </StackPanel>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>

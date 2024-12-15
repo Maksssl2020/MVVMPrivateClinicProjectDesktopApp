@@ -7,5 +7,5 @@ public class PatientNoteDetailsDto {
     public required string Description { get; set; }
     public DateOnly DateIssued { get; set; }
     public PatientDetailsDto PatientDetailsDto { get; set; } = null!;
-    public DoctorDetailsDto DoctorDetailsDto { get; set; } = null!;
+    public DoctorDtoBase DoctorDtoBase { get; set; } = null!;
 }

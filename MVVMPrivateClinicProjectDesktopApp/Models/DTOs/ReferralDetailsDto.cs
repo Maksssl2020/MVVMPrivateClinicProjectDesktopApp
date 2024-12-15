@@ -5,7 +5,7 @@ public class ReferralDetailsDto {
     public DateTime DateIssued { get; set; }
     public required string Name { get; set; }
     public PatientDetailsDto PatientDetailsDto { get; set; } = null!;
-    public DoctorDetailsDto DoctorDetailsDto { get; set; } = null!;
+    public DoctorDtoBase DoctorDtoBase { get; set; } = null!;
     public DiseaseDto DiseaseDetailsDto { get; set; } = null!;
     public ReferralTestDto ReferralTestDetailsDto { get; set; } = null!;
     public int IdPatient { get; set; }

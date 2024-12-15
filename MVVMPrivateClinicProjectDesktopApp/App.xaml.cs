@@ -38,6 +38,8 @@ public partial class App : Application {
     private readonly DiagnosisStore _diagnosisStore;
     private readonly AppointmentDateStore _appointmentDateStore;
     private readonly AddSpecificDataToPatientStore _addSpecificDataToPatientStore;
+    private readonly StatisticsStore _statisticsStore;
+    
     private readonly NavigationBarViewModel _navigationBarViewModel;
     private readonly ModalNavigationViewModel _modalNavigationViewModel;
     private readonly PatientDataModalNavigationViewModel _patientDataModalNavigationViewModel;
@@ -68,6 +70,7 @@ public partial class App : Application {
         _diagnosisStore = new DiagnosisStore(unitOfWork);
         _appointmentDateStore = new AppointmentDateStore(unitOfWork);
         _addSpecificDataToPatientStore = new AddSpecificDataToPatientStore();
+        _statisticsStore = new StatisticsStore(unitOfWork);
         
         _navigationBarViewModel = new NavigationBarViewModel(
             CreateHomeNavigationService(),
@@ -120,7 +123,7 @@ public partial class App : Application {
     }
 
     private NavigationServiceBase CreateHomeNavigationService(){
-        return new NavigationService(_navigationStore, () => HomeViewModel.LoadHomeViewModel(_doctorStore));
+        return new NavigationService(_navigationStore, () => HomeViewModel.LoadHomeViewModel(_doctorStore, _pricingStore, _appointmentStore, _statisticsStore));
     }
     
     private NavigationServiceBase CreatePatientsNavigationService(){

@@ -228,3 +228,5 @@ C:\Users\maksy\RiderProjects\MVVMPrivateClinicProjectDesktopApp\MVVMPrivateClini
 C:\Users\maksy\RiderProjects\MVVMPrivateClinicProjectDesktopApp\MVVMPrivateClinicProjectDesktopApp\obj\Debug\net8.0-windows\Views\SelectPatientToAddSpecificDataView.baml
 C:\Users\maksy\RiderProjects\MVVMPrivateClinicProjectDesktopApp\MVVMPrivateClinicProjectDesktopApp\obj\Debug\net8.0-windows\Views\AddNewInvoiceView.g.cs
 C:\Users\maksy\RiderProjects\MVVMPrivateClinicProjectDesktopApp\MVVMPrivateClinicProjectDesktopApp\obj\Debug\net8.0-windows\Views\AddNewInvoiceView.baml
+C:\Users\maksy\RiderProjects\MVVMPrivateClinicProjectDesktopApp\MVVMPrivateClinicProjectDesktopApp\obj\Debug\net8.0-windows\Views\Components\SortingComboBox.g.cs
+C:\Users\maksy\RiderProjects\MVVMPrivateClinicProjectDesktopApp\MVVMPrivateClinicProjectDesktopApp\obj\Debug\net8.0-windows\Views\Components\SortingComboBox.baml

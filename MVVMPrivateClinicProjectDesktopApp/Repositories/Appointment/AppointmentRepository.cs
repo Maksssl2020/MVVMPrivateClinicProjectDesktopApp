@@ -44,7 +44,7 @@ public class AppointmentRepository(
         var foundAppointments = await context.Appointments
             .ToListAsync();
 
-        var appointmentDtos = await CreateAppointmentDtos(foundAppointments);
+        var appointmentDtos = await CreateAppointmentsDto(foundAppointments);
         return appointmentDtos;
     }
 
@@ -63,21 +63,43 @@ public class AppointmentRepository(
             .Where(appointment => appointment.IdPatient == patientId)
             .ToListAsync();
         
-        var appointmentDtos = await CreateAppointmentDtos(foundPatientAppointments);
+        var appointmentDtos = await CreateAppointmentsDto(foundPatientAppointments);
         return appointmentDtos;
     }
 
-    private async Task<List<AppointmentDto>> CreateAppointmentDtos(List<Models.Entities.Appointment> appointments){
-        var appointmentDtos = new List<AppointmentDto>();
+    public async Task<IEnumerable<AppointmentDto>> GetUpcomingAppointmentsAsync(int amount){
+        await using var context = dbContextFactory.CreateDbContext();
+
+       var foundAppointments = await context.Appointments
+           .Where(appointment => appointment.AppointmentStatus.Equals("Accepted") && appointment.AppointmentDate > DateTime.Now)
+           .OrderBy(appointment => appointment.AppointmentDate)
+           .Take(amount)
+           .ToListAsync();
+       
+       return await CreateAppointmentsDto(foundAppointments);
+    }
+
+    public async Task<int> CountAppointmentsAsync(){
+        await using var context = dbContextFactory.CreateDbContext();
+        return await context.Appointments
+            .Where(appointment =>
+                !appointment.AppointmentStatus.Equals("Canceled") &&
+                !appointment.AppointmentStatus.Equals("PatientNoShow")
+                )
+            .CountAsync();
+    }
+
+    private async Task<List<AppointmentDto>> CreateAppointmentsDto(List<Models.Entities.Appointment> appointments){
+        var appointmentsDto = new List<AppointmentDto>();
         
         foreach (var appointment in appointments) {
             var appointmentDto = mapper.Map<AppointmentDto>(appointment);
             await CreateAppointmentDto(appointmentDto, appointment.AppointmentStatus);
             
-            appointmentDtos.Add(appointmentDto);
+            appointmentsDto.Add(appointmentDto);
         }
         
-        return appointmentDtos;
+        return appointmentsDto;
     }
 
     private async Task CreateAppointmentDto(AppointmentDto appointmentDto, string status){
@@ -86,7 +108,7 @@ public class AppointmentRepository(
         var foundPricing = await pricingRepository.GetPricingByIdAsync(appointmentDto.IdPricing);
 
         if (foundPatient != null) appointmentDto.PatientDetailsDto = foundPatient;
-        if (foundDoctor != null) appointmentDto.DoctorDetailsDto = foundDoctor;
+        if (foundDoctor != null) appointmentDto.DoctorDtoBase = foundDoctor;
         if (foundPricing != null) appointmentDto.PricingDto = foundPricing;
 
         appointmentDto.AppointmentStatus = status;

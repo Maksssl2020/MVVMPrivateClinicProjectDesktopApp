@@ -8,4 +8,5 @@ public interface IPatientRepository {
     Task<PatientDto?> GetPatientByIdAsync(int patientId);
     Task<PatientDetailsDto?> GetPatientDetailsAsync(int patientId);
     void DeletePatient(int patientId);
+    Task<int> CountPatientsAsync();
 }

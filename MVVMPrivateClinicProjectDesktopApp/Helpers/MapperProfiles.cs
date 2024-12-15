@@ -29,7 +29,7 @@ public class MapperProfiles : Profile {
             .ForMember(dest => dest.DiseaseCode, opt => opt.Ignore());
         CreateMap<Referral, ReferralDetailsDto>()
             .ForMember(dest => dest.PatientDetailsDto, opt => opt.Ignore())
-            .ForMember(dest => dest.DoctorDetailsDto, opt => opt.Ignore())
+            .ForMember(dest => dest.DoctorDtoBase, opt => opt.Ignore())
             .ForMember(dest => dest.DiseaseDetailsDto, opt => opt.Ignore())
             .ForMember(dest => dest.ReferralTestDetailsDto, opt => opt.Ignore());
         
@@ -38,6 +38,9 @@ public class MapperProfiles : Profile {
             .ForMember(dest => dest.Status, opt => opt.Ignore());
 
         CreateMap<Pricing, PricingDto>();
+        CreateMap<Pricing, TopPricingDto>()
+            .ForMember(dest => dest.TotalUseAmount, opt => opt.MapFrom(src => src.Appointments.Count))
+            .ForMember(dest => dest.Position, opt => opt.Ignore());
         CreateMap<PatientNote, PatientNoteDto>()
             .ForMember(dest => dest.PatientCode, opt => opt.Ignore())
             .ForMember(dest => dest.DoctorCode, opt => opt.Ignore());
@@ -49,7 +52,7 @@ public class MapperProfiles : Profile {
         
         CreateMap<PatientNote, PatientNoteDetailsDto>()
             .ForMember(dest => dest.PatientDetailsDto, opt => opt.Ignore())
-            .ForMember(dest => dest.DoctorDetailsDto, opt => opt.Ignore());
+            .ForMember(dest => dest.DoctorDtoBase, opt => opt.Ignore());
         
         CreateMap<Disease, DiseaseDto>();
         CreateMap<DoctorSpecialization, DoctorSpecializationDto>();
@@ -59,12 +62,12 @@ public class MapperProfiles : Profile {
             .ForMember(dest => dest.DoctorCode, opt => opt.Ignore())
             .ForMember(dest => dest.DiseaseCode, opt => opt.Ignore());
 
-        CreateMap<Doctor, DoctorDetailsDto>();
+        CreateMap<Doctor, DoctorDtoBase>();
         CreateMap<Patient, PatientDetailsDto>();
         CreateMap<Patient, PatientDto>();
         CreateMap<Prescription, PrescriptionDetailsDto>()
             .ForMember(dest => dest.MedicinesDto, opt => opt.Ignore())
-            .ForMember(dest => dest.DoctorDetailsDto, opt => opt.Ignore())
+            .ForMember(dest => dest.DoctorDtoBase, opt => opt.Ignore())
             .ForMember(dest => dest.PatientDetailsCto, opt => opt.Ignore());
     }
 }

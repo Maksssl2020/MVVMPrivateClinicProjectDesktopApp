@@ -55,7 +55,7 @@ public class ReferralRepository(
         var foundReferralTest = await referralTestRepository.GetReferralTestByIdAsync(foundReferral.IdReferralTest);
 
         if (foundPatient != null) foundReferral.PatientDetailsDto = foundPatient;
-        if (foundDoctor != null) foundReferral.DoctorDetailsDto = foundDoctor;
+        if (foundDoctor != null) foundReferral.DoctorDtoBase = foundDoctor;
         if (foundDisease != null) foundReferral.DiseaseDetailsDto = foundDisease;
         if (foundReferralTest != null) foundReferral.ReferralTestDetailsDto = foundReferralTest;
 
@@ -89,5 +89,10 @@ public class ReferralRepository(
         }
         
         return foundReferralsDto;
+    }
+
+    public async Task<int> CountIssuedReferralsAsync(){
+        await using var context = dbContextFactory.CreateDbContext();
+        return await context.Referrals.CountAsync();
     }
 }

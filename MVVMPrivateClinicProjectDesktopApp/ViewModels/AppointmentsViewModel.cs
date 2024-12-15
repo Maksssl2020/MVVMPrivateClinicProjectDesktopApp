@@ -5,6 +5,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using MVVMPrivateClinicProjectDesktopApp.Commands;
+using MVVMPrivateClinicProjectDesktopApp.Helpers;
 using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
 using MVVMPrivateClinicProjectDesktopApp.Stores;
 using static System.Enum;
@@ -22,6 +23,20 @@ public class AppointmentsViewModel : ViewModelBase {
     private ObservableCollection<AppointmentDto> PageCollection { get; set; }
     public ICollectionView AppointmentsView { get; set; }
 
+    public ObservableCollection<SortingOptions> SortingOptionsList { get; } = [SortingOptions.AlphabeticalAscending, SortingOptions.AlphabeticalDescending, SortingOptions.IdAscending, SortingOptions.IdDescending];
+    
+    private SortingOptions _selectedSortingOption;
+    public SortingOptions SelectedSortingOption {
+        get => _selectedSortingOption;
+        set {
+            _selectedSortingOption = value;
+            OnPropertyChanged();
+            AppointmentsView.Refresh();
+
+            Console.WriteLine(value.ToString());
+        }
+    }
+    
     public int CurrentPageDisplay => _currentPage + 1;
     private int AmountOfItemsToSkip { get; set; }
 

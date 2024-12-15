@@ -1,3 +1,4 @@
+using System.Windows.Documents;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
@@ -23,7 +24,7 @@ public class DoctorRepository(DbContextFactory dbContextFactory, IMapper mapper,
 
 
         var doctorDto = mapper.Map<DoctorDto>(doctor);
-        await AppendDoctorSpecialization(doctorDto);
+        AppendDoctorSpecialization(doctorDto, await GetAllDoctorSpecializationsAsList());
         
         return doctorDto;
     }
@@ -31,10 +32,12 @@ public class DoctorRepository(DbContextFactory dbContextFactory, IMapper mapper,
     public async Task<IEnumerable<DoctorDto>> GetAllDoctors(){
         await using var context = dbContextFactory.CreateDbContext();
         var doctors = await context.Doctors.ToListAsync();
+        var allDoctorSpecializationsAsList = await GetAllDoctorSpecializationsAsList();
+
         List<DoctorDto> doctorsDto = [];
         
         foreach (var doctorDto in doctors.Select(mapper.Map<DoctorDto>)) {
-            await AppendDoctorSpecialization(doctorDto);
+            AppendDoctorSpecialization(doctorDto, allDoctorSpecializationsAsList);
             doctorsDto.Add(doctorDto);
         }
         
@@ -56,9 +59,10 @@ public class DoctorRepository(DbContextFactory dbContextFactory, IMapper mapper,
                 var doctorDto = mapper.Map<DoctorDto>(doctor);
                 var doctorDtoDoctorSpecialization =
                     specializations.FirstOrDefault(s => s.Id == doctor.IdDoctorSpecialization)?.Name;
-                
-                doctorDto.DoctorSpecialization =
-                    doctorDtoDoctorSpecialization;
+
+                if (doctorDtoDoctorSpecialization != null)
+                    doctorDto.DoctorSpecialization =
+                        doctorDtoDoctorSpecialization;
 
                 return doctorDto;
             })
@@ -67,16 +71,17 @@ public class DoctorRepository(DbContextFactory dbContextFactory, IMapper mapper,
 
     public async Task<IEnumerable<DoctorDto>> GetMostPopularDoctors(int size){
         await using var context = dbContextFactory.CreateDbContext();
-
+        var allDoctorSpecializationsAsList = await GetAllDoctorSpecializationsAsList();
         List<DoctorDto> doctorsDto = [];
         
         var foundDoctors = await context.Doctors
+            .Include(doctor => doctor.Appointments)
             .OrderByDescending(doctor => doctor.Appointments.Count)
             .Take(size)
             .ToListAsync();
 
         foreach (var doctorDto in foundDoctors.Select(mapper.Map<DoctorDto>)) {
-            await AppendDoctorSpecialization(doctorDto);
+            AppendDoctorSpecialization(doctorDto, allDoctorSpecializationsAsList);
             doctorsDto.Add(doctorDto);
         }
         
@@ -90,21 +95,36 @@ public class DoctorRepository(DbContextFactory dbContextFactory, IMapper mapper,
         if (foundDoctor == null) return null;
         var doctorDto = mapper.Map<DoctorDto>(foundDoctor);
 
-        await AppendDoctorSpecialization(doctorDto);
+        AppendDoctorSpecialization(doctorDto, await GetAllDoctorSpecializationsAsList());
 
         return doctorDto;
     }
 
-    public async Task<DoctorDetailsDto?> GetDoctorDetailsAsync(int doctorId){
+    public async Task<DoctorDtoBase?> GetDoctorDetailsAsync(int doctorId){
         await using var context = dbContextFactory.CreateDbContext();
 
-        return await context.Doctors
-            .ProjectTo<DoctorDetailsDto>(mapper.ConfigurationProvider)
+        var foundDoctor = await context.Doctors
+            .ProjectTo<DoctorDtoBase>(mapper.ConfigurationProvider)
             .FirstOrDefaultAsync(doctor => doctor.Id == doctorId);
+        
+        if (foundDoctor == null) return null;
+        
+        AppendDoctorSpecialization(foundDoctor, await GetAllDoctorSpecializationsAsList());
+        return foundDoctor;
     }
 
-    private async Task AppendDoctorSpecialization(DoctorDto doctorDto){ 
-        var foundSpecialization =  await doctorSpecializationRepository.GetDoctorSpecializationById(doctorDto.Id);
-        doctorDto.DoctorSpecialization = foundSpecialization?.Name;
+    public async Task<int> CountDoctorsAsync(){
+        await using var context = dbContextFactory.CreateDbContext();
+        return await context.Doctors.CountAsync();
+    }
+
+    private async Task<List<DoctorSpecializationDto>> GetAllDoctorSpecializationsAsList(){
+        var allDoctorSpecializations = await doctorSpecializationRepository.GetAllDoctorSpecializations();
+        return allDoctorSpecializations.ToList();
+    }
+    
+    private static void AppendDoctorSpecialization(DoctorDtoBase doctorDto, IEnumerable<DoctorSpecializationDto> allDoctorSpecializations){
+        var doctorSpecializationDto = allDoctorSpecializations.FirstOrDefault(specialization => specialization.Id == doctorDto.IdDoctorSpecialization);
+        if (doctorSpecializationDto?.Name != null) doctorDto.DoctorSpecialization = doctorSpecializationDto.Name;
     }
 }

@@ -89,10 +89,10 @@
                                    Padding="5 0 0 0"
                                    HorizontalAlignment="Left"
                                    VerticalAlignment="Center">
-                            <Run Text="{Binding PatientNote.DoctorDetailsDto.FirstName}"/>
-                            <Run Text="{Binding PatientNote.DoctorDetailsDto.LastName}"/>
+                            <Run Text="{Binding PatientNote.DoctorDtoBase.FirstName}"/>
+                            <Run Text="{Binding PatientNote.DoctorDtoBase.LastName}"/>
                             <Run Text="-"/>
-                            <Run Text="{Binding PatientNote.DoctorDetailsDto.Specialization}"/>
+                            <Run Text="{Binding PatientNote.DoctorDtoBase.DoctorSpecialization}"/>
                         </TextBlock>
                     </Border>
                 </StackPanel>

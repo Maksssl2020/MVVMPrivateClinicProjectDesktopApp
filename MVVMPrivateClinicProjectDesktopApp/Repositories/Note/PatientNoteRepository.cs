@@ -44,7 +44,7 @@ public class PatientNoteRepository(DbContextFactory dbContextFactory, IMapper ma
             await doctorRepository.GetDoctorDetailsAsync(foundPatientNote.IdDoctor);
         var foundPatient = await patientRepository.GetPatientDetailsAsync(foundPatientNote.IdPatient);
 
-        if (foundDoctor != null) foundPatientNote.DoctorDetailsDto = foundDoctor;
+        if (foundDoctor != null) foundPatientNote.DoctorDtoBase = foundDoctor;
         if (foundPatient != null) foundPatientNote.PatientDetailsDto = foundPatient;
 
         return foundPatientNote;

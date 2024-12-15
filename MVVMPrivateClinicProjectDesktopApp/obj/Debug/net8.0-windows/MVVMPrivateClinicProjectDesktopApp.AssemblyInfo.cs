@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MVVMPrivateClinicProjectDesktopApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5d97b46aa297bc1dcaa3e82508fd710b20dd96cf")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+323a82a94aa44f6fea48745601c7ceb75bb4002d")]
 [assembly: System.Reflection.AssemblyProductAttribute("MVVMPrivateClinicProjectDesktopApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MVVMPrivateClinicProjectDesktopApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

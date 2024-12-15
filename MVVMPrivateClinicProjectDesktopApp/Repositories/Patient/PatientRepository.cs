@@ -51,4 +51,9 @@ public class PatientRepository(DbContextFactory dbContextFactory, IMapper mapper
             .Where(patient => patient.Id == id)
             .ExecuteDelete();
     }
+
+    public async Task<int> CountPatientsAsync(){
+        await using var context = dbContextFactory.CreateDbContext();
+        return await context.Patients.CountAsync();
+    }
 }

@@ -113,10 +113,10 @@
                                             </Grid.ColumnDefinitions>
                                             <TextBlock Grid.Column="0"  FontWeight="Bold" FontSize="16" Foreground="White">
                                                 <Run>Dr.</Run>
-                                                <Run Text="{Binding DoctorDetailsDto.FirstName}"/>
-                                                <Run Text="{Binding DoctorDetailsDto.LastName}"/>
+                                                <Run Text="{Binding DoctorDtoBase.FirstName}"/>
+                                                <Run Text="{Binding DoctorDtoBase.LastName}"/>
                                                 <LineBreak/>
-                                                <Run FontWeight="Normal" FontSize="14" Text="{Binding DoctorDetailsDto.Specialization}"/>
+                                                <Run FontWeight="Normal" FontSize="14" Text="{Binding DoctorDtoBase.DoctorSpecialization}"/>
                                             </TextBlock>
                                             <TextBlock Grid.Column="1">
                                                 <Run FontSize="16" Foreground="White" >App. Date</Run>
@@ -165,6 +165,12 @@
                    <ColumnDefinition Width="250"/>
                </Grid.ColumnDefinitions>
                 
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
+                    <components:SortingComboBox ComboBoxBorderBrush="{StaticResource CustomRedColor1}"
+                                                ItemsSource="{Binding SortingOptionsList}"
+                                                SelectedItem="{Binding SelectedSortingOption}"/>
+                </StackPanel>
+                
                 <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
                     <Button Style="{StaticResource ControlBarButton}"
                             Tag="{StaticResource CustomBlueColor1}"
@@ -188,12 +194,15 @@
                     </Button>
                 </StackPanel>
                 
-                <components:ButtonWithIcon Grid.Column="2"
-                                           ButtonText="Add New Appointment"
-                                           ButtonWidth="225"
-                                           TextColor="{StaticResource CustomRedColor1}"
-                                           Command="{Binding ShowAddNewAppointmentModalCommand}"
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Column="2">
+                    
+                    <components:ButtonWithIcon ButtonText="Add New Appointment"
+                                               ButtonWidth="200"
+                                               ButtonHeight="60"
+                                               TextColor="{StaticResource CustomRedColor1}"
+                                               Command="{Binding ShowAddNewAppointmentModalCommand}"
                     />
+                </StackPanel>
             </Grid>
         </Grid>
     </Border>
