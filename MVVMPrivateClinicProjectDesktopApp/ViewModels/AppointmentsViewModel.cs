@@ -60,6 +60,7 @@ public class AppointmentsViewModel : ViewModelBase {
         ApplyFilter();
         
         _appointmentStore.AppointmentStatusUpdated += OnAppointmentStatusUpdated;
+        _appointmentStore.AppointmentCreated += OnAppointmentCreated;
     }
 
     public static AppointmentsViewModel LoadAppointmentsViewModel(AppointmentStore appointmentStore, ModalNavigationViewModel modalNavigationViewModel){
@@ -85,6 +86,10 @@ public class AppointmentsViewModel : ViewModelBase {
         if (foundAppointment != null) {
             foundAppointment.AppointmentStatus = appointmentDto.AppointmentStatus;
         }
+    }
+
+    private void OnAppointmentCreated(AppointmentDto appointmentDto) {
+        _filteredAppointments.Add(appointmentDto);
     }
     
     public void NextPage(){

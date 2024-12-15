@@ -17,4 +17,11 @@ public partial class ReferralsView : UserControl {
         viewModel.SetReferralIdToShowDetails(referralDto.Id);
         viewModel.ShowReferralDetailsCommand.Execute(null);
     }
+    
+    private void ShowSelectPatient_OnClick(object sender, RoutedEventArgs e){
+        if (DataContext is not ReferralsViewModel viewModel) return;
+        
+        viewModel.SetDataInAddSpecificDataToPatientStore();
+        viewModel.ShowSelectPatientToAddSpecificDataModal.Execute(null);
+    }
 }

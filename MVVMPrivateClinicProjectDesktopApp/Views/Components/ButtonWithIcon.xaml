@@ -7,7 +7,8 @@
              mc:Ignorable="d"
              x:Name="Root"
              d:DesignHeight="300" d:DesignWidth="300">
-    <Button Style="{StaticResource ButtonWithIconLarge}"
+    <Button x:Name="InternalButton"
+            Style="{StaticResource ButtonWithIconLarge}"
             Tag="{Binding TextColor, ElementName=Root}"
             Command="{Binding Command, ElementName=Root}"
             Width="{Binding ButtonWidth, ElementName=Root}"

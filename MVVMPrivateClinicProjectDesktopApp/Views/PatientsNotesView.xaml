@@ -9,6 +9,7 @@
              xmlns:dto="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Models.DTOs"
              xmlns:entities="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Models.Entities"
              xmlns:converters="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Converters"
+             xmlns:components="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Views.Components"
              mc:Ignorable="d"
              d:DesignHeight="675" 
              d:DesignWidth="1000"
@@ -42,15 +43,11 @@
                         </Border>
                     </Border>
                     
-                    <Button Grid.Column="1"
-                            Width="250"
-                            Style="{StaticResource ButtonWithIconLarge}"
-                            Tag="{StaticResource CustomBlueColor1}">
-                        <StackPanel Style="{StaticResource ButtonStackPanel}">
-                            <fa:IconImage Margin="0 0 5 0" Icon="Plus" Style="{StaticResource IconButtonLarge}"/>
-                            <TextBox Margin="5 0 0 0" Text="Add New Patient Note" Style="{StaticResource ButtonTextLarge}"/>
-                        </StackPanel>
-                    </Button>
+                    <components:ButtonWithIcon Grid.Column="1"
+                                               ButtonText="Add New Patient Note"
+                                               ButtonWidth="225"
+                                               TextColor="{StaticResource CustomBlueColor1}"
+                                               Click="ShowSelectPatient_OnClick"/>
                 </Grid>
             </Border>
             

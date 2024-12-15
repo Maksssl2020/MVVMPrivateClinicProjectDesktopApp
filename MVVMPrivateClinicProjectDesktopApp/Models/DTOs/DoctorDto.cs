@@ -8,4 +8,5 @@ public class DoctorDto {
     public string? PhoneNumber { get; set; }
     public string? DoctorSpecialization { get; set; }
     public int IdDoctorCard { get; set; }
+    public int AmountOfAppointments { get; set; }
 }

@@ -17,4 +17,11 @@ public partial class PatientsNotesView : UserControl {
         viewModel.SetPatientNoteIdToShowDetails(patientNoteDto.Id);
         viewModel.ShowPatientNoteDetailsCommand.Execute(null);
     }
+    
+    private void ShowSelectPatient_OnClick(object sender, RoutedEventArgs e){
+        if (DataContext is not PatientsNotesViewModel viewModel) return;
+        
+        viewModel.SetDataInAddSpecificDataToPatientStore();
+        viewModel.ShowSelectPatientToAddSpecificDataModal.Execute(null);
+    }
 }

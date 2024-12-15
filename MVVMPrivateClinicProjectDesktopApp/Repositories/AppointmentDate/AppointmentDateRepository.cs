@@ -22,7 +22,7 @@ public class AppointmentDateRepository(DbContextFactory dbContextFactory, IMappe
         await context.SaveChangesAsync();
 
 
-        var appointmentDateDto = mapper.Map<AppointmentDateDto>(appointmentDate);
+        var appointmentDateDto = mapper.Map<AppointmentDateDto>(appointmentsCalendar);
         appointmentDateDto.AppointmentDate = DateOnly.FromDateTime(appointmentsCalendar.AppointmentDate1);
         appointmentDateDto.AppointmentTime = TimeOnly.FromDateTime(appointmentsCalendar.AppointmentDate1);
         

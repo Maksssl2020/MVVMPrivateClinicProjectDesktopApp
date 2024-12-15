@@ -8,7 +8,8 @@ public class CreateAppointmentCommand(
     AddNewAppointmentViewModel viewModel,
     AppointmentStore appointmentStore,
     AppointmentDateStore appointmentDateStore,
-    InvoiceStore invoiceStore
+    InvoiceStore invoiceStore,
+    Action resetForm
     ) : AsyncRelayCommand {
     public override async Task ExecuteAsync(object? parameter){
         try {
@@ -18,6 +19,7 @@ public class CreateAppointmentCommand(
                 AppointmentTime = viewModel.SelectedTime!.Value,
                 IdPatient = viewModel.SelectedPatient.Id,
                 IdDoctor = viewModel.SelectedDoctor.Id,
+                IdPricing = viewModel.SelectedPricing.Id,
             };
 
             var saveAppointmentDateRequest = new SaveAppointmentDateRequest {
@@ -36,6 +38,8 @@ public class CreateAppointmentCommand(
             await appointmentStore.CreateAppointment(saveAppointmentRequest);
             await appointmentDateStore.CreateAppointmentDate(saveAppointmentDateRequest);
             await invoiceStore.CreateInvoice(saveNewInvoiceRequest);
+            
+            resetForm.Invoke();
         }
         catch (Exception e) {
             Console.WriteLine(e);

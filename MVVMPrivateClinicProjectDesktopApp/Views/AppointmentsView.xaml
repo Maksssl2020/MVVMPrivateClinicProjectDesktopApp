@@ -15,8 +15,7 @@
              FontFamily="/Fonts/#OpenSans"
              d:DesignHeight="725" 
              d:DesignWidth="1100"
-             d:DataContext="{d:DesignInstance viewModel:AppointmentsViewModel}"
-             >
+             d:DataContext="{d:DesignInstance viewModel:AppointmentsViewModel}">
     
     <UserControl.Resources>
         <converters:DateTimeFormatConverter x:Key="DateTimeFormatConverter"/>
@@ -114,10 +113,10 @@
                                             </Grid.ColumnDefinitions>
                                             <TextBlock Grid.Column="0"  FontWeight="Bold" FontSize="16" Foreground="White">
                                                 <Run>Dr.</Run>
-                                                <Run Text="{Binding DoctorFirstName}"/>
-                                                <Run Text="{Binding DoctorLastName}"/>
+                                                <Run Text="{Binding DoctorDetailsDto.FirstName}"/>
+                                                <Run Text="{Binding DoctorDetailsDto.LastName}"/>
                                                 <LineBreak/>
-                                                <Run FontWeight="Normal" FontSize="14" Text="{Binding DoctorSpecialization}"/>
+                                                <Run FontWeight="Normal" FontSize="14" Text="{Binding DoctorDetailsDto.Specialization}"/>
                                             </TextBlock>
                                             <TextBlock Grid.Column="1">
                                                 <Run FontSize="16" Foreground="White" >App. Date</Run>
@@ -134,10 +133,10 @@
                                             </Grid.ColumnDefinitions>
                                             <TextBlock Grid.Column="0" FontSize="16" Foreground="White">
                                                 <Run>Patient -</Run>
-                                                <Run Text="{Binding PatientCode}"/>
+                                                <Run Text="{Binding PatientDetailsDto.PatientCode}"/>
                                                 <LineBreak/>
-                                                <Run FontWeight="Bold" Text="{Binding PatientFirstName}"/>
-                                                <Run FontWeight="Bold" Text="{Binding PatientLastName}"/>
+                                                <Run FontWeight="Bold" Text="{Binding PatientDetailsDto.FirstName}"/>
+                                                <Run FontWeight="Bold" Text="{Binding PatientDetailsDto.LastName}"/>
                                                 <Run FontWeight="Bold" Text="{Binding Id}"/>
                                             </TextBlock>
                                             <TextBlock Grid.Column="1">

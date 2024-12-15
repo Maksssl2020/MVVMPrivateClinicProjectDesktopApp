@@ -9,20 +9,16 @@ using MVVMPrivateClinicProjectDesktopApp.Stores;
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
 public class InvoicesViewModel : ViewModelBase {
-    private readonly InvoiceStore _invoiceStore;
-    
     private readonly ObservableCollection<InvoiceDto> _invoices;
     public ICollectionView InvoicesView { get; set; }
 
     private ICommand LoadInvoicesCommand { get; set; }
 
     private InvoicesViewModel(InvoiceStore invoiceStore){
-        _invoiceStore = invoiceStore;
-
         _invoices = [];
         InvoicesView = CollectionViewSource.GetDefaultView(_invoices);
 
-        LoadInvoicesCommand = new LoadInvoicesDtoCommand(this, _invoiceStore);
+        LoadInvoicesCommand = new LoadInvoicesDtoCommand(this, invoiceStore);
     }
 
     public static InvoicesViewModel LoadInvoicesViewModel(InvoiceStore invoiceStore){

@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Windows.Data;
 using System.Windows.Input;
 using MVVMPrivateClinicProjectDesktopApp.Commands;
+using MVVMPrivateClinicProjectDesktopApp.Helpers;
 using MVVMPrivateClinicProjectDesktopApp.Interfaces;
 using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
 using MVVMPrivateClinicProjectDesktopApp.Stores;
@@ -19,7 +20,19 @@ public class PatientsViewModel : ViewModelBase, IPatientViewModel {
     
     private readonly ObservableCollection<PatientDto> _patients = [];
     public ICollectionView PatientsView { get; set; }
+
+    public ObservableCollection<SortingOptions> SortingOptionsList { get; } = [SortingOptions.AlphabeticalAscending, SortingOptions.AlphabeticalDescending, SortingOptions.IdAscending, SortingOptions.IdDescending];
     
+    private SortingOptions _selectedSortingOption;
+    public SortingOptions SelectedSortingOption {
+        get => _selectedSortingOption;
+        set {
+            _selectedSortingOption = value;
+            OnPropertyChanged();
+            SortPatients();
+            PatientsView.Refresh();
+        }
+    }
     
     private string _patientsFilter = string.Empty;
     public string PatientsFilter {
@@ -33,7 +46,6 @@ public class PatientsViewModel : ViewModelBase, IPatientViewModel {
 
     private PatientsViewModel(PatientStore patientStore, ModalNavigationViewModel modalNavigationViewModel){
         _patientStore = patientStore;
-
         LoadPatients = new LoadPatientsCommand(this, patientStore);
         ShowAddNewPatientModal = modalNavigationViewModel.ShowAddNewPatientModal;
         ShowDeletePatientModal = modalNavigationViewModel.ShowDeletePatientModal;
@@ -84,6 +96,54 @@ public class PatientsViewModel : ViewModelBase, IPatientViewModel {
         foreach (var patient in patients) {
             _patients.Add(patient);
         }
+        
+        SelectedSortingOption = SortingOptions.AlphabeticalAscending;
+    }
+
+    private void SortPatients(){
+        PatientsView.SortDescriptions.Clear();
+        
+        switch (SelectedSortingOption) {
+            case SortingOptions.AlphabeticalAscending: {
+                PatientsView.SortDescriptions.Add(
+                    new SortDescription(nameof(PatientDto.FirstName), ListSortDirection.Ascending)
+                ); 
+                PatientsView.SortDescriptions.Add(
+                    new SortDescription(nameof(PatientDto.LastName), ListSortDirection.Ascending)
+                ); 
+                break;
+            }
+            case SortingOptions.AlphabeticalDescending: {
+                PatientsView.SortDescriptions.Add(
+                    new SortDescription(nameof(PatientDto.FirstName), ListSortDirection.Descending)
+                ); 
+                PatientsView.SortDescriptions.Add(
+                    new SortDescription(nameof(PatientDto.LastName), ListSortDirection.Descending)
+                ); 
+                break;
+            }
+            case SortingOptions.IdAscending: {
+                PatientsView.SortDescriptions.Add(
+                    new SortDescription(nameof(PatientDto.Id), ListSortDirection.Ascending)
+                ); 
+                break;
+            }
+            case SortingOptions.IdDescending: {
+                PatientsView.SortDescriptions.Add(
+                    new SortDescription(nameof(PatientDto.Id), ListSortDirection.Descending)
+                ); 
+                break;
+            }
+            default: {
+                PatientsView.SortDescriptions.Add(
+                    new SortDescription(nameof(PatientDto.FirstName), ListSortDirection.Ascending)
+                ); 
+                PatientsView.SortDescriptions.Add(
+                    new SortDescription(nameof(PatientDto.LastName), ListSortDirection.Ascending)
+                ); 
+                break;
+            }
+        }
     }
     
     private bool FilterPatients(object obj){
@@ -96,7 +156,7 @@ public class PatientsViewModel : ViewModelBase, IPatientViewModel {
         }
         
         var filter = PatientsFilter.Trim().ToLower();
-        return patient.PatientCode!.Contains(filter, StringComparison.CurrentCultureIgnoreCase) ||
+        return patient.PatientCode.Contains(filter, StringComparison.CurrentCultureIgnoreCase) ||
                patient.FirstName.Contains(filter, StringComparison.CurrentCultureIgnoreCase) ||
                patient.LastName.Contains(filter, StringComparison.CurrentCultureIgnoreCase);
     }

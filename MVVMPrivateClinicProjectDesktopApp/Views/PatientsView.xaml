@@ -7,17 +7,22 @@
              xmlns:viewModel="clr-namespace:MVVMPrivateClinicProjectDesktopApp.ViewModels"
              xmlns:entities="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Models.Entities"
              xmlns:dto="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Models.DTOs"
+             xmlns:components="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Views.Components"
+             xmlns:converters="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Converters"
              mc:Ignorable="d"
              FontFamily="/Fonts/#OpenSans"
              d:DesignHeight="675" 
              d:DesignWidth="1000"
              d:DataContext="{d:DesignInstance viewModel:PatientsViewModel}">
     
+    <UserControl.Resources>
+        <converters:SortingOptionDisplayConverter x:Key="SortingOptionDisplayConverter"/>
+    </UserControl.Resources>
+    
     <Border Background="{StaticResource CustomBlackColor1}">
-        
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="50"/>
+                <RowDefinition Height="75"/>
                 <RowDefinition Height="60"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
@@ -29,24 +34,43 @@
                         <ColumnDefinition Width="250"/>
                     </Grid.ColumnDefinitions>
                     
-                    <Border Grid.Column="0" HorizontalAlignment="Left" >
-                        <Border Height="45" Width="250" CornerRadius="10" Background="{StaticResource CustomGrayColor1}">
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
-                                <TextBox FontSize="15" Padding="5 0" VerticalContentAlignment="Center" Text="{Binding PatientsFilter, UpdateSourceTrigger=PropertyChanged}" Foreground="White" Height="45" Width="225" Background="Transparent" BorderBrush="Transparent" BorderThickness="0"/>
-                                <fa:IconImage Width="20" Height="20" Icon="MagnifyingGlass" Foreground="White"/>
-                            </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Column="0">
+                        <Border HorizontalAlignment="Left" >
+                            <Border Height="55" Width="250" CornerRadius="10" Background="{StaticResource CustomGrayColor1}">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                                    <TextBox FontSize="15" Padding="5 0" VerticalContentAlignment="Center" Text="{Binding PatientsFilter, UpdateSourceTrigger=PropertyChanged}" Foreground="White" Height="45" Width="225" Background="Transparent" BorderBrush="Transparent" BorderThickness="0"/>
+                                    <fa:IconImage Width="20" Height="20" Icon="MagnifyingGlass" Foreground="White"/>
+                                </StackPanel>
+                            </Border>
                         </Border>
-                    </Border>
+                        
+                            <Border Padding="5 0 0 0" Margin="15 0 0 0" Height="60" CornerRadius="10" Background="{StaticResource CustomGrayColor1}" HorizontalAlignment="Left" Width="210">
+                                <StackPanel Orientation="Horizontal">
+                                    <ComboBox Width="175"
+                                              x:Name="SortingSelector"
+                                              BorderBrush="{StaticResource CustomGreenColor1}"
+                                              VerticalAlignment="Center"
+                                              ItemsSource="{Binding SortingOptionsList}"
+                                              SelectedItem="{Binding SelectedSortingOption}"
+                                              Style="{StaticResource ComboBoxStyle}">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate >
+                                                <ScrollViewer CanContentScroll="True" VerticalScrollBarVisibility="Visible" >
+                                                    <TextBlock TextAlignment="Center" VerticalAlignment="Center" Padding="10 10 0 0" Height="35" FontSize="14" Foreground="White" Text="{Binding Converter={StaticResource SortingOptionDisplayConverter}}"/>
+                                                </ScrollViewer>
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
+                                    <fa:IconImage Foreground="White" Margin="8 0 0 0"   Width="20" Height="20" Icon="Sort"/>
+                                </StackPanel>
+                            </Border>
+                    </StackPanel>
                     
-                    <Button Grid.Column="1" 
-                            Command="{Binding ShowAddNewPatientModal}"
-                            Style="{StaticResource ButtonWithIconLarge}"
-                            Tag="{StaticResource CustomGreenColor1}">
-                        <StackPanel Style="{StaticResource ButtonStackPanel}">
-                            <fa:IconImage Margin="0 0 5 0" Icon="Plus" Style="{StaticResource IconButtonLarge}"/>
-                            <TextBox Margin="5 0 0 0" Text="Add New Patient" Style="{StaticResource ButtonTextLarge}"/>
-                        </StackPanel>
-                    </Button>
+                    <components:ButtonWithIcon Grid.Column="1"
+                                               ButtonText="Add New Patient"
+                                               ButtonWidth="200"
+                                               TextColor="{StaticResource CustomGreenColor1}"
+                                               Command="{Binding ShowAddNewPatientModal}"/>
                 </Grid>
             </Border>
             

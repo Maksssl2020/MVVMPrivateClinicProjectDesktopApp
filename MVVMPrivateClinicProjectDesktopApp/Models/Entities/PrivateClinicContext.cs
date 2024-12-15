@@ -226,7 +226,9 @@ public partial class PrivateClinicContext : Microsoft.EntityFrameworkCore.DbCont
             entity.Property(e => e.Amount).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.DateIssued).HasColumnType("datetime");
             entity.Property(e => e.DueDate).HasColumnType("datetime");
-            entity.Property(e => e.Status).HasMaxLength(50);
+            entity.Property(e => e.Status)
+                .HasMaxLength(50)
+                .HasDefaultValue("AwaitingPayment");
 
             entity.HasOne(d => d.IdPatientNavigation).WithMany(p => p.Invoices)
                 .HasForeignKey(d => d.IdPatient)

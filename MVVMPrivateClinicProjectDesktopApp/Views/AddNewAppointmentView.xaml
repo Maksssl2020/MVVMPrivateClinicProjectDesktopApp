@@ -34,10 +34,9 @@
             </Grid.RowDefinitions>
             
             <StackPanel HorizontalAlignment="Right" Grid.Row="0">
-                <Button  x:Name="closeButton" 
-                         Click="buttonClose_Click"
-                         Style="{StaticResource ControlBarButton}"
-                         Tag="{StaticResource CustomRedColor1}"
+                <Button Click="buttonClose_Click"
+                        Style="{StaticResource ControlBarButton}"
+                        Tag="{StaticResource CustomRedColor1}"
                 >
                     <fa:IconImage Icon="Xmark" Style="{StaticResource ControlBarButtonIcon}"/>
                 </Button>

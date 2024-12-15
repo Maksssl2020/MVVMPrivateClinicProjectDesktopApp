@@ -62,5 +62,8 @@ public partial class ButtonWithIcon : UserControl {
     
     public ButtonWithIcon(){
         InitializeComponent();
+        InternalButton.Click += (s, e) => Click?.Invoke(this, e);
     }
+
+    public event RoutedEventHandler? Click;
 }

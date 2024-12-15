@@ -74,6 +74,8 @@
                         <TextBox Template="{StaticResource ComboBoxTextBox}"
                                  HorizontalAlignment="Left"
                                  VerticalAlignment="Center"
+                                 Foreground="White"
+                                 FontSize="12"
                                  Focusable="True"
                                  Visibility="Hidden"/>
                         <Popup x:Name="Popup"

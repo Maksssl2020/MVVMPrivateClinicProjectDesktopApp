@@ -6,10 +6,17 @@ namespace MVVMPrivateClinicProjectDesktopApp.Helpers;
 public class MapperProfiles : Profile {
     public MapperProfiles(){
         CreateMap<Doctor, DoctorDto>()
-            .ForMember(dest => dest.DoctorSpecialization, 
-                opt => opt.Ignore());
+            .ForMember(dest => dest.DoctorSpecialization,
+                opt => opt.Ignore())
+            .ForMember(dest => dest.AmountOfAppointments, opt => opt.MapFrom(src => src.Appointments.Count));
 
         CreateMap<Appointment, AppointmentDto>();
+        CreateMap<AppointmentDate, AppointmentDateDto>()
+            .ForMember(dest => dest.AppointmentDate,
+                opt => opt.Ignore())
+            .ForMember(dest => dest.AppointmentTime,
+                opt => opt.Ignore());
+        
         CreateMap<Medicine, MedicineDto>();
 
         CreateMap<Prescription, PrescriptionDto>()

@@ -103,7 +103,7 @@ public class AddNewAppointmentViewModel : ViewModelBase, IDoctorsViewModel, IPat
     private ICommand LoadPatientsCommand { get; set; }
     private ICommand LoadPricingCommand { get; set; }
     public SubmitCommand SubmitCommand { get; set; }
-    public ICommand CreateAppointmentCommand { get; set; }
+    private ICommand CreateAppointmentCommand { get; set; }
 
     private AddNewAppointmentViewModel(DoctorStore doctorStore, PatientStore patientStore, AppointmentStore appointmentStore,  AppointmentDateStore appointmentDateStore, PricingStore pricingStore, InvoiceStore invoiceStore){
         _appointmentDateStore = appointmentDateStore;
@@ -120,7 +120,7 @@ public class AddNewAppointmentViewModel : ViewModelBase, IDoctorsViewModel, IPat
         LoadPricingCommand = new LoadPricingDtoCommand(this, pricingStore);
         SubmitCommand = new SubmitCommand(Submit, CanSubmit);
         CreateAppointmentCommand =
-            new CreateAppointmentCommand(this, appointmentStore, appointmentDateStore, invoiceStore);
+            new CreateAppointmentCommand(this, appointmentStore, appointmentDateStore, invoiceStore, ResetForm);
     }
 
     private bool CanSubmit(){
@@ -130,9 +130,17 @@ public class AddNewAppointmentViewModel : ViewModelBase, IDoctorsViewModel, IPat
     }
 
     private void Submit(){
-        Console.WriteLine("SSSUBMIT!");
+        CreateAppointmentCommand.Execute(null);
     }
 
+    private void ResetForm(){
+        SelectedDoctor = null!;
+        SelectedPatient = null!;
+        SelectedTime = null!;
+        SelectedDay = null!;
+        SelectedPricing = null!;
+    }
+    
     public static AddNewAppointmentViewModel LoadAddNewAppointmentViewModel(DoctorStore doctorStore, PatientStore patientStore, AppointmentStore appointmentStore,  AppointmentDateStore appointmentDateStore, PricingStore pricingStore, InvoiceStore invoiceStore){
         var addNewAppointmentViewModel = new AddNewAppointmentViewModel(doctorStore, patientStore, appointmentStore, appointmentDateStore, pricingStore, invoiceStore);
         

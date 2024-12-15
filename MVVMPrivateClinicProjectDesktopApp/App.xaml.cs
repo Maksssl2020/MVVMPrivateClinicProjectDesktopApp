@@ -20,7 +20,6 @@ public partial class App : Application {
     private const string ConnectionString = "Server=localhost;Database=PrivateClinic;Trusted_Connection=True;TrustServerCertificate=True";
     
     private readonly ServiceProvider _serviceProvider;
-    private readonly IUnitOfWork _unitOfWork;
     private readonly NavigationStore _navigationStore;
     private readonly ModalNavigationStore _modalNavigationStore;
     private readonly PatientStore _patientStore;
@@ -38,6 +37,7 @@ public partial class App : Application {
     private readonly ReferralTestStore _referralTestStore;
     private readonly DiagnosisStore _diagnosisStore;
     private readonly AppointmentDateStore _appointmentDateStore;
+    private readonly AddSpecificDataToPatientStore _addSpecificDataToPatientStore;
     private readonly NavigationBarViewModel _navigationBarViewModel;
     private readonly ModalNavigationViewModel _modalNavigationViewModel;
     private readonly PatientDataModalNavigationViewModel _patientDataModalNavigationViewModel;
@@ -49,24 +49,25 @@ public partial class App : Application {
         MyMapper.Mapper = mapper!;
         _serviceProvider = services.BuildServiceProvider();
 
-        _unitOfWork = new UnitOfWork.UnitOfWork(new DbContextFactory(ConnectionString));
+        IUnitOfWork unitOfWork = new UnitOfWork.UnitOfWork(new DbContextFactory(ConnectionString));
         _navigationStore = new NavigationStore();
-        _patientStore = new PatientStore(_unitOfWork);
+        _patientStore = new PatientStore(unitOfWork);
         _modalNavigationStore = new ModalNavigationStore();
-        _appointmentStore = new AppointmentStore(_unitOfWork);
+        _appointmentStore = new AppointmentStore(unitOfWork);
         _patientDataModalNavigationStore = new PatientDataModalNavigationStore();
-        _medicineStore = new MedicineStore(_unitOfWork);
-        _doctorStore = new DoctorStore(_unitOfWork);
-        _prescriptionStore = new PrescriptionStore(_unitOfWork);
-        _referralStore = new ReferralStore(_unitOfWork);
-        _invoiceStore = new InvoiceStore(_unitOfWork);
-        _pricingStore = new PricingStore(_unitOfWork);
-        _patientNoteStore = new PatientNoteStore(_unitOfWork);
-        _diseaseStore = new DiseaseStore(_unitOfWork);
-        _doctorSpecializationStore = new DoctorSpecializationStore(_unitOfWork);
-        _referralTestStore = new ReferralTestStore(_unitOfWork);
-        _diagnosisStore = new DiagnosisStore(_unitOfWork);
-        _appointmentDateStore = new AppointmentDateStore(_unitOfWork);
+        _medicineStore = new MedicineStore(unitOfWork);
+        _doctorStore = new DoctorStore(unitOfWork);
+        _prescriptionStore = new PrescriptionStore(unitOfWork);
+        _referralStore = new ReferralStore(unitOfWork);
+        _invoiceStore = new InvoiceStore(unitOfWork);
+        _pricingStore = new PricingStore(unitOfWork);
+        _patientNoteStore = new PatientNoteStore(unitOfWork);
+        _diseaseStore = new DiseaseStore(unitOfWork);
+        _doctorSpecializationStore = new DoctorSpecializationStore(unitOfWork);
+        _referralTestStore = new ReferralTestStore(unitOfWork);
+        _diagnosisStore = new DiagnosisStore(unitOfWork);
+        _appointmentDateStore = new AppointmentDateStore(unitOfWork);
+        _addSpecificDataToPatientStore = new AddSpecificDataToPatientStore();
         
         _navigationBarViewModel = new NavigationBarViewModel(
             CreateHomeNavigationService(),
@@ -93,7 +94,8 @@ public partial class App : Application {
             CreatePrescriptionDetailsNavigationService(),
             CreatePatientNoteDetailsNavigationService(),
             CreateReferralDetailsNavigationService(),
-            CreateAddNewAppointmentNavigationService()
+            CreateAddNewAppointmentNavigationService(),
+            CreateSelectPatientToAddSpecificDataNavigationService()
             );
 
         _patientDataModalNavigationViewModel = new PatientDataModalNavigationViewModel(
@@ -142,11 +144,11 @@ public partial class App : Application {
     }
 
     private NavigationServiceBase CreatePrescriptionsNavigationService(){
-        return new NavigationService(_navigationStore, () => PrescriptionsViewModel.LoadPrescriptionsViewModel(_prescriptionStore, _modalNavigationViewModel));
+        return new NavigationService(_navigationStore, () => PrescriptionsViewModel.LoadPrescriptionsViewModel(_prescriptionStore, _addSpecificDataToPatientStore, _modalNavigationViewModel));
     }
 
     private NavigationServiceBase CreateReferralsNavigationService(){
-        return new NavigationService(_navigationStore, () => ReferralsViewModel.LoadReferralsViewModel(_referralStore, _modalNavigationViewModel));
+        return new NavigationService(_navigationStore, () => ReferralsViewModel.LoadReferralsViewModel(_referralStore, _addSpecificDataToPatientStore, _modalNavigationViewModel));
     }
 
     private NavigationServiceBase CreateInvoicesNavigationService(){
@@ -158,7 +160,7 @@ public partial class App : Application {
     }
 
     private NavigationServiceBase CreatePatientsNotesNavigationService(){
-        return new NavigationService(_navigationStore, () => PatientsNotesViewModel.LoadPatientNoteViewModel(_patientNoteStore, _modalNavigationViewModel));
+        return new NavigationService(_navigationStore, () => PatientsNotesViewModel.LoadPatientNoteViewModel(_patientNoteStore, _addSpecificDataToPatientStore, _modalNavigationViewModel));
     }
 
     private NavigationServiceBase CreateReferralTestsNavigationService(){
@@ -208,6 +210,12 @@ public partial class App : Application {
 
     private NavigationServiceBase CreateAddNewAppointmentNavigationService(){
         return new ModalNavigationService(_modalNavigationStore, () =>  AddNewAppointmentViewModel.LoadAddNewAppointmentViewModel(_doctorStore, _patientStore, _appointmentStore, _appointmentDateStore, _pricingStore, _invoiceStore));
+    }
+
+    private NavigationServiceBase CreateSelectPatientToAddSpecificDataNavigationService(){
+        return new ModalNavigationService(_modalNavigationStore,
+            () => SelectPatientToAddSpecificDataViewModel.LoadSelectPatientToAddSpecificDataViewModel(_patientStore,
+                _addSpecificDataToPatientStore, _modalNavigationViewModel));
     }
     
     private NavigationServiceBase CreatePatientDetailsNavigationService(){

@@ -17,4 +17,11 @@ public partial class PrescriptionsView : UserControl {
         viewModel.SetPrescriptionIdToSeeDetails(prescriptionDto.Id);
         viewModel.ShowPrescriptionDetailsModal.Execute(null);
     }
+
+    private void ShowSelectPatient_OnClick(object sender, RoutedEventArgs e){
+        if (DataContext is not PrescriptionsViewModel viewModel) return;
+        
+        viewModel.SetDataInAddSpecificDataToPatientStore();
+        viewModel.ShowSelectPatientToAddSpecificDataModal.Execute(null);
+    }
 }
