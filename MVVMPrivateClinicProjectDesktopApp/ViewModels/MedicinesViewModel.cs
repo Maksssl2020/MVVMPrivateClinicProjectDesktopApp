@@ -3,35 +3,20 @@ using System.ComponentModel;
 using System.Windows.Data;
 using System.Windows.Input;
 using MVVMPrivateClinicProjectDesktopApp.Commands;
+using MVVMPrivateClinicProjectDesktopApp.Helpers;
 using MVVMPrivateClinicProjectDesktopApp.Interfaces;
 using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
 using MVVMPrivateClinicProjectDesktopApp.Stores;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
-public class MedicinesViewModel : ViewModelBase, IMedicinesViewModel {
-    private string _medicineFilter = string.Empty;
-
-    private readonly ObservableCollection<MedicineDto> _medicines = [];
-    public ICollectionView MedicinesView { get; set; }
-
-    public string MedicinesFilter {
-        get => _medicineFilter;
-        set {
-            _medicineFilter = value;
-            OnPropertyChanged();
-            MedicinesView.Refresh();
-        }
-    }
-
-    private ICommand LoadMedicinesCommand { get; set; }
+public class MedicinesViewModel : DisplayEntitiesViewModelBase<MedicineDto> {
+   private ICommand LoadMedicinesCommand { get; set; }
     public ICommand ShowAddNewMedicineModal { get; set; }
 
-    private MedicinesViewModel(MedicineStore medicineStore, ModalNavigationViewModel modalNavigationViewModel){
-        MedicinesView = CollectionViewSource.GetDefaultView(_medicines);
-        MedicinesView.Filter = FilterMedicines;
-
-        LoadMedicinesCommand = new LoadMedicinesDtoCommand(this, medicineStore);
+    private MedicinesViewModel(MedicineStore medicineStore, ModalNavigationViewModel modalNavigationViewModel)
+        :base([SortingOptions.IdAscending, SortingOptions.IdDescending, SortingOptions.AlphabeticalAscending, SortingOptions.AlphabeticalDescending]) {
+        LoadMedicinesCommand = new LoadMedicinesDtoCommand(UpdateEntities, medicineStore);
         ShowAddNewMedicineModal = modalNavigationViewModel.ShowAddNewMedicineModal;
         medicineStore.MedicineCreated += OnMedicineCreated;
     }
@@ -45,27 +30,34 @@ public class MedicinesViewModel : ViewModelBase, IMedicinesViewModel {
     }
 
     private void OnMedicineCreated(MedicineDto medicineDto){
-        _medicines.Add(medicineDto);
+        Entities.Add(medicineDto);
     }
-    
-    public void UpdateMedicines(IEnumerable<MedicineDto> medicinesDto){
-        _medicines.Clear();
 
-        foreach (var medicineDto in medicinesDto) {
-            _medicines.Add(medicineDto);
+    public override void UpdateEntities(IEnumerable<MedicineDto> entities){
+        Entities.Clear();
+
+        foreach (var entity in entities) {
+            Entities.Add(entity);
         }
+        
+        SelectedSortingOption = SortingOptions.IdAscending;
     }
-    
-    private bool FilterMedicines(object obj){
+
+    protected override void SortEntities(){
+        var nameOfProperty = SelectedSortingOption is SortingOptions.IdAscending or SortingOptions.IdDescending ? nameof(MedicineDto.Id) : nameof(MedicineDto.Name);
+        ApplySortingOptions.ApplySortingWithOneProperty(EntitiesView, SelectedSortingOption, nameOfProperty);
+    }
+
+    protected override bool ApplyFilter(object obj){
         if (obj is not MedicineDto medicine) {
             return false;
         }
 
-        if (string.IsNullOrWhiteSpace(MedicinesFilter)) {
+        if (string.IsNullOrWhiteSpace(Filter)) {
             return true;
         }
         
-        var filter = MedicinesFilter.Trim().ToLower();
+        var filter = Filter.Trim().ToLower();
         return medicine.Name.Contains(filter, StringComparison.CurrentCultureIgnoreCase) ||
                medicine.Type.Contains(filter, StringComparison.CurrentCultureIgnoreCase);
     }

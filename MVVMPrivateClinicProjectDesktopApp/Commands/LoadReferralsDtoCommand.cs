@@ -7,7 +7,7 @@ public class LoadReferralsDtoCommand(ReferralsViewModel viewModel, ReferralStore
     public override async Task ExecuteAsync(object? parameter){
         try {
             await referralStore.LoadReferrals();
-            viewModel.UpdateReferrals(referralStore.ReferralsDto);
+            viewModel.UpdateEntities(referralStore.ReferralsDto);
         }
         catch (Exception e) {
             Console.WriteLine(e);

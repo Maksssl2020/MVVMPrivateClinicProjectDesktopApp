@@ -11,7 +11,7 @@ using MVVMPrivateClinicProjectDesktopApp.Stores;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
-public class SelectPatientToAddSpecificDataViewModel : ViewModelBase, IPatientViewModel {
+public class SelectPatientToAddSpecificDataViewModel : ViewModelBase {
     private readonly PatientStore _patientStore;
     
     public string DataToAddName { get; set; }
@@ -43,7 +43,7 @@ public class SelectPatientToAddSpecificDataViewModel : ViewModelBase, IPatientVi
         
         PatientsView = CollectionViewSource.GetDefaultView(_patients);
 
-        LoadPatientsCommand = new LoadPatientsCommand(this, patientStore);
+        LoadPatientsCommand = new LoadPatientsCommand(UpdatePatients, patientStore);
         ShowPatientDataModalCommand = modalNavigationViewModel.ShowPatientDataModal;
         SubmitCommand = new SubmitCommand(Submit, CanSubmit);
     }

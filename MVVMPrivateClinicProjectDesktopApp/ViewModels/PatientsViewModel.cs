@@ -10,7 +10,7 @@ using MVVMPrivateClinicProjectDesktopApp.Stores;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
-public class PatientsViewModel : ViewModelBase, IPatientViewModel {
+public class PatientsViewModel : DisplayEntitiesViewModelBase<PatientDto> {
     private readonly PatientStore _patientStore;
 
     public ICommand ShowAddNewPatientModal {get; set;}
@@ -18,41 +18,13 @@ public class PatientsViewModel : ViewModelBase, IPatientViewModel {
     public ICommand ShowPatientDataModal { get; set; }
     private ICommand LoadPatients { get; set; }
     
-    private readonly ObservableCollection<PatientDto> _patients = [];
-    public ICollectionView PatientsView { get; set; }
-
-    public ObservableCollection<SortingOptions> SortingOptionsList { get; } = [SortingOptions.AlphabeticalAscending, SortingOptions.AlphabeticalDescending, SortingOptions.IdAscending, SortingOptions.IdDescending];
-    
-    private SortingOptions _selectedSortingOption;
-    public SortingOptions SelectedSortingOption {
-        get => _selectedSortingOption;
-        set {
-            _selectedSortingOption = value;
-            OnPropertyChanged();
-            SortPatients();
-            PatientsView.Refresh();
-        }
-    }
-    
-    private string _patientsFilter = string.Empty;
-    public string PatientsFilter {
-        get => _patientsFilter;
-        set {
-            _patientsFilter = value;
-            OnPropertyChanged();
-            PatientsView.Refresh();
-        }
-    }
-
-    private PatientsViewModel(PatientStore patientStore, ModalNavigationViewModel modalNavigationViewModel){
+    private PatientsViewModel(PatientStore patientStore, ModalNavigationViewModel modalNavigationViewModel)
+        :base([SortingOptions.AlphabeticalAscending, SortingOptions.AlphabeticalDescending, SortingOptions.IdAscending, SortingOptions.IdDescending]){
         _patientStore = patientStore;
-        LoadPatients = new LoadPatientsCommand(this, patientStore);
+        LoadPatients = new LoadPatientsCommand(UpdateEntities, patientStore);
         ShowAddNewPatientModal = modalNavigationViewModel.ShowAddNewPatientModal;
         ShowDeletePatientModal = modalNavigationViewModel.ShowDeletePatientModal;
         ShowPatientDataModal = modalNavigationViewModel.ShowPatientDataModal;
-        
-        PatientsView = CollectionViewSource.GetDefaultView(_patients);
-        PatientsView.Filter = FilterPatients;
         
         _patientStore.PatientCreated += OnPatientCreated;
         _patientStore.PatientDeleted += OnPatientDeleted;
@@ -67,6 +39,40 @@ public class PatientsViewModel : ViewModelBase, IPatientViewModel {
         return patientsViewModel;
     }
 
+    public override void UpdateEntities(IEnumerable<PatientDto> entities){
+        Entities.Clear();
+
+        foreach (var entity in entities) {
+            Entities.Add(entity);
+        }
+        
+        SelectedSortingOption = SortingOptions.AlphabeticalAscending;
+    }
+
+    protected override void SortEntities(){
+        if (SelectedSortingOption is SortingOptions.AlphabeticalAscending or SortingOptions.AlphabeticalDescending) {
+            ApplySortingOptions.ApplySortingWithTwoProperties(EntitiesView, SelectedSortingOption, nameof(PatientDto.FirstName), nameof(PatientDto.LastName));
+        }
+        else {
+            ApplySortingOptions.ApplySortingWithOneProperty(EntitiesView, SelectedSortingOption, nameof(PatientDto.Id));
+        }
+    }
+
+    protected override bool ApplyFilter(object obj){
+        if (obj is not PatientDto patient) {
+            return false;
+        }
+
+        if (string.IsNullOrWhiteSpace(Filter)) {
+            return true;
+        }
+        
+        var filter = Filter.Trim().ToLower();
+        return patient.PatientCode.Contains(filter, StringComparison.CurrentCultureIgnoreCase) ||
+               patient.FirstName.Contains(filter, StringComparison.CurrentCultureIgnoreCase) ||
+               patient.LastName.Contains(filter, StringComparison.CurrentCultureIgnoreCase);
+    }
+    
     public void SetPatientIdToDelete(int patientId) {
         _patientStore.PatientIdToDelete = patientId;
     }
@@ -82,82 +88,11 @@ public class PatientsViewModel : ViewModelBase, IPatientViewModel {
     }
 
     private void OnPatientCreated(PatientDto patient){
-        _patients.Add(patient);
+        Entities.Add(patient);
     }
 
     private void OnPatientDeleted(int patientId){
-        var foundPatient = _patients.First(patient => patient.Id == patientId);
-        _patients.Remove(foundPatient);
-    }
-
-    public void UpdatePatients(IEnumerable<PatientDto> patients){
-        _patients.Clear();
-
-        foreach (var patient in patients) {
-            _patients.Add(patient);
-        }
-        
-        SelectedSortingOption = SortingOptions.AlphabeticalAscending;
-    }
-
-    private void SortPatients(){
-        PatientsView.SortDescriptions.Clear();
-        
-        switch (SelectedSortingOption) {
-            case SortingOptions.AlphabeticalAscending: {
-                PatientsView.SortDescriptions.Add(
-                    new SortDescription(nameof(PatientDto.FirstName), ListSortDirection.Ascending)
-                ); 
-                PatientsView.SortDescriptions.Add(
-                    new SortDescription(nameof(PatientDto.LastName), ListSortDirection.Ascending)
-                ); 
-                break;
-            }
-            case SortingOptions.AlphabeticalDescending: {
-                PatientsView.SortDescriptions.Add(
-                    new SortDescription(nameof(PatientDto.FirstName), ListSortDirection.Descending)
-                ); 
-                PatientsView.SortDescriptions.Add(
-                    new SortDescription(nameof(PatientDto.LastName), ListSortDirection.Descending)
-                ); 
-                break;
-            }
-            case SortingOptions.IdAscending: {
-                PatientsView.SortDescriptions.Add(
-                    new SortDescription(nameof(PatientDto.Id), ListSortDirection.Ascending)
-                ); 
-                break;
-            }
-            case SortingOptions.IdDescending: {
-                PatientsView.SortDescriptions.Add(
-                    new SortDescription(nameof(PatientDto.Id), ListSortDirection.Descending)
-                ); 
-                break;
-            }
-            default: {
-                PatientsView.SortDescriptions.Add(
-                    new SortDescription(nameof(PatientDto.FirstName), ListSortDirection.Ascending)
-                ); 
-                PatientsView.SortDescriptions.Add(
-                    new SortDescription(nameof(PatientDto.LastName), ListSortDirection.Ascending)
-                ); 
-                break;
-            }
-        }
-    }
-    
-    private bool FilterPatients(object obj){
-        if (obj is not PatientDto patient) {
-            return false;
-        }
-
-        if (string.IsNullOrWhiteSpace(PatientsFilter)) {
-            return true;
-        }
-        
-        var filter = PatientsFilter.Trim().ToLower();
-        return patient.PatientCode.Contains(filter, StringComparison.CurrentCultureIgnoreCase) ||
-               patient.FirstName.Contains(filter, StringComparison.CurrentCultureIgnoreCase) ||
-               patient.LastName.Contains(filter, StringComparison.CurrentCultureIgnoreCase);
+        var foundPatient = Entities.First(patient => patient.Id == patientId);
+        Entities.Remove(foundPatient);
     }
 }

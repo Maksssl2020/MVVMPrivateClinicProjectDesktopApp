@@ -24,7 +24,7 @@ public class InvoiceStore {
         await _initializeLazy.Value;
     }
 
-    public async Task CreateInvoice(SaveNewInvoiceRequest invoiceRequest){
+    public async Task CreateInvoice(SaveInvoiceRequest invoiceRequest){
         var savedInvoice = await _unitOfWork.InvoiceRepository.SaveInvoiceAsync(invoiceRequest);
         _invoicesDto.Add(savedInvoice);
         

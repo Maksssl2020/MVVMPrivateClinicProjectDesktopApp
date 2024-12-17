@@ -5,7 +5,7 @@ using MVVMPrivateClinicProjectDesktopApp.Stores;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
-public class AddNewPatientViewModel : ViewModelBase {
+public class AddNewPatientViewModel : AddNewEntityViewModelBase {
     private string _firstName = string.Empty;
 
     [Required(ErrorMessage = "First name is required!")]
@@ -16,6 +16,7 @@ public class AddNewPatientViewModel : ViewModelBase {
             _firstName = value; 
             Validate(nameof(FirstName), value);
             SubmitCommand.OnCanExecuteChanged();
+            OnPropertyChanged();
         }
     }
 
@@ -29,6 +30,7 @@ public class AddNewPatientViewModel : ViewModelBase {
             _lastName = value;
             Validate(nameof(LastName), value);
             SubmitCommand.OnCanExecuteChanged();
+            OnPropertyChanged();
         }
     }
     
@@ -42,6 +44,7 @@ public class AddNewPatientViewModel : ViewModelBase {
             _phoneNumber = value;
             Validate(nameof(PhoneNumber), value);
             SubmitCommand.OnCanExecuteChanged();
+            OnPropertyChanged();
         }
     }
 
@@ -55,6 +58,7 @@ public class AddNewPatientViewModel : ViewModelBase {
             _email = value;
             Validate(nameof(Email), value);
             SubmitCommand.OnCanExecuteChanged();
+            OnPropertyChanged();
         }
     }
     
@@ -68,6 +72,7 @@ public class AddNewPatientViewModel : ViewModelBase {
             _city = value;
             Validate(nameof(City), value);
             SubmitCommand.OnCanExecuteChanged();
+            OnPropertyChanged();
         }
     }
 
@@ -81,6 +86,7 @@ public class AddNewPatientViewModel : ViewModelBase {
             _postalCode = value;
             Validate(nameof(PostalCode), value);
             SubmitCommand.OnCanExecuteChanged();
+            OnPropertyChanged();
         }
     }
     
@@ -95,6 +101,7 @@ public class AddNewPatientViewModel : ViewModelBase {
             _street = value;
             Validate(nameof(Street), value);
             SubmitCommand.OnCanExecuteChanged();
+            OnPropertyChanged();
         }
     }
     
@@ -109,30 +116,23 @@ public class AddNewPatientViewModel : ViewModelBase {
             _buildingNumber = value;
             Validate(nameof(BuildingNumber), value);
             SubmitCommand.OnCanExecuteChanged();
+            OnPropertyChanged();
         }
     }
 
     public string LocalNumber { get; set; } = string.Empty;
 
-    public RelayCommand SubmitCommand { get; set; }
-    public ICommand CreatePatientCommand { get; set; }
+    private ICommand CreatePatientCommand { get; set; }
     
     public AddNewPatientViewModel(PatientStore patientStore){
-        SubmitCommand = new SubmitCommand(Submit, CanSubmit);
         CreatePatientCommand = new CreatePatientCommand(this, patientStore, ResetForm);
     }
 
-    private bool CanSubmit(){
-        var context = new ValidationContext(this);
-        var results = new List<ValidationResult>();
-        return Validator.TryValidateObject(this, context, results, true);
-    }
-
-    private void Submit(){
+    protected override void Submit(){
         CreatePatientCommand.Execute(null);
     }
 
-    private void ResetForm() {
+    protected override void ResetForm() {
         FirstName = string.Empty;
         LastName = string.Empty;
         PhoneNumber = string.Empty;

@@ -10,7 +10,7 @@ using MVVMPrivateClinicProjectDesktopApp.Stores;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
-public class IssueReferralViewModel : ViewModelBase, IDiseasesViewModel, IDoctorsViewModel, IReferralTestsViewModel {
+public class IssueReferralViewModel : AddNewEntityViewModelBase {
     public static string Today => DateTime.Today.ToString("dd-MM-yyyy");
     
     private readonly ObservableCollection<DoctorDto> _doctors;
@@ -30,6 +30,7 @@ public class IssueReferralViewModel : ViewModelBase, IDiseasesViewModel, IDoctor
             _selectedDoctor = value;
             Validate(nameof(SelectedDoctor), value);
             SubmitCommand.OnCanExecuteChanged();
+            OnPropertyChanged();
         }
     }
     
@@ -42,6 +43,7 @@ public class IssueReferralViewModel : ViewModelBase, IDiseasesViewModel, IDoctor
             _selectedReferralTest = value;
             Validate(nameof(SelectedReferralTest), value);
             SubmitCommand.OnCanExecuteChanged();
+            OnPropertyChanged();
         }
     }
 
@@ -64,6 +66,7 @@ public class IssueReferralViewModel : ViewModelBase, IDiseasesViewModel, IDoctor
             _referralName = value;
             Validate(nameof(ReferralName), value);
             SubmitCommand.OnCanExecuteChanged();
+            OnPropertyChanged();
         }
     }
     
@@ -77,13 +80,13 @@ public class IssueReferralViewModel : ViewModelBase, IDiseasesViewModel, IDoctor
             _referralDescription = value;
             Validate(nameof(ReferralDescription), value);
             SubmitCommand.OnCanExecuteChanged();
+            OnPropertyChanged();
         }
     }
     
     private ICommand LoadFamilyDoctorsCommand { get; set; }
     private ICommand LoadDiseasesCommand { get; }
     private ICommand LoadReferralTestsCommand { get; }
-    public SubmitCommand SubmitCommand { get; set; }
     public ICommand CreateReferralCommand { get; set; }
     public int SelectedPatientId { get; set; }
 
@@ -97,10 +100,9 @@ public class IssueReferralViewModel : ViewModelBase, IDiseasesViewModel, IDoctor
         DiseasesView = CollectionViewSource.GetDefaultView(_diseases);
         ReferralTestsView = CollectionViewSource.GetDefaultView(_referralTests);
 
-        LoadFamilyDoctorsCommand = new LoadFamilyDoctorsCommand(this, doctorStore);
-        LoadDiseasesCommand = new LoadDiseasesCommand(this, diseaseStore);
-        LoadReferralTestsCommand = new LoadReferralTestsCommand(this, referralTestStore);
-        SubmitCommand = new SubmitCommand(Submit, CanSubmit);
+        LoadFamilyDoctorsCommand = new LoadFamilyDoctorsCommand(UpdateDoctorsDto, doctorStore);
+        LoadDiseasesCommand = new LoadDiseasesCommand(UpdateDiseasesDto, diseaseStore);
+        LoadReferralTestsCommand = new LoadReferralTestsCommand(UpdateReferralTests, referralTestStore);
         CreateReferralCommand = new CreateReferralCommand(this, referralStore, ResetForm);
     }
 
@@ -115,13 +117,7 @@ public class IssueReferralViewModel : ViewModelBase, IDiseasesViewModel, IDoctor
         return issueReferralViewModel;
     }
     
-    private bool CanSubmit(){
-        var context = new ValidationContext(this);
-        var results = new List<ValidationResult>();
-        return Validator.TryValidateObject(this, context, results, true);
-    }
-
-    private void Submit() {
+    protected override void Submit() {
         CreateReferralCommand.Execute(null);
     }
 
@@ -149,7 +145,7 @@ public class IssueReferralViewModel : ViewModelBase, IDiseasesViewModel, IDoctor
         }
     }
 
-    private void ResetForm(){
+    protected override void ResetForm(){
         SelectedDoctor = null!;
         SelectedReferralTest = null!;
         SelectedDisease  = null!;

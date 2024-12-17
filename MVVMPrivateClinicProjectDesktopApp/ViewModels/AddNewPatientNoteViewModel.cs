@@ -10,7 +10,7 @@ using MVVMPrivateClinicProjectDesktopApp.Stores;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
-public class AddNewPatientNoteViewModel : ViewModelBase, IDoctorsViewModel {
+public class AddNewPatientNoteViewModel : AddNewEntityViewModelBase {
     public static string Today => DateTime.Today.ToString("dd-MM-yyyy");
 
     private readonly ObservableCollection<DoctorDto> _doctorsDto;
@@ -26,6 +26,7 @@ public class AddNewPatientNoteViewModel : ViewModelBase, IDoctorsViewModel {
             _selectedDoctor = value;
             Validate(nameof(SelectedDoctor), value);
             SubmitCommand.OnCanExecuteChanged();
+            OnPropertyChanged();
         }
     }
     
@@ -39,6 +40,7 @@ public class AddNewPatientNoteViewModel : ViewModelBase, IDoctorsViewModel {
             _patientNoteDescription = value;
             Validate(nameof(PatientNoteDescription), value);
             SubmitCommand.OnCanExecuteChanged();
+            OnPropertyChanged();
         }
     }
 
@@ -53,7 +55,6 @@ public class AddNewPatientNoteViewModel : ViewModelBase, IDoctorsViewModel {
     
     private ICommand LoadDoctorsCommand { get; set; }
     private ICommand LoadPatientNotesCommand { get; set; }
-    public SubmitCommand SubmitCommand { get; set; }
     private ICommand CreatePatientNoteCommand { get; set; }
 
     private AddNewPatientNoteViewModel(DoctorStore doctorStore, PatientStore patientStore, PatientNoteStore patientNoteStore){
@@ -63,9 +64,8 @@ public class AddNewPatientNoteViewModel : ViewModelBase, IDoctorsViewModel {
         DoctorsDtoView = CollectionViewSource.GetDefaultView(_doctorsDto);
         PatientNotesWithDoctorDataDtoView = CollectionViewSource.GetDefaultView(_patientNotesDto);
         
-        LoadDoctorsCommand = new LoadFamilyDoctorsCommand(this, doctorStore);
+        LoadDoctorsCommand = new LoadFamilyDoctorsCommand(UpdateDoctorsDto, doctorStore);
         LoadPatientNotesCommand = new LoadSelectedPatientNotesDtoCommand(this, patientNoteStore, patientStore);
-        SubmitCommand = new SubmitCommand(Submit, CanSubmit);
         CreatePatientNoteCommand = new CreatePatientNoteCommand(this, patientNoteStore, ResetForm);
     }
     
@@ -82,17 +82,11 @@ public class AddNewPatientNoteViewModel : ViewModelBase, IDoctorsViewModel {
         return addNewPatientNoteViewModel;
     }
     
-    private bool CanSubmit(){
-        var context = new ValidationContext(this);
-        var results = new List<ValidationResult>();
-        return Validator.TryValidateObject(this, context, results, true);
-    }
-
-    private void Submit(){
+   protected override void Submit(){
         CreatePatientNoteCommand.Execute(null);
     }
 
-    private void ResetForm(){
+    protected override void ResetForm(){
         PatientNoteDescription = string.Empty;
         SelectedDoctor = null!;
     }

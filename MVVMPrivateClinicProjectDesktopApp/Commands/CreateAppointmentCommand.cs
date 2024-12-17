@@ -29,7 +29,7 @@ public class CreateAppointmentCommand(
                 IdDoctor = viewModel.SelectedDoctor.Id,
             };
 
-            var saveNewInvoiceRequest = new SaveNewInvoiceRequest {
+            var saveNewInvoiceRequest = new SaveInvoiceRequest {
                 Amount = viewModel.SelectedPricing.Price,
                 IdPatient = viewModel.SelectedPatient.Id,
                 IdPricing = viewModel.SelectedPricing.Id,

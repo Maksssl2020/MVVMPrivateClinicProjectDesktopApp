@@ -2,7 +2,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Windows.Input;
 using MVVMPrivateClinicProjectDesktopApp.Commands;
 using MVVMPrivateClinicProjectDesktopApp.Stores;
-using RelayCommand = MVVMPrivateClinicProjectDesktopApp.Commands.RelayCommand;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
@@ -20,7 +19,7 @@ public class AddNewDiseaseViewModel : ViewModelBase {
         }
     }
 
-    public RelayCommand SubmitCommand { get; set; }
+    public SubmitCommand SubmitCommand { get; set; }
     private ICommand CreateDiseaseCommand { get; set; }
     
     public AddNewDiseaseViewModel(DiseaseStore diseaseStore){

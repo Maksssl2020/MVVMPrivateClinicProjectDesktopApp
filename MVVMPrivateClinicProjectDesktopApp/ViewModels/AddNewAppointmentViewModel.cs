@@ -11,7 +11,7 @@ using ValidationResult = System.Windows.Controls.ValidationResult;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
-public class AddNewAppointmentViewModel : ViewModelBase, IDoctorsViewModel, IPatientViewModel, IPricingViewModel {
+public class AddNewAppointmentViewModel : ViewModelBase {
     private readonly AppointmentDateStore _appointmentDateStore;
 
     private readonly ObservableCollection<DoctorDto> _doctors = [];
@@ -115,9 +115,9 @@ public class AddNewAppointmentViewModel : ViewModelBase, IDoctorsViewModel, IPat
         DaysView = null!;
         TimesView = null!;
 
-        LoadDoctorsCommand = new LoadDoctorsCommand(this, doctorStore);
-        LoadPatientsCommand = new LoadPatientsCommand(this, patientStore);
-        LoadPricingCommand = new LoadPricingDtoCommand(this, pricingStore);
+        LoadDoctorsCommand = new LoadDoctorsCommand(UpdateDoctorsDto, doctorStore);
+        LoadPatientsCommand = new LoadPatientsCommand(UpdatePatients, patientStore);
+        LoadPricingCommand = new LoadPricingCommand(UpdatePricing, pricingStore);
         SubmitCommand = new SubmitCommand(Submit, CanSubmit);
         CreateAppointmentCommand =
             new CreateAppointmentCommand(this, appointmentStore, appointmentDateStore, invoiceStore, ResetForm);

@@ -9,7 +9,7 @@ using MVVMPrivateClinicProjectDesktopApp.Stores;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
-public class AddNewMedicineViewModel : ViewModelBase {
+public class AddNewMedicineViewModel : AddNewEntityViewModelBase {
     private readonly ObservableCollection<MedicineTypeDto> _medicineTypes;
     public ICollectionView MedicineTypes { get; set; }
 
@@ -24,6 +24,7 @@ public class AddNewMedicineViewModel : ViewModelBase {
             _medicineName = value;
             Validate(nameof(MedicineName), value);
             SubmitCommand.OnCanExecuteChanged();
+            OnPropertyChanged();
         }
     }
 
@@ -35,6 +36,7 @@ public class AddNewMedicineViewModel : ViewModelBase {
             _selectedMedicineType = value;
             SubmitCommand.OnCanExecuteChanged();
             MedicineType = value.Type;
+            OnPropertyChanged();
         }
     }
     
@@ -48,6 +50,7 @@ public class AddNewMedicineViewModel : ViewModelBase {
             _medicineType = value;
             Validate(nameof(MedicineType), value);
             SubmitCommand.OnCanExecuteChanged();
+            OnPropertyChanged();
         }
     }
     
@@ -62,19 +65,18 @@ public class AddNewMedicineViewModel : ViewModelBase {
             _medicineDescription = value;
             Validate(nameof(MedicineDescription), value);
             SubmitCommand.OnCanExecuteChanged();
+            OnPropertyChanged();
         }
     }
     
-    public SubmitCommand SubmitCommand { get; set; }
     private ICommand LoadMedicineTypesCommand { get; set; }
-    public ICommand CreateMedicineCommand { get; set; }
+    private ICommand CreateMedicineCommand { get; set; }
     
     private AddNewMedicineViewModel(MedicineStore medicineStore) {
         _medicineTypes = [];
         
         MedicineTypes = CollectionViewSource.GetDefaultView(_medicineTypes);
 
-        SubmitCommand = new SubmitCommand(Submit, CanSubmit);
         LoadMedicineTypesCommand = new LoadMedicineTypesCommand(this, medicineStore);
         CreateMedicineCommand = new CreateMedicineCommand(this, medicineStore, ResetForm);
     }
@@ -95,18 +97,12 @@ public class AddNewMedicineViewModel : ViewModelBase {
             Console.WriteLine(medicineType.Type);
         }
     }
-    
-    private bool CanSubmit(){
-        var context = new ValidationContext(this);
-        var results = new List<ValidationResult>();
-        return Validator.TryValidateObject(this, context, results, true);
-    }
 
-    private void Submit(){
+    protected override void Submit(){
         CreateMedicineCommand.Execute(null);
     }
 
-    private void ResetForm(){
+    protected override void ResetForm(){
         MedicineName = string.Empty;
         MedicineDescription = string.Empty;
         MedicineType = string.Empty;

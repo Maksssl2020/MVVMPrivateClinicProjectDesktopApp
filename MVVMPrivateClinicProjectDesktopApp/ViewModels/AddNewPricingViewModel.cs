@@ -9,7 +9,7 @@ using MVVMPrivateClinicProjectDesktopApp.Stores;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
-public class AddNewPricingViewModel : ViewModelBase {
+public class AddNewPricingViewModel : AddNewEntityViewModelBase {
     private readonly ObservableCollection<ServiceTypeDto> _serviceTypes;
     public ICollectionView ServiceTypesView { get; set; }
 
@@ -23,6 +23,7 @@ public class AddNewPricingViewModel : ViewModelBase {
             _serviceName = value;
             Validate(nameof(ServiceName), value);
             SubmitCommand.OnCanExecuteChanged();
+            OnPropertyChanged();
         }
     }
 
@@ -35,6 +36,7 @@ public class AddNewPricingViewModel : ViewModelBase {
             _serviceType = value;
             Validate(nameof(ServiceType), value);
             SubmitCommand.OnCanExecuteChanged();
+            OnPropertyChanged();
         }
     }
     
@@ -48,11 +50,11 @@ public class AddNewPricingViewModel : ViewModelBase {
             _price = value;
             Validate(nameof(Price), value);
             SubmitCommand.OnCanExecuteChanged();
+            OnPropertyChanged();
         }
     }
     
     private ICommand LoadServiceTypesCommand { get; set; }
-    public SubmitCommand SubmitCommand { get; set; }
     private ICommand CreatePricingCommand { get; set; }
 
     private AddNewPricingViewModel(PricingStore pricingStore){
@@ -61,7 +63,6 @@ public class AddNewPricingViewModel : ViewModelBase {
         ServiceTypesView = CollectionViewSource.GetDefaultView(_serviceTypes);
 
         LoadServiceTypesCommand = new LoadServiceTypesDtoCommand(this, pricingStore);
-        SubmitCommand = new SubmitCommand(Submit, CanSubmit);
         CreatePricingCommand = new CreatePricingCommand(this, pricingStore, ResetForm);
     }
 
@@ -73,20 +74,14 @@ public class AddNewPricingViewModel : ViewModelBase {
         return addNewPricingViewModel;
     }
     
-    private bool CanSubmit(){
-        var context = new ValidationContext(this);
-        var results = new List<ValidationResult>();
-        return Validator.TryValidateObject(this, context, results, true);
-    }
-
-    private void Submit(){
+    protected override void Submit(){
         CreatePricingCommand.Execute(null);
     }
 
-    private void ResetForm(){
+    protected override void ResetForm(){
         ServiceName = string.Empty;
         ServiceType = null!;
-        _price = new decimal(0);
+        Price = new decimal(0);
     }
     
     public void UpdateServiceTypes(IEnumerable<ServiceTypeDto> serviceTypes){

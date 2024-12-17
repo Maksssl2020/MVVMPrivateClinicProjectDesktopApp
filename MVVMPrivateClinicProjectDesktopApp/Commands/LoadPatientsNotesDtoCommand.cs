@@ -7,7 +7,7 @@ public class LoadPatientsNotesDtoCommand(PatientsNotesViewModel viewModel, Patie
     public override async Task ExecuteAsync(object? parameter){
         try {
             await patientNoteStore.LoadPatientsNotes();
-            viewModel.UpdatePatientsNotes(patientNoteStore.AllPatientsNotesDto);
+            viewModel.UpdateEntities(patientNoteStore.AllPatientsNotesDto);
         }
         catch (Exception e) {
             Console.WriteLine(e);

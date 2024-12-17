@@ -1,14 +1,13 @@
-using MVVMPrivateClinicProjectDesktopApp.Interfaces;
+using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
 using MVVMPrivateClinicProjectDesktopApp.Stores;
-using MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
 namespace MVVMPrivateClinicProjectDesktopApp.Commands;
 
-public class LoadFamilyDoctorsCommand(IDoctorsViewModel viewModel, DoctorStore doctorStore) : AsyncRelayCommand {
+public class LoadFamilyDoctorsCommand(Action<IEnumerable<DoctorDto>> updateFamlilyDoctors, DoctorStore doctorStore) : AsyncRelayCommand {
     public override async Task ExecuteAsync(object? parameter){
         try {
             await doctorStore.LoadFamilyMedicineDoctorsDto();
-            viewModel.UpdateDoctorsDto(doctorStore.FamilyMedicineDoctorsDto);
+            updateFamlilyDoctors.Invoke(doctorStore.FamilyMedicineDoctorsDto);
         }
         catch (Exception e) {
             Console.WriteLine(e);

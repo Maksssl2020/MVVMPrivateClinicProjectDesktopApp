@@ -44,6 +44,10 @@ public class AppointmentRepository(
         var foundAppointments = await context.Appointments
             .ToListAsync();
 
+        foreach (var appointment in foundAppointments.Where(appointment => appointment.AppointmentDate < DateTime.Now && appointment.AppointmentStatus == "Scheduled")) {
+            appointment.AppointmentStatus = "Canceled";
+        }
+        
         var appointmentDtos = await CreateAppointmentsDto(foundAppointments);
         return appointmentDtos;
     }

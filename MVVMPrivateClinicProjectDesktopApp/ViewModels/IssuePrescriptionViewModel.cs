@@ -13,7 +13,7 @@ using static System.Enum;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
-public class IssuePrescriptionViewModel : ViewModelBase, IMedicinesViewModel, IDoctorsViewModel {
+public class IssuePrescriptionViewModel : AddNewEntityViewModelBase {
     public static string Today => DateTime.Today.ToString("dd-MM-yyyy");
 
     private readonly ObservableCollection<MedicineDto> _medicinesDto;
@@ -30,6 +30,7 @@ public class IssuePrescriptionViewModel : ViewModelBase, IMedicinesViewModel, ID
             _selectedDoctor = value;
             Validate(nameof(SelectedDoctor), value);
             SubmitCommand.OnCanExecuteChanged();
+            OnPropertyChanged();
         }
     }
     
@@ -43,6 +44,7 @@ public class IssuePrescriptionViewModel : ViewModelBase, IMedicinesViewModel, ID
             _prescriptionDescription = value;
             Validate(nameof(PrescriptionDescription), value);
             SubmitCommand.OnCanExecuteChanged();
+            OnPropertyChanged();
         }
     }
     
@@ -59,18 +61,20 @@ public class IssuePrescriptionViewModel : ViewModelBase, IMedicinesViewModel, ID
             if (!_errors.TryGetValue(nameof(SelectedMedicines), out var error)) {
                 SelectedMedicinesError = string.Empty;
                 return;
-            };
+            }
 
             if (error.Count != 0) {
                 SelectedMedicinesError = error[0];
             }
+            
+            OnPropertyChanged();
         }
     }
 
     private string _selectedMedicinesError = string.Empty;
     public string SelectedMedicinesError {
         get => _selectedMedicinesError;
-        set {
+        private set {
             _selectedMedicinesError = value;
             OnPropertyChanged();
         }
@@ -79,7 +83,7 @@ public class IssuePrescriptionViewModel : ViewModelBase, IMedicinesViewModel, ID
     private readonly int _patientId;
     public int SelectedPatientId {
         get => _patientId;
-        init {
+        private init {
             _patientId = value;
             OnPropertyChanged();
         }
@@ -88,7 +92,7 @@ public class IssuePrescriptionViewModel : ViewModelBase, IMedicinesViewModel, ID
     private PrescriptionValidity _prescriptionValidity = PrescriptionValidity.OneMonth;
     public PrescriptionValidity PrescriptionValidity {
         get => _prescriptionValidity;
-        set {
+        private set {
             _prescriptionValidity = value;
             OnPropertyChanged();
         }
@@ -96,7 +100,6 @@ public class IssuePrescriptionViewModel : ViewModelBase, IMedicinesViewModel, ID
     
     private ICommand LoadMedicinesDtoCommand { get; set; }
     private ICommand LoadDoctorsCommand { get; set; }
-    public SubmitCommand SubmitCommand { get; set; }
     public ICommand SetPrescriptionValidityCommand { get; set; }
     private ICommand CreatePrescriptionCommand { get; set; }
     
@@ -105,9 +108,8 @@ public class IssuePrescriptionViewModel : ViewModelBase, IMedicinesViewModel, ID
         _doctorsDto = [];
         SelectedPatientId = patientStore.PatientIdToShowDetails;
 
-        LoadMedicinesDtoCommand = new LoadMedicinesDtoCommand(this, medicineStore);
-        LoadDoctorsCommand = new LoadFamilyDoctorsCommand(this, doctorStore);
-        SubmitCommand = new SubmitCommand(Submit, CanSubmit);
+        LoadMedicinesDtoCommand = new LoadMedicinesDtoCommand(UpdateMedicines, medicineStore);
+        LoadDoctorsCommand = new LoadFamilyDoctorsCommand(UpdateDoctorsDto, doctorStore);
         SetPrescriptionValidityCommand = new RelayCommand<string>(SetPrescriptionValidity);
         CreatePrescriptionCommand = new CreatePrescriptionCommand(this, prescriptionStore, ResetForm);
         
@@ -124,13 +126,7 @@ public class IssuePrescriptionViewModel : ViewModelBase, IMedicinesViewModel, ID
         return viewModel;
     }
     
-    private bool CanSubmit(){
-        var context = new ValidationContext(this);
-        var results = new List<ValidationResult>();
-        return Validator.TryValidateObject(this, context, results, true);
-    }
-    
-    private void Submit(){
+    protected override void Submit(){
         CreatePrescriptionCommand.Execute(null);
     }
 
@@ -162,7 +158,7 @@ public class IssuePrescriptionViewModel : ViewModelBase, IMedicinesViewModel, ID
         }
     }
 
-    private void ResetForm(){
+    protected override void ResetForm(){
         SelectedDoctor = null!;
         SelectedMedicines.Clear();
         PrescriptionDescription = string.Empty;

@@ -168,7 +168,7 @@
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
                     <components:SortingComboBox ComboBoxBorderBrush="{StaticResource CustomRedColor1}"
                                                 ItemsSource="{Binding SortingOptionsList}"
-                                                SelectedItem="{Binding SelectedSortingOption}"/>
+                                                SelectedItem="{Binding SelectedSortingOption, Mode=TwoWay}"/>
                 </StackPanel>
                 
                 <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">

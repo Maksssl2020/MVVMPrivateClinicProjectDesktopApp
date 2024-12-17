@@ -5,29 +5,24 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using MVVMPrivateClinicProjectDesktopApp.Commands;
+using MVVMPrivateClinicProjectDesktopApp.Helpers;
 using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
 using MVVMPrivateClinicProjectDesktopApp.Stores;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
-public class PatientsNotesViewModel : ViewModelBase {
+public class PatientsNotesViewModel : DisplayEntitiesViewModelBase<PatientNoteDto> {
     private readonly PatientNoteStore _patientNoteStore;
     private readonly AddSpecificDataToPatientStore _addSpecificDataToPatientStore;
     
-    private readonly ObservableCollection<PatientNoteDto> _patientsNotesDto;
-    public ICollectionView PatientsNotesView { get; set; }
-
     private ICommand LoadPatientsNotesCommand { get; set; }
     public ICommand ShowPatientNoteDetailsCommand { get; set; }
     public ICommand ShowSelectPatientToAddSpecificDataModal { get; set; }
 
-
-    private PatientsNotesViewModel(PatientNoteStore patientNoteStore, AddSpecificDataToPatientStore addSpecificDataToPatientStore, ModalNavigationViewModel modalNavigationViewModel){
+    private PatientsNotesViewModel(PatientNoteStore patientNoteStore, AddSpecificDataToPatientStore addSpecificDataToPatientStore, ModalNavigationViewModel modalNavigationViewModel)
+        :base([SortingOptions.IdAscending, SortingOptions.IdDescending, SortingOptions.DateAscending, SortingOptions.DateDescending]) {
         _patientNoteStore = patientNoteStore;
         _addSpecificDataToPatientStore = addSpecificDataToPatientStore;
-        
-        _patientsNotesDto = [];
-        PatientsNotesView  = CollectionViewSource.GetDefaultView(_patientsNotesDto);
 
         LoadPatientsNotesCommand = new LoadPatientsNotesDtoCommand(this, patientNoteStore);
         ShowPatientNoteDetailsCommand = modalNavigationViewModel.ShowPatientNoteDetailsModal;
@@ -51,12 +46,35 @@ public class PatientsNotesViewModel : ViewModelBase {
         _addSpecificDataToPatientStore.DataColor =
             (SolidColorBrush) Application.Current.Resources["CustomBlueColor1"]!;
     }
-    
-    public void UpdatePatientsNotes(IEnumerable<PatientNoteDto> patientsNotesDto){
-        _patientsNotesDto.Clear();
 
-        foreach (var patientNoteDto in patientsNotesDto) {
-            _patientsNotesDto.Add(patientNoteDto);
+    public override void UpdateEntities(IEnumerable<PatientNoteDto> entities){
+        Entities.Clear();
+
+        foreach (var entity in entities) {
+            Entities.Add(entity);
         }
+        
+        SelectedSortingOption = SortingOptions.IdAscending;
+    }
+
+    protected override void SortEntities(){
+        ApplySortingOptions.ApplySortingWithOneProperty(EntitiesView, SelectedSortingOption,
+            SelectedSortingOption is SortingOptions.IdAscending or SortingOptions.IdDescending
+                ? nameof(PatientNoteDto.Id)
+                : nameof(PatientNoteDto.DateIsuued));
+    }
+
+    protected override bool ApplyFilter(object obj){
+        if (obj is not PatientNoteDto patientNoteDto) {
+            return false;
+        }
+        
+        if (string.IsNullOrWhiteSpace(Filter)) {
+            return true;
+        }
+        
+        var filter = Filter.Trim().ToLower();
+        return patientNoteDto.PatientCode.Contains(filter, StringComparison.CurrentCultureIgnoreCase) ||
+               patientNoteDto.DoctorCode.Contains(filter, StringComparison.CurrentCultureIgnoreCase);
     }
 }

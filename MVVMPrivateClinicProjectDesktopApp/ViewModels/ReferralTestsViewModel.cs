@@ -3,25 +3,19 @@ using System.ComponentModel;
 using System.Windows.Data;
 using System.Windows.Input;
 using MVVMPrivateClinicProjectDesktopApp.Commands;
+using MVVMPrivateClinicProjectDesktopApp.Helpers;
 using MVVMPrivateClinicProjectDesktopApp.Interfaces;
 using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
 using MVVMPrivateClinicProjectDesktopApp.Stores;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
-public class ReferralTestsViewModel : ViewModelBase, IReferralTestsViewModel {
-    
-    private readonly ObservableCollection<ReferralTestDto> _referralTests;
-    public ICollectionView ReferralTestsView { get; set; }
-
+public class ReferralTestsViewModel : DisplayEntitiesViewModelBase<ReferralTestDto> {
     private ICommand LoadReferralTestsCommand { get; set; }
 
-    private ReferralTestsViewModel(ReferralTestStore referralTestStore){
-        _referralTests = [];
-        
-        ReferralTestsView = CollectionViewSource.GetDefaultView(_referralTests);
-
-        LoadReferralTestsCommand = new LoadReferralTestsCommand(this, referralTestStore);
+    private ReferralTestsViewModel(ReferralTestStore referralTestStore)
+        :base([SortingOptions.IdAscending, SortingOptions.IdDescending, SortingOptions.AlphabeticalAscending, SortingOptions.AlphabeticalDescending]) {
+        LoadReferralTestsCommand = new LoadReferralTestsCommand(UpdateEntities, referralTestStore);
     }
 
     public static ReferralTestsViewModel LoadReferralTestsViewModel(ReferralTestStore referralTestStore){
@@ -31,12 +25,34 @@ public class ReferralTestsViewModel : ViewModelBase, IReferralTestsViewModel {
         
         return referralTestsViewModel;
     }
-    
-    public void UpdateReferralTests(IEnumerable<ReferralTestDto> referralTests){
-        _referralTests.Clear();
 
-        foreach (var referralTest in referralTests) {
-            _referralTests.Add(referralTest);
+    public override void UpdateEntities(IEnumerable<ReferralTestDto> entities){
+        Entities.Clear();
+
+        foreach (var entity in entities) {
+            Entities.Add(entity);
         }
+
+        SelectedSortingOption = SortingOptions.IdAscending;
+    }
+
+    protected override void SortEntities(){
+        ApplySortingOptions.ApplySortingWithOneProperty(EntitiesView, SelectedSortingOption,
+            SelectedSortingOption is SortingOptions.IdAscending or SortingOptions.IdDescending
+                ? nameof(ReferralTestDto.Id)
+                : nameof(ReferralTestDto.Name));
+    }
+
+    protected override bool ApplyFilter(object obj){
+        if (obj is not ReferralTestDto referralTestDto) {
+            return false;
+        }
+
+        if (string.IsNullOrWhiteSpace(Filter)) {
+            return true;
+        }
+        
+        var filter = Filter.Trim().ToLower();
+        return referralTestDto.Name.Contains(filter, StringComparison.CurrentCultureIgnoreCase);
     }
 }

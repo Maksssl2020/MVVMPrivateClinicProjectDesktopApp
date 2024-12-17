@@ -7,7 +7,7 @@ public class LoadPrescriptionsDtoCommand(PrescriptionsViewModel viewModel, Presc
     public override async Task ExecuteAsync(object? parameter){
         try {   
             await prescriptionStore.LoadPrescriptions();
-            viewModel.UpdatePrescriptions(prescriptionStore.PrescriptionsDto);
+            viewModel.UpdateEntities(prescriptionStore.PrescriptionsDto);
         }
         catch (Exception e) {
             Console.WriteLine(e);

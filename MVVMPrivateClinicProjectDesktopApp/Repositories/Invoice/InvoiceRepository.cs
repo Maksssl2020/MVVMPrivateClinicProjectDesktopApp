@@ -8,7 +8,7 @@ using static System.Enum;
 namespace MVVMPrivateClinicProjectDesktopApp.Repositories.Invoice;
 
 public class InvoiceRepository(DbContextFactory dbContextFactory, IMapper mapper, IPatientRepository patientRepository) : IInvoiceRepository {
-    public async Task<InvoiceDto> SaveInvoiceAsync(SaveNewInvoiceRequest invoiceRequest){
+    public async Task<InvoiceDto> SaveInvoiceAsync(SaveInvoiceRequest invoiceRequest){
         await using var context = dbContextFactory.CreateDbContext();
         
         var dateIssued = DateTime.Now;

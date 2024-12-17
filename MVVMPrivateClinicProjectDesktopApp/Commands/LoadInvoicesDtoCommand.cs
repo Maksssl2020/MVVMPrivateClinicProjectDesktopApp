@@ -7,7 +7,7 @@ public class LoadInvoicesDtoCommand(InvoicesViewModel viewModel, InvoiceStore in
     public override async Task ExecuteAsync(object? parameter){
         try {
             await invoiceStore.LoadInvoices(); 
-            viewModel.UpdateInvoices(invoiceStore.InvoicesDto);
+            viewModel.UpdateEntities(invoiceStore.InvoicesDto);
         }
         catch (Exception e) {
             Console.WriteLine(e);

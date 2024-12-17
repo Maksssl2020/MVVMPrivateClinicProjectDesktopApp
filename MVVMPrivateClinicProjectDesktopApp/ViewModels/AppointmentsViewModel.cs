@@ -14,16 +14,19 @@ namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
 public class AppointmentsViewModel : ViewModelBase {
     private readonly AppointmentStore _appointmentStore;
+    
     private readonly ObservableCollection<AppointmentDto> _appointments;
     private ObservableCollection<AppointmentDto> _filteredAppointments;
+    private ObservableCollection<AppointmentDto> PageCollection { get; set; }
+    public ICollectionView AppointmentsView { get; set; }
 
     private int _currentPage;
     private AppointmentStatus _activeFilter = AppointmentStatus.Accepted;
     
-    private ObservableCollection<AppointmentDto> PageCollection { get; set; }
-    public ICollectionView AppointmentsView { get; set; }
-
-    public ObservableCollection<SortingOptions> SortingOptionsList { get; } = [SortingOptions.AlphabeticalAscending, SortingOptions.AlphabeticalDescending, SortingOptions.IdAscending, SortingOptions.IdDescending];
+    public ObservableCollection<SortingOptions> SortingOptionsList { get; } = [
+        SortingOptions.DateAscending,
+        SortingOptions.DateDescending
+    ];
     
     private SortingOptions _selectedSortingOption;
     public SortingOptions SelectedSortingOption {
@@ -31,9 +34,8 @@ public class AppointmentsViewModel : ViewModelBase {
         set {
             _selectedSortingOption = value;
             OnPropertyChanged();
+            SortAppointments();
             AppointmentsView.Refresh();
-
-            Console.WriteLine(value.ToString());
         }
     }
     
@@ -93,6 +95,7 @@ public class AppointmentsViewModel : ViewModelBase {
             _appointments.Add(appointment);
         }
         
+        SelectedSortingOption = SortingOptions.DateAscending;
         ApplyFilter();
     }
 
@@ -125,6 +128,14 @@ public class AppointmentsViewModel : ViewModelBase {
         UpdatePageCollection();
     }
 
+    private void SortAppointments(){
+        ApplySortingOptions.ApplySortingWithOneProperty(
+            AppointmentsView,
+            SelectedSortingOption,
+            nameof(AppointmentDto.AppointmentDate)
+            );
+    }
+    
     private void SetFilter(string? filter){
         if (string.IsNullOrEmpty(filter)) return;
 
@@ -146,11 +157,12 @@ public class AppointmentsViewModel : ViewModelBase {
             
             UpdatePageCollection();
     }
-
+    
     private void UpdatePageCollection() {
         if (_filteredAppointments.Count == 0) {
             PageCollection.Clear();
             OnPropertyChanged(nameof(CurrentPageDisplay));
+            AppointmentsView.Refresh();
             return;
         }
         

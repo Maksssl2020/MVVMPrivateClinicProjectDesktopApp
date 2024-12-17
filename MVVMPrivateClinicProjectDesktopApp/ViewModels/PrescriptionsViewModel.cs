@@ -1,36 +1,30 @@
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Windows;
-using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using MVVMPrivateClinicProjectDesktopApp.Commands;
+using MVVMPrivateClinicProjectDesktopApp.Helpers;
 using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
 using MVVMPrivateClinicProjectDesktopApp.Stores;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
-public class PrescriptionsViewModel : ViewModelBase {
+public class PrescriptionsViewModel : DisplayEntitiesViewModelBase<PrescriptionDto> {
     private readonly PrescriptionStore _prescriptionStore;
     private readonly AddSpecificDataToPatientStore _addSpecificDataToPatientStore;
     
-    private readonly ObservableCollection<PrescriptionDto>  _prescriptions;
-    public ICollectionView PrescriptionsView { get; set; }
-
     private ICommand LoadPrescriptionsCommand { get; set; }
     public ICommand ShowPrescriptionDetailsModal { get; set; }
     public ICommand ShowSelectPatientToAddSpecificDataModal { get; set; }
     
-    private PrescriptionsViewModel(PrescriptionStore prescriptionStore, AddSpecificDataToPatientStore addSpecificDataToPatientStore, ModalNavigationViewModel modalNavigationViewModel){
+    private PrescriptionsViewModel(PrescriptionStore prescriptionStore, AddSpecificDataToPatientStore addSpecificDataToPatientStore, ModalNavigationViewModel modalNavigationViewModel)
+        : base([SortingOptions.IdAscending, SortingOptions.IdDescending, SortingOptions.DateAscending, SortingOptions.DateDescending]) {
         _prescriptionStore = prescriptionStore;
         _addSpecificDataToPatientStore = addSpecificDataToPatientStore;
-        _prescriptions = [];
         
         LoadPrescriptionsCommand = new LoadPrescriptionsDtoCommand(this, prescriptionStore);
         ShowPrescriptionDetailsModal = modalNavigationViewModel.ShowPrescriptionDetailsModal;
         ShowSelectPatientToAddSpecificDataModal = modalNavigationViewModel.ShowSelectPatientToAddSpecificDataModal;
         
-        PrescriptionsView = CollectionViewSource.GetDefaultView(_prescriptions);
         prescriptionStore.PrescriptionCreated += OnPrescriptionCreated;
     }
 
@@ -43,7 +37,7 @@ public class PrescriptionsViewModel : ViewModelBase {
     }
 
     private void OnPrescriptionCreated(PrescriptionDto prescription){
-        _prescriptions.Add(prescription);
+        Entities.Add(prescription);
     }
 
     public void SetPrescriptionIdToSeeDetails(int prescriptionId){
@@ -56,11 +50,34 @@ public class PrescriptionsViewModel : ViewModelBase {
             (SolidColorBrush) Application.Current.Resources["CustomOrangeColor1"]!;
     }
     
-    public void UpdatePrescriptions(IEnumerable<PrescriptionDto> prescriptions){
-        _prescriptions.Clear();
+    public override void UpdateEntities(IEnumerable<PrescriptionDto> entities){
+        Entities.Clear();
 
-        foreach (var prescription in prescriptions) {
-            _prescriptions.Add(prescription);
+        foreach (var entity in entities) {
+            Entities.Add(entity);
         }
+        
+        SelectedSortingOption = SortingOptions.IdAscending;
+    }
+
+    protected override void SortEntities(){
+        ApplySortingOptions.ApplySortingWithOneProperty(EntitiesView, SelectedSortingOption,
+            SelectedSortingOption is SortingOptions.IdAscending or SortingOptions.IdDescending
+                ? nameof(PrescriptionDto.Id)
+                : nameof(PrescriptionDto.DateIssued));
+    }
+
+    protected override bool ApplyFilter(object obj){
+        if (obj is not PrescriptionDto prescriptionDto) {
+            return false;
+        }
+
+        if (string.IsNullOrWhiteSpace(Filter)) {
+            return true;
+        }
+        
+        var filter = Filter.Trim().ToLower();
+        return prescriptionDto.PatientCode.Contains(filter, StringComparison.CurrentCultureIgnoreCase) ||
+               prescriptionDto.DoctorCode.Contains(filter, StringComparison.CurrentCultureIgnoreCase);
     }
 }

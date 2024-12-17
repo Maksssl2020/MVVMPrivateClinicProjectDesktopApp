@@ -4,9 +4,127 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Views"
+        xmlns:components="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Views.Components"
+        xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+        xmlns:viewModel="clr-namespace:MVVMPrivateClinicProjectDesktopApp.ViewModels"
+        xmlns:views="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Views"
+        xmlns:dto="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Models.DTOs"
+        xmlns:system="clr-namespace:System;assembly=System.Runtime"
+        xmlns:converters="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Converters"
         mc:Ignorable="d"
-        Title="AddNewInvoiceView" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        Title="AddNewMedicineView" 
+        Height="425" 
+        Width="500"
+        WindowStyle="None" 
+        WindowStartupLocation="CenterScreen"
+        Background="Transparent"
+        AllowsTransparency="True"
+        d:DataContext="{d:DesignInstance viewModel:AddNewInvoiceViewModel}">
+    
+    <Window.Resources>
+        <converters:PriceFormatConverter x:Key="PriceConverter"/>
+    </Window.Resources>
+    
+    <Border MouseLeftButtonDown="MouseLeftButtonDown_Hold" BorderThickness="2" BorderBrush="{StaticResource CustomGrayColor1}" Background="{StaticResource CustomBlackColor1}" CornerRadius="20" Padding="20">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="35"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+            
+            <StackPanel HorizontalAlignment="Right" Grid.Row="0">
+                <Button Click="buttonClose_Click"
+                        Style="{StaticResource ControlBarButton}"
+                        Tag="{StaticResource CustomRedColor1}"
+                >
+                    <fa:IconImage Icon="Xmark" Style="{StaticResource ControlBarButtonIcon}"/>
+                </Button>
+            </StackPanel>
+            
+            <Border Grid.Row="1" Width="450" Height="275" Grid.Column="0"  Padding="5" BorderThickness="2" BorderBrush="{StaticResource CustomGrayColor1}" CornerRadius="15" Background="Transparent">
+                <StackPanel>
+                    <StackPanel >
+                        <Label Foreground="White" FontSize="15" Content="Select Patient:"/>
+                        <ComboBox Width="435"
+                                  x:Name="PatientSelector"
+                                  BorderBrush="{StaticResource CustomGreenColor1}"
+                                  VerticalAlignment="Center"
+                                  Style="{StaticResource ComboBoxStyle}"
+                                  ItemsSource="{Binding PatientsView}"
+                                  SelectedItem="{Binding SelectedPatient}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate DataType="{x:Type dto:PatientDto}">
+                                    <ScrollViewer CanContentScroll="True" VerticalScrollBarVisibility="Visible" >
+                                        <TextBlock Padding="10 0" Height="30" FontSize="14" Foreground="White">
+                                            <Run Text="{Binding FirstName}"/>
+                                            <Run Text="{Binding LastName}"/>
+                                            <Run Text="-"/>
+                                            <Run Text="{Binding PatientCode}"/>
+                                        </TextBlock>
+                                    </ScrollViewer>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <Label Content="{Binding ElementName=PatientSelector, Path=(Validation.Errors)[0].ErrorContent}" Height="35" FontSize="15" Foreground="Red" Margin="0 10 0 0"/>
+
+                    </StackPanel> 
+                    
+                    <StackPanel >
+                        <Label Foreground="White" FontSize="15" Content="Select Pricing:"/>
+                        <ComboBox Width="435"
+                                  x:Name="PricingSelector"
+                                  BorderBrush="{StaticResource CustomPaleGoldColor1}"
+                                  VerticalAlignment="Center"
+                                  Style="{StaticResource ComboBoxStyle}"
+                                  ItemsSource="{Binding PricingView}"
+                                  SelectedItem="{Binding SelectedPricing}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate DataType="{x:Type dto:PricingDto}">
+                                    <ScrollViewer CanContentScroll="True" VerticalScrollBarVisibility="Visible" >
+                                        <TextBlock Padding="10 0" Height="30" FontSize="14" Foreground="White">
+                                            <Run Text="{Binding ServiceName}"/>
+                                            <Run Text="{Binding ServiceType}"/>
+                                            <Run Text="-"/>
+                                            <Run Text="{Binding Price, Converter={StaticResource PriceConverter}}"/>
+                                        </TextBlock>
+                                    </ScrollViewer>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <Label Content="{Binding ElementName=PricingSelector, Path=(Validation.Errors)[0].ErrorContent}" Height="35" FontSize="15" Foreground="Red" Margin="0 10 0 0"/>
+
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+            
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left">
+                    <Button
+                        Style="{StaticResource CommonButton}"
+                        Width="220"
+                        Content="Clear Form"
+                        BorderBrush="Transparent"
+                        BorderThickness="0"
+                        Margin="0 0 5 0"
+                        Click="buttonClearForm_Click"
+                        Tag="{StaticResource CustomCoralColor1}"/>
+                </StackPanel>
+                
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1">
+                    <components:ButtonWithIcon 
+                        ButtonWidth="220"
+                        ButtonText="Add New Invoice"
+                        IconName="Plus"
+                        Command="{Binding SubmitCommand}"
+                        TextColor="{StaticResource CustomCoralColor1}"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Border>
 </local:WindowViewBase>

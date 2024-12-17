@@ -13,6 +13,10 @@ public class SortingOptionDisplayConverter : IValueConverter {
                 SortingOptions.AlphabeticalDescending => "Alphabetical Desc.",
                 SortingOptions.IdAscending => "Id Asc.",
                 SortingOptions.IdDescending => "Id Desc.",
+                SortingOptions.DateAscending => "Date Asc.",
+                SortingOptions.DateDescending => "Date Desc.",
+                SortingOptions.PriceAscending => "Price Asc.",
+                SortingOptions.PriceDescending => "Price Desc.",
                 _ => "Unknown"
             };
         }

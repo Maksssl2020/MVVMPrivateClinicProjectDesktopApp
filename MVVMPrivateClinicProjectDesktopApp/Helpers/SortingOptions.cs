@@ -5,4 +5,8 @@ public enum SortingOptions {
     AlphabeticalDescending,
     IdAscending,
     IdDescending,
+    DateAscending,
+    DateDescending,
+    PriceAscending,
+    PriceDescending,
 }

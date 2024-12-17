@@ -10,7 +10,7 @@ using MVVMPrivateClinicProjectDesktopApp.Stores;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
-public class AddNewDiagnosisViewModel : ViewModelBase, IDoctorsViewModel, IDiseasesViewModel {
+public class AddNewDiagnosisViewModel : ViewModelBase, IDiseasesViewModel {
     public static string Today => DateTime.Now.ToString("dd-MM-yyyy");
     
     private readonly ObservableCollection<DoctorDto> _doctors;
@@ -71,8 +71,8 @@ public class AddNewDiagnosisViewModel : ViewModelBase, IDoctorsViewModel, IDisea
         DoctorsView = CollectionViewSource.GetDefaultView(_doctors);
         DiseasesView = CollectionViewSource.GetDefaultView(_diseases);
 
-        LoadDoctorsCommand = new LoadDoctorsCommand(this, doctorStore);
-        LoadDiseasesCommand = new LoadDiseasesCommand(this, diseaseStore);
+        LoadDoctorsCommand = new LoadDoctorsCommand(UpdateDoctorsDto, doctorStore);
+        LoadDiseasesCommand = new LoadDiseasesCommand(UpdateDiseasesDto, diseaseStore);
         SubmitCommand = new SubmitCommand(Submit, CanSubmit);
         CreateDiagnosisCommand = new CreateDiagnosisCommand(this, diagnosisStore, ResetForm);
     }

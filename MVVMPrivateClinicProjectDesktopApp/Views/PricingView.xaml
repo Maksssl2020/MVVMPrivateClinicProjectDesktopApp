@@ -22,33 +22,33 @@
     <Border Background="{StaticResource CustomBlackColor1}">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="50"/>
+                <RowDefinition Height="75"/>
                 <RowDefinition Height="60"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             
-            <Border Grid.Row="0">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="250"/>
-                    </Grid.ColumnDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="250"/>
+                </Grid.ColumnDefinitions>
                     
-                    <Border Grid.Column="0" HorizontalAlignment="Left" >
-                        <Border Height="45" Width="250" CornerRadius="10" Background="{StaticResource CustomGrayColor1}">
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
-                                <TextBox FontSize="15" Padding="5 0" VerticalContentAlignment="Center"  Foreground="White" Height="45" Width="225" Background="Transparent" BorderBrush="Transparent" BorderThickness="0"/>
-                                <fa:IconImage Width="20" Height="20" Icon="MagnifyingGlass" Foreground="White"/>
-                            </StackPanel>
-                        </Border>
-                    </Border>
+                <StackPanel Orientation="Horizontal" Grid.Column="0">
+                    <components:SearchBar SearchBarText="{Binding PricingFilter, Mode=TwoWay}"
+                                          SearchBarTag="{StaticResource CustomPaleGoldColor1}"/>
+                        
+                    <components:SortingComboBox ComboBoxBorderBrush="{StaticResource CustomPaleGoldColor1}"
+                                                ItemsSource="{Binding SortingOptionsList}"
+                                                SelectedItem="{Binding SelectedSortingOption, Mode=TwoWay}"/>
+                </StackPanel>
                     
-                    <components:ButtonWithIcon ButtonWidth="200" Grid.Column="1"
-                                               ButtonText="Add New Pricing"
-                                               TextColor="{StaticResource CustomPaleGoldColor1}"
-                                               Command="{Binding ShowAddNewPricingViewCommand}"/>
-                </Grid>
-            </Border>
+                <components:ButtonWithIcon Grid.Column="1"
+                                           ButtonText="Add New Pricing"
+                                           ButtonHeight="60"
+                                           ButtonWidth="200"
+                                           TextColor="{StaticResource CustomPaleGoldColor1}"
+                                           Command="{Binding ShowAddNewPricingViewCommand}"/>
+            </Grid>
             
             <Border Grid.Row="1" Padding="10 0" Height="50" Background="{StaticResource CustomGrayColor1}" Margin="0 10 20 0" CornerRadius="15">
                 <Grid>
