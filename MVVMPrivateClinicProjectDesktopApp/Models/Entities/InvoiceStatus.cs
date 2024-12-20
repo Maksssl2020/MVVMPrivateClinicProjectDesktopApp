@@ -1,5 +1,5 @@
 namespace MVVMPrivateClinicProjectDesktopApp.Models.Entities;
 
 public enum InvoiceStatus {
-    AwaitingPayment, Paid, Overdue 
+    AwaitingPayment, Paid, Overdue, Canceled
 }

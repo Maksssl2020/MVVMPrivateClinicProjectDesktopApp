@@ -99,7 +99,8 @@ public partial class App : Application {
             CreateReferralDetailsNavigationService(),
             CreateAddNewAppointmentNavigationService(),
             CreateSelectPatientToAddSpecificDataNavigationService(),
-            CreateAddNewInvoiceNavigationService()
+            CreateAddNewInvoiceNavigationService(),
+            CreateInvoiceDetailsNavigationService()
             );
 
         _patientDataModalNavigationViewModel = new PatientDataModalNavigationViewModel(
@@ -225,6 +226,11 @@ public partial class App : Application {
         return new ModalNavigationService(_modalNavigationStore,
             () => SelectPatientToAddSpecificDataViewModel.LoadSelectPatientToAddSpecificDataViewModel(_patientStore,
                 _addSpecificDataToPatientStore, _modalNavigationViewModel));
+    }
+
+    private NavigationServiceBase CreateInvoiceDetailsNavigationService(){
+        return new ModalNavigationService(_modalNavigationStore,
+            () => InvoiceDetailsViewModel.LoadInvoiceDetailsViewModel(_invoiceStore));
     }
     
     private NavigationServiceBase CreatePatientDetailsNavigationService(){

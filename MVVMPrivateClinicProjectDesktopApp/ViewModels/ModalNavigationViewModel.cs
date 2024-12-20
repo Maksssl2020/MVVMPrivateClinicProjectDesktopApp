@@ -17,7 +17,8 @@ public class ModalNavigationViewModel(
     NavigationServiceBase referralDetailsModalNavigationService,
     NavigationServiceBase addNewAppointmentModalNavigationService,
     NavigationServiceBase selectPatientToAddSpecificDataModalNavigationService,
-    NavigationServiceBase addNewInvoiceModalNavigationService
+    NavigationServiceBase addNewInvoiceModalNavigationService,
+    NavigationServiceBase invoiceDetailsModalNavigationService
     )
     : ViewModelBase {
     public readonly ICommand ShowAddNewPatientModal = new NavigateCommand(addNewPatientNavigationService);
@@ -33,4 +34,5 @@ public class ModalNavigationViewModel(
     public readonly ICommand ShowAddNewAppointmentModal = new NavigateCommand(addNewAppointmentModalNavigationService);
     public readonly ICommand ShowSelectPatientToAddSpecificDataModal = new NavigateCommand(selectPatientToAddSpecificDataModalNavigationService);
     public readonly ICommand ShowAddNewInvoiceModal = new NavigateCommand(addNewInvoiceModalNavigationService);
+    public readonly ICommand ShowInvoiceDetailsModal = new NavigateCommand(invoiceDetailsModalNavigationService);
 }

@@ -19,9 +19,13 @@ public partial class Appointment
 
     public int IdPricing { get; set; }
 
+    public int? IdInvoice { get; set; }
+
     public virtual ICollection<DoctorClinicCard> DoctorClinicCards { get; set; } = new List<DoctorClinicCard>();
 
     public virtual Doctor IdDoctorNavigation { get; set; } = null!;
+
+    public virtual Invoice? IdInvoiceNavigation { get; set; }
 
     public virtual Patient IdPatientNavigation { get; set; } = null!;
 

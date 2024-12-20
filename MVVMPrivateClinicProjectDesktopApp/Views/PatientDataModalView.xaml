@@ -62,8 +62,7 @@
                         </TextBlock>
                     </StackPanel>
                     <StackPanel Grid.Column="1" HorizontalAlignment="Right" >
-                        <Button  x:Name="closeButton" 
-                                 Click="buttonClose_Click"
+                        <Button  Click="buttonClose_Click"
                                  Style="{StaticResource ControlBarButton}"
                                  Tag="{StaticResource CustomRedColor1}"
                         >

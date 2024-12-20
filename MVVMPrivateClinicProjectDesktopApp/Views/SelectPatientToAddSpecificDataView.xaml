@@ -12,7 +12,7 @@
         xmlns:converters="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Converters"
         mc:Ignorable="d"
         Title="AddNewMedicineView" 
-        Height="325" 
+        Height="425" 
         Width="500"
         WindowStyle="None" 
         WindowStartupLocation="CenterScreen"
@@ -37,13 +37,17 @@
                 </Button>
             </StackPanel>
             
-            <Border Grid.Row="1" Width="450" Height="175" Grid.Column="0"  Padding="5" BorderThickness="2" BorderBrush="{StaticResource CustomGrayColor1}" CornerRadius="15" Background="Transparent">
+            <Border Grid.Row="1" Width="450" Height="275" Grid.Column="0"  Padding="5" BorderThickness="2" BorderBrush="{StaticResource CustomGrayColor1}" CornerRadius="15" Background="Transparent">
                 <StackPanel>
                     <TextBlock Foreground="White" FontSize="18">
                         <Run Text="Select Patient To Add/Issue"/>
                         <Run Text="{Binding DataToAddName}"/>
                         <Run Text=":"/>
                     </TextBlock>
+                    <StackPanel Margin="0 15 0 0" Orientation="Vertical">
+                        <Label Foreground="White" FontSize="15" Content="Filter Patients:"/>
+                        <components:SearchBar SearchBarWidth="435" SearchBarText="{Binding PatientsFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
                     <StackPanel Margin="0 15 0 0" >
                         <Label Foreground="White" FontSize="15" Content="Select Patient:"/>
                         <ComboBox Width="435"

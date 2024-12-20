@@ -79,6 +79,13 @@ public class DiagnosisRepository(
         return await context.Diagnoses.CountAsync();
     }
 
+    public async Task<int> CountIssuedDiagnosisByDoctorIdAsync(int doctorId){
+        await using var context = dbContextFactory.CreateDbContext();
+        return await context.Diagnoses
+            .Where(diagnosis => diagnosis.IdDoctor == doctorId)
+            .CountAsync();
+    }
+
     private async Task AppendPatientCodeDoctorCodeAndDiseaseCodeToDiagnosisDto(Models.Entities.Diagnosis diagnosis, DiagnosisDto diagnosisDto){
         var foundPatient = await patientRepository.GetPatientByIdAsync(diagnosis.IdPatient);
         var foundDoctor = await doctorRepository.GetDoctorByIdAsync(diagnosis.IdDoctor);

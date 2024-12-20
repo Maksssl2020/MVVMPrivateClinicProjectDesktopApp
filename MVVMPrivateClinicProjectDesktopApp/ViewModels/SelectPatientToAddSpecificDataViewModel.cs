@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
+using Microsoft.IdentityModel.Tokens;
 using MVVMPrivateClinicProjectDesktopApp.Commands;
 using MVVMPrivateClinicProjectDesktopApp.Interfaces;
 using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
@@ -32,8 +33,19 @@ public class SelectPatientToAddSpecificDataViewModel : ViewModelBase {
         }
     }
     
-    public ICommand LoadPatientsCommand { get; set; }
-    public ICommand ShowPatientDataModalCommand { get; set; }
+    private string _patientsFilter = string.Empty;
+
+    public string PatientsFilter {
+        get => _patientsFilter;
+        set {
+            _patientsFilter = value;
+            OnPropertyChanged();
+            PatientsView.Refresh();
+        }
+    }
+
+    private ICommand LoadPatientsCommand { get; set; }
+    private ICommand ShowPatientDataModalCommand { get; set; }
     public SubmitCommand SubmitCommand { get; set; }
 
     private SelectPatientToAddSpecificDataViewModel(PatientStore patientStore, AddSpecificDataToPatientStore addSpecificDataToPatientStore, ModalNavigationViewModel modalNavigationViewModel){
@@ -42,6 +54,7 @@ public class SelectPatientToAddSpecificDataViewModel : ViewModelBase {
         DataColor = addSpecificDataToPatientStore.DataColor;
         
         PatientsView = CollectionViewSource.GetDefaultView(_patients);
+        PatientsView.Filter = FilterPatients;
 
         LoadPatientsCommand = new LoadPatientsCommand(UpdatePatients, patientStore);
         ShowPatientDataModalCommand = modalNavigationViewModel.ShowPatientDataModal;
@@ -72,11 +85,26 @@ public class SelectPatientToAddSpecificDataViewModel : ViewModelBase {
         _patientStore.PatientIdToShowDetails = SelectedPatient.Id;
     }
 
-    public void UpdatePatients(IEnumerable<PatientDto> patients){
+    private void UpdatePatients(IEnumerable<PatientDto> patients){
         _patients.Clear();
 
         foreach (var patient in patients) {
             _patients.Add(patient);
         }
+    }
+
+    private bool FilterPatients(object obj){
+        if (obj is not PatientDto patientDto) {
+            return false;
+        }
+
+        if (PatientsFilter.IsNullOrEmpty()) {
+            return true;
+        }
+        
+        var filter = PatientsFilter.Trim().ToLower();
+        return patientDto.PatientCode.Contains(filter, StringComparison.CurrentCultureIgnoreCase) ||
+               patientDto.FirstName.Contains(filter, StringComparison.CurrentCultureIgnoreCase) ||
+               patientDto.LastName.Contains(filter, StringComparison.CurrentCultureIgnoreCase);
     }
 }

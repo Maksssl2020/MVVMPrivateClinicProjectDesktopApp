@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Windows.Data;
 using System.Windows.Input;
+using Microsoft.IdentityModel.Tokens;
 using MVVMPrivateClinicProjectDesktopApp.Commands;
 using MVVMPrivateClinicProjectDesktopApp.Interfaces;
 using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
@@ -52,6 +53,16 @@ public class AddNewPatientNoteViewModel : AddNewEntityViewModelBase {
             OnPropertyChanged();
         }
     }
+
+    private string _patientNoteFilter = string.Empty;
+    public string PatientNoteFilter {
+        get => _patientNoteFilter;
+        set {
+            _patientNoteFilter = value;
+            OnPropertyChanged();
+            PatientNotesWithDoctorDataDtoView.Refresh();
+        }
+    }
     
     private ICommand LoadDoctorsCommand { get; set; }
     private ICommand LoadPatientNotesCommand { get; set; }
@@ -61,8 +72,10 @@ public class AddNewPatientNoteViewModel : AddNewEntityViewModelBase {
         _doctorsDto = [];
         _patientNotesDto = [];
         SelectedPatientId = patientStore.PatientIdToShowDetails;
+        
         DoctorsDtoView = CollectionViewSource.GetDefaultView(_doctorsDto);
         PatientNotesWithDoctorDataDtoView = CollectionViewSource.GetDefaultView(_patientNotesDto);
+        PatientNotesWithDoctorDataDtoView.Filter = FilterPatientNotes;
         
         LoadDoctorsCommand = new LoadFamilyDoctorsCommand(UpdateDoctorsDto, doctorStore);
         LoadPatientNotesCommand = new LoadSelectedPatientNotesDtoCommand(this, patientNoteStore, patientStore);
@@ -90,8 +103,8 @@ public class AddNewPatientNoteViewModel : AddNewEntityViewModelBase {
         PatientNoteDescription = string.Empty;
         SelectedDoctor = null!;
     }
-    
-    public void UpdateDoctorsDto(IEnumerable<DoctorDto> doctorsDto){
+
+    private void UpdateDoctorsDto(IEnumerable<DoctorDto> doctorsDto){
         _doctorsDto.Clear();
         
         foreach (var doctorDto in doctorsDto) {
@@ -105,5 +118,18 @@ public class AddNewPatientNoteViewModel : AddNewEntityViewModelBase {
         foreach (var patientNoteDto in selectedPatientNotes) {
             _patientNotesDto.Add(patientNoteDto);
         }
+    }
+
+    private bool FilterPatientNotes(object obj){
+        if (obj is not PatientNoteDto patientNoteDto) {
+            return false;
+        }
+
+        if (PatientNoteFilter.IsNullOrEmpty()) {
+            return true;
+        }
+        
+        var filter = PatientNoteFilter.Trim().ToLower();
+        return patientNoteDto.DoctorCode.Contains(filter, StringComparison.CurrentCultureIgnoreCase);
     }
 }

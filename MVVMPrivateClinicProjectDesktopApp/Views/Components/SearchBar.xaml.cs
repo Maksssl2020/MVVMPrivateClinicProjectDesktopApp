@@ -13,6 +13,10 @@ public partial class SearchBar : UserControl {
         DependencyProperty.Register(nameof(SearchBarTag), typeof(object), typeof(SearchBar),
             new PropertyMetadata(null));
     
+    public static readonly DependencyProperty SearchBarWidthProperty = 
+        DependencyProperty.Register(nameof(SearchBarWidth), typeof(double), typeof(SearchBar),
+            new PropertyMetadata(250.0d));
+    
     public string SearchBarText {
         get => (string)GetValue(SearchBarTextProperty);
         set => SetValue(SearchBarTextProperty, value);
@@ -21,6 +25,11 @@ public partial class SearchBar : UserControl {
     public object SearchBarTag {
         get => GetValue(SearchBarTagProperty);
         set => SetValue(SearchBarTagProperty, value);
+    }
+
+    public double SearchBarWidth {
+        get => (double)GetValue(SearchBarWidthProperty);
+        set => SetValue(SearchBarWidthProperty, value);
     }
     
     public SearchBar(){

@@ -20,13 +20,19 @@
         
        
             <Border Grid.Column="0" Padding="15">
-                <StackPanel Orientation="Vertical">
-                    <Label FontSize="24" Foreground="White" Content="New Diagnosis Form"/>
-                    <Grid>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="75"/>
+                    </Grid.RowDefinitions>
+                    
+                    <Label Grid.Row="0" FontSize="24" Foreground="White" Content="New Diagnosis Form"/>
+
+                    <Grid Grid.Row="1">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="135"/>
                             <RowDefinition Height="*"/>
-                            <RowDefinition Height="75"/>
                         </Grid.RowDefinitions>
 
                         <Grid Grid.Row="0">
@@ -78,27 +84,27 @@
                                              x:Name="DiagnosisDescriptionInput"
                                              ErrorMessage="{Binding ElementName=DiagnosisDescriptionInput, Path=(Validation.Errors)[0].ErrorContent}" 
                                              FormText="{Binding DiagnosisDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                        
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="2">
-                            <Button
-                                Style="{StaticResource CommonButton}"
-                                Width="220"
-                                Content="Clear Form"
-                                BorderBrush="Transparent"
-                                BorderThickness="0"
-                                Margin="0 0 5 0"
-                                Click="buttonClearForm_Click"
-                                Tag="{StaticResource CustomPlumColor1}"/>
-                
-                            <components:ButtonWithIcon 
-                                ButtonWidth="220"
-                                ButtonText="Add Diagnosis"
-                                IconName="Plus"
-                                TextColor="{StaticResource CustomPlumColor1}"
-                                Command="{Binding SubmitCommand}"/>
-                        </StackPanel>
                     </Grid>
-                </StackPanel>
+                    
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="2">
+                        <Button
+                            Style="{StaticResource CommonButton}"
+                            Width="220"
+                            Content="Clear Form"
+                            BorderBrush="Transparent"
+                            BorderThickness="0"
+                            Margin="0 0 5 0"
+                            Click="buttonClearForm_Click"
+                            Tag="{StaticResource CustomPlumColor1}"/>
+                
+                        <components:ButtonWithIcon 
+                            ButtonWidth="220"
+                            ButtonText="Add Diagnosis"
+                            IconName="Plus"
+                            TextColor="{StaticResource CustomPlumColor1}"
+                            Command="{Binding SubmitCommand}"/>
+                    </StackPanel>
+                </Grid>
             </Border>
         
         <Grid Grid.Column="1">
@@ -116,13 +122,13 @@
                 <Grid VerticalAlignment="Center">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="50"/>
-                        <ColumnDefinition Width="195"/>
-                        <ColumnDefinition Width="195"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="100"/>
                     </Grid.ColumnDefinitions>
                 
-                    <TextBlock FontSize="18" Text="Id" Foreground="White" Grid.Column="0"/>
-                    <TextBlock FontSize="18" Text="Disease Name" Foreground="White" Grid.Column="1"/>
-                    <TextBlock FontSize="18" Text="Disease Code" Foreground="White" Grid.Column="2"/>
+                    <TextBlock FontSize="15" Text="Id" Foreground="White" Grid.Column="0"/>
+                    <TextBlock FontSize="15" Text="Disease Name" Foreground="White" Grid.Column="1"/>
+                    <TextBlock FontSize="15" Text="Disease Code" Foreground="White" Grid.Column="2"/>
                 </Grid>
             </Border>
             <ScrollViewer Grid.Row="1" Style="{StaticResource ScrollBarTheme}" >
@@ -141,16 +147,16 @@
                 >
                     <ListView.ItemTemplate>
                         <DataTemplate DataType="{x:Type dto:DiseaseDto}">
-                            <Border Width="440" Height="35" Padding="5 0" VerticalAlignment="Center" BorderBrush="{StaticResource CustomGrayColor1}" BorderThickness="0 0 0 2">
+                            <Border Width="445" Height="35" Padding="5 0" VerticalAlignment="Center" BorderBrush="{StaticResource CustomGrayColor1}" BorderThickness="0 0 0 2">
                                 <Grid VerticalAlignment="Center">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="50"/>
-                                        <ColumnDefinition Width="195"/>
-                                        <ColumnDefinition Width="195"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="100"/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="0" Foreground="White" Text="{Binding Id}"/>
-                                    <TextBlock Grid.Column="1" Foreground="White" Text="{Binding Name}"/>
-                                    <TextBlock Grid.Column="2" Foreground="White" Text="{Binding DiseaseCode}"/>
+                                    <TextBlock Grid.Column="0" FontSize="14" Foreground="White" Text="{Binding Id}"/>
+                                    <TextBlock Grid.Column="1" FontSize="14" Foreground="White" Text="{Binding Name}"/>
+                                    <TextBlock Grid.Column="2" FontSize="14" Foreground="White" Text="{Binding DiseaseCode}"/>
                                 </Grid>
                             </Border>
                         </DataTemplate>

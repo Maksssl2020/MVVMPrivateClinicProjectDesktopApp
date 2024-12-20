@@ -7,4 +7,5 @@ public interface IDiagnosisRepository {
     Task<IEnumerable<DiagnosisDto>> GetPatientAllDiagnosisAsync(int patientId);
     Task<IEnumerable<DiagnosisDto>> GetAllDiagnosisAsync();
     Task<int> CountIssuedDiagnosisAsync();
+    Task<int> CountIssuedDiagnosisByDoctorIdAsync(int doctorId);
 }

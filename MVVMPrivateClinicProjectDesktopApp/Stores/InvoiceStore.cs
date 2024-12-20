@@ -13,6 +13,17 @@ public class InvoiceStore {
 
     public event Action<InvoiceDto>? InvoiceCreated; 
     
+    private int _selectedInvoiceId;
+    public int SelectedInvoiceId {
+        get => _selectedInvoiceId;
+        set {
+            _selectedInvoiceId = value;
+            SelectedInvoice = null!;
+        }
+    }
+
+    public InvoiceDetailsDto SelectedInvoice { get; set; } = null!;
+    
     public InvoiceStore(IUnitOfWork unitOfWork){
         _unitOfWork = unitOfWork;
 
@@ -31,6 +42,11 @@ public class InvoiceStore {
         OnInvoiceCreated(savedInvoice);
     }
 
+    public async Task LoadInvoiceDetails(){
+        var loadedInvoice = await _unitOfWork.InvoiceRepository.GetInvoiceDetailsDtoAsync(SelectedInvoiceId);
+        if (loadedInvoice != null) SelectedInvoice = loadedInvoice;
+    }
+    
     private void OnInvoiceCreated(InvoiceDto invoiceDto){
         InvoiceCreated?.Invoke(invoiceDto);
     }

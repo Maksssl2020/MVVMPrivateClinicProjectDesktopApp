@@ -9,10 +9,17 @@
              xmlns:dto="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Models.DTOs"
              xmlns:entities="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Models.Entities"
              xmlns:components="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Views.Components"
+             xmlns:converters="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Converters"
              mc:Ignorable="d"
              d:DesignHeight="675" 
              d:DesignWidth="1000"
              d:DataContext="{d:DesignInstance viewModel:InvoicesViewModel}">
+    <UserControl.Resources>
+        <converters:DateTimeFormatConverter x:Key="DateTimeFormatConverter"/>
+        <converters:PriceFormatConverter x:Key="PriceFormatConverter"/>
+        <converters:InvoiceStatusConverter x:Key="InvoiceStatusConverter"/>
+    </UserControl.Resources>
+    
     <Border Background="{StaticResource CustomBlackColor1}">
         <Grid>
             <Grid.RowDefinitions>
@@ -79,14 +86,15 @@
                                         <ColumnDefinition Width="100"/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock VerticalAlignment="Center" Foreground="White" Grid.Column="0" Text="{Binding Id}"/>
-                                    <TextBlock VerticalAlignment="Center" Foreground="White" Grid.Column="1" Text="{Binding Amount}"/>
-                                    <TextBlock VerticalAlignment="Center" Foreground="White" Grid.Column="2" Text="{Binding DateIssued}"/>
-                                    <TextBlock VerticalAlignment="Center" Foreground="White" Grid.Column="3" Text="{Binding DueDate}"/>
-                                    <TextBlock VerticalAlignment="Center" Foreground="White" Grid.Column="4" Text="{Binding Status}"/>
+                                    <TextBlock VerticalAlignment="Center" Foreground="White" Grid.Column="1" Text="{Binding Amount, Converter={StaticResource PriceFormatConverter}}"/>
+                                    <TextBlock VerticalAlignment="Center" Foreground="White" Grid.Column="2" Text="{Binding DateIssued, Converter={StaticResource DateTimeFormatConverter}}"/>
+                                    <TextBlock VerticalAlignment="Center" Foreground="White" Grid.Column="3" Text="{Binding DueDate, Converter={StaticResource DateTimeFormatConverter}}"/>
+                                    <TextBlock VerticalAlignment="Center" Foreground="White" Grid.Column="4" Text="{Binding Status, Converter={StaticResource InvoiceStatusConverter}}"/>
                                     <TextBlock VerticalAlignment="Center" Foreground="White" Grid.Column="5" Text="{Binding PatientCode}"/>
                                     <StackPanel Orientation="Horizontal" Grid.Column="6">
                                         <Button Style="{StaticResource ButtonWithIconSmall}"
-                                                Tag="{StaticResource CustomBlueColor1}">
+                                                Tag="{StaticResource CustomBlueColor1}"
+                                                Click="ShowInvoiceDetails_OnClick">
                                             <fa:IconImage Style="{StaticResource IconButtonSmall}" Icon="Eye"/>
                                         </Button>
                                         <Button Style="{StaticResource ButtonWithIconSmall}"

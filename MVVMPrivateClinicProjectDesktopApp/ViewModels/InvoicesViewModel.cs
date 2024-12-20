@@ -10,13 +10,19 @@ using MVVMPrivateClinicProjectDesktopApp.Stores;
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
 public class InvoicesViewModel : DisplayEntitiesViewModelBase<InvoiceDto> {
-   private ICommand LoadInvoicesCommand { get; set; }
-   public ICommand ShowAddNewInvoiceModalCommand { get; set; }
+    private readonly InvoiceStore _invoiceStore;
+    
+    private ICommand LoadInvoicesCommand { get; set; }
+    public ICommand ShowAddNewInvoiceModalCommand { get; set; }
+    public ICommand ShowInvoiceDetailsModalCommand { get; set; }
    
     private InvoicesViewModel(InvoiceStore invoiceStore, ModalNavigationViewModel modalNavigationViewModel)
         :base([SortingOptions.IdAscending, SortingOptions.IdDescending, SortingOptions.PriceAscending, SortingOptions.PriceDescending, SortingOptions.DateAscending, SortingOptions.DateDescending]) {
+        _invoiceStore = invoiceStore;
+        
         LoadInvoicesCommand = new LoadInvoicesDtoCommand(this, invoiceStore);
         ShowAddNewInvoiceModalCommand = modalNavigationViewModel.ShowAddNewInvoiceModal;
+        ShowInvoiceDetailsModalCommand = modalNavigationViewModel.ShowInvoiceDetailsModal;
         
         invoiceStore.InvoiceCreated += OnInvoiceCreated;
     }
@@ -29,6 +35,10 @@ public class InvoicesViewModel : DisplayEntitiesViewModelBase<InvoiceDto> {
         return invoicesViewModel;
     }
 
+    public void SetInvoiceIdToShowDetails(int invoiceId){
+        _invoiceStore.SelectedInvoiceId = invoiceId;
+    }
+    
     public override void UpdateEntities(IEnumerable<InvoiceDto> entities){
         Entities.Clear();
 

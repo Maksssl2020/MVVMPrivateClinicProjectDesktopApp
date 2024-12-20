@@ -24,15 +24,20 @@
             <ColumnDefinition Width="475"/>
         </Grid.ColumnDefinitions>
         
-       
             <Border Grid.Column="0" Padding="15">
-                <StackPanel Orientation="Vertical">
-                    <Label FontSize="24" Foreground="White" Content="New Patient Note"/>
-                    <Grid>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="75"/>
+                    </Grid.RowDefinitions>
+                    
+                    <Label Grid.Row="0" FontSize="24" Foreground="White" Content="New Patient Note"/>
+                    
+                    <Grid Grid.Row="1">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="135"/>
                             <RowDefinition Height="*"/>
-                            <RowDefinition Height="75"/>
                         </Grid.RowDefinitions>
 
                          <Grid Grid.Row="0">
@@ -88,43 +93,47 @@
                             FormText="{Binding PatientNoteDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             LabelTitle="Patient Note Description*"
                             InputHeight="165"
-                            InputBackgroundColor="{StaticResource CustomGrayColor1}"/>
-                        
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="2">
-                            <Button
-                                Style="{StaticResource CommonButton}"
-                                Width="220"
-                                Content="Clear Form"
-                                BorderBrush="Transparent"
-                                BorderThickness="0"
-                                Margin="0 0 5 0"
-                                Click="buttonClearForm_Click"
-                                Tag="{StaticResource CustomPaleGoldColor1}"/>
-                
-                            <components:ButtonWithIcon 
-                                ButtonWidth="220"
-                                ButtonText="Add New Patient Note"
-                                IconName="Plus"
-                                TextColor="{StaticResource CustomPaleGoldColor1}"
-                                Command="{Binding SubmitCommand}"/>
-                        </StackPanel>
+                            InputBackgroundColor="{StaticResource CustomGrayColor1}"
+                            InputTag="{StaticResource CustomBlueColor1}"/>
                     </Grid>
-                </StackPanel>
+                    
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button
+                            Style="{StaticResource CommonButton}"
+                            Width="220"
+                            Content="Clear Form"
+                            BorderBrush="Transparent"
+                            BorderThickness="0"
+                            Margin="0 0 5 0"
+                            Click="buttonClearForm_Click"
+                            Tag="{StaticResource CustomPaleGoldColor1}"/>
+                
+                        <components:ButtonWithIcon 
+                            ButtonWidth="220"
+                            ButtonText="Add New Patient Note"
+                            IconName="Plus"
+                            TextColor="{StaticResource CustomPaleGoldColor1}"
+                            Command="{Binding SubmitCommand}"/>
+                    </StackPanel>
+                </Grid>
             </Border>
         
             <Border Grid.Column="1">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="75"/>
                         <RowDefinition Height="50"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     
-                    <Border></Border>
+                    <components:SearchBar Grid.Row="0" 
+                                          SearchBarText="{Binding PatientNoteFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged }"
+                                          SearchBarTag="{StaticResource CustomBlueColor1}" 
+                                          SearchBarWidth="455"/>
                     <Border Grid.Row="1" 
                             Padding="10 0" 
                             Margin="0 0 20 0" 
-                            CornerRadius="15 15 0 0"
+                            CornerRadius="10 10 0 0"
                             Background="{StaticResource CustomGrayColor1}">
                         <Label FontSize="16" Foreground="White" VerticalAlignment="Center" Content="All Patient Notes"/>
                     </Border>
@@ -132,7 +141,7 @@
                        <Border BorderBrush="{StaticResource CustomGrayColor1}" 
                                BorderThickness="5 0 5 5 "
                                Padding="10"
-                               CornerRadius=" 0 0 15 15">
+                               CornerRadius=" 0 0 10 10">
                             <ItemsControl ItemsSource="{Binding PatientNotesWithDoctorDataDtoView }">
                                 <ItemsControl.Template>
                                     <ControlTemplate>

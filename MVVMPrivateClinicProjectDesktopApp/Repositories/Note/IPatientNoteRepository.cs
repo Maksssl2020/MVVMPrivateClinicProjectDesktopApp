@@ -7,4 +7,5 @@ public interface IPatientNoteRepository {
     Task<PatientNoteDetailsDto?> GetPatientNoteDetailsAsync(int patientNoteId);
     Task<IEnumerable<PatientNoteDto>> GetAllPatientsNotesAsync();
     Task<IEnumerable<PatientNoteWithDoctorDataDto>> GetAllPatientNotesByPatientIdAsync(int patientId);
+    Task<int> CountIssuedPatientNotesByDoctorIdAsync(int doctorId);
 }

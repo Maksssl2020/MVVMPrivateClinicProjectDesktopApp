@@ -95,4 +95,11 @@ public class ReferralRepository(
         await using var context = dbContextFactory.CreateDbContext();
         return await context.Referrals.CountAsync();
     }
+
+    public async Task<int> CountIssuedReferralsByDoctorIdAsync(int doctorId){
+        await using var context = dbContextFactory.CreateDbContext();
+        return await context.Referrals
+            .Where(referral => referral.IdDoctor == doctorId)
+            .CountAsync();
+    }
 }

@@ -20,14 +20,20 @@
         
        
             <Border Grid.Column="0" Padding="15">
-                <StackPanel Orientation="Vertical">
-                    <Label FontSize="24" Foreground="White" Content="New Prescription Form"/>
-                    <Grid>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="75"/>
+                    </Grid.RowDefinitions>
+                    
+                    <Label Grid.Row="0" FontSize="24" Foreground="White" Content="New Prescription Form"/>
+                    
+                   <Grid Grid.Row="1">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="135"/>
                             <RowDefinition Height="125"/>
                             <RowDefinition Height="*"/>
-                            <RowDefinition Height="75"/>
                         </Grid.RowDefinitions>
 
                         <Grid Grid.Row="0">
@@ -109,27 +115,27 @@
                                              x:Name="PrescriptionDescriptionInput"
                                              ErrorMessage="{Binding ElementName=PrescriptionDescriptionInput, Path=(Validation.Errors)[0].ErrorContent}" 
                                              FormText="{Binding PrescriptionDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                        
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="3">
-                            <Button
-                                Style="{StaticResource CommonButton}"
-                                Width="220"
-                                Content="Clear Form"
-                                BorderBrush="Transparent"
-                                BorderThickness="0"
-                                Margin="0 0 5 0"
-                                Click="buttonClearForm_Click"
-                                Tag="{StaticResource CustomOrangeColor1}"/>
-                
-                            <components:ButtonWithIcon 
-                                ButtonWidth="220"
-                                ButtonText="Issue Prescription"
-                                IconName="Plus"
-                                TextColor="{StaticResource CustomOrangeColor1}"
-                                Command="{Binding SubmitCommand}"/>
-                        </StackPanel>
                     </Grid>
-                </StackPanel>
+                    
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button
+                            Style="{StaticResource CommonButton}"
+                            Width="220"
+                            Content="Clear Form"
+                            BorderBrush="Transparent"
+                            BorderThickness="0"
+                            Margin="0 0 5 0"
+                            Click="buttonClearForm_Click"
+                            Tag="{StaticResource CustomOrangeColor1}"/>
+                
+                        <components:ButtonWithIcon 
+                            ButtonWidth="220"
+                            ButtonText="Issue Prescription"
+                            IconName="Plus"
+                            TextColor="{StaticResource CustomOrangeColor1}"
+                            Command="{Binding SubmitCommand}"/>
+                    </StackPanel>
+                </Grid>
             </Border>
         
         <Grid Grid.Column="1">
@@ -151,9 +157,9 @@
                         <ColumnDefinition Width="195"/>
                     </Grid.ColumnDefinitions>
                 
-                    <TextBlock FontSize="18" Text="Id" Foreground="White" Grid.Column="0"/>
-                    <TextBlock FontSize="18" Text="Medicine Name" Foreground="White" Grid.Column="1"/>
-                    <TextBlock FontSize="18" Text="Medicine Type" Foreground="White" Grid.Column="2"/>
+                    <TextBlock FontSize="15" Text="Id" Foreground="White" Grid.Column="0"/>
+                    <TextBlock FontSize="15" Text="Medicine Name" Foreground="White" Grid.Column="1"/>
+                    <TextBlock FontSize="15" Text="Medicine Type" Foreground="White" Grid.Column="2"/>
                 </Grid>
             </Border>
             <ScrollViewer Grid.Row="1" Style="{StaticResource ScrollBarTheme}" >
@@ -171,7 +177,7 @@
                 >
                     <ListView.ItemTemplate>
                         <DataTemplate DataType="{x:Type dto:MedicineDto}">
-                            <Border Width="440" Height="35" Padding="5 0" VerticalAlignment="Center" BorderBrush="{StaticResource CustomGrayColor1}" BorderThickness="0 0 0 2">
+                            <Border Width="445" Height="35" Padding="5 0" VerticalAlignment="Center" BorderBrush="{StaticResource CustomGrayColor1}" BorderThickness="0 0 0 2">
                                 <Grid VerticalAlignment="Center">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="50"/>
@@ -187,7 +193,7 @@
                     </ListView.ItemTemplate>
                 </ListView>
             </ScrollViewer>
-                <Label Grid.Row="2" Content="{Binding SelectedMedicinesError}" Height="35" FontSize="15" Foreground="Red" Margin="0 10 0 0"/>
+            <Label Grid.Row="2" Content="{Binding SelectedMedicinesError}" Height="35" FontSize="15" Foreground="Red" Margin="0 10 0 0"/>
         </Grid>
     </Grid>
 </UserControl>

@@ -8,4 +8,5 @@ public interface IPrescriptionRepository {
     Task<IEnumerable<PrescriptionDto>> GetAllPrescriptionsDtoAsync();
     Task<IEnumerable<PrescriptionDto>> GetPatientAllPrescriptionsDtoAsync(int patientId);
     Task<int> CountIssuedPrescriptionsAsync();
+    Task<int> CountIssuedPrescriptionsByDoctorIdAsync(int doctorId);
 }

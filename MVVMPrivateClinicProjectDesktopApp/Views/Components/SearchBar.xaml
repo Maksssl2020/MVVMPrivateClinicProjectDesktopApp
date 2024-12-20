@@ -8,10 +8,14 @@
              xmlns:viewModel="clr-namespace:MVVMPrivateClinicProjectDesktopApp.ViewModels"
              xmlns:entities="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Models.Entities"
              xmlns:components="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Views.Components"
+             xmlns:converters="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Converters"
              mc:Ignorable="d"
              x:Name="Root"
              d:DesignHeight="300" d:DesignWidth="300">
-    <Border Tag="{Binding SearchBarTag, ElementName=Root}" HorizontalAlignment="Left">
+    <UserControl.Resources>
+        <converters:WidthSearchBarAdjustmentConverter x:Key="WidthSearchBarAdjustmentConverter"/>
+    </UserControl.Resources>
+    <Border x:Name="SearchBoxBorder" Width="{Binding SearchBarWidth, ElementName=Root}" Tag="{Binding SearchBarTag, ElementName=Root}" HorizontalAlignment="Left">
         <Border.Style>
             <Style TargetType="Border" BasedOn="{StaticResource SearchBarStyle}">
                 <Style.Triggers>
@@ -22,7 +26,11 @@
             </Style>
         </Border.Style>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
-            <TextBox x:Name="SearchBox" Style="{StaticResource SearchBarTextBox}" VerticalContentAlignment="Center" Text="{Binding SearchBarText, UpdateSourceTrigger=PropertyChanged, ElementName=Root}" />
+            <TextBox x:Name="SearchBox"
+                     Style="{StaticResource SearchBarTextBox}"
+                     VerticalContentAlignment="Center" 
+                     Text="{Binding SearchBarText, UpdateSourceTrigger=PropertyChanged, ElementName=Root}"
+                     Width="{Binding ActualWidth, ElementName=SearchBoxBorder, Converter={StaticResource WidthSearchBarAdjustmentConverter}}"/>
             <fa:IconImage Width="20" Height="20" Icon="MagnifyingGlass" Foreground="White"/>
         </StackPanel>
     </Border>

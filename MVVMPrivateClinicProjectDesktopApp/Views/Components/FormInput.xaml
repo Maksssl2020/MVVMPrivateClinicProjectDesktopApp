@@ -11,8 +11,21 @@
     
     <StackPanel Margin="0 0 0 5" >
         <Label FontSize="15" Style="{StaticResource LabelForm}" Content="{Binding LabelTitle, ElementName=Root}"/>
-        <Border BorderBrush="Transparent" BorderThickness="0" CornerRadius="10" Background="{Binding InputBackgroundColor, ElementName=Root}">
+        <Border Tag="{Binding InputTag, ElementName=Root}" BorderThickness="2" CornerRadius="10" Background="{Binding InputBackgroundColor, ElementName=Root}">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsFocused, ElementName=InputBox}" Value="True">
+                            <Setter Property="BorderBrush" Value="{Binding Tag, RelativeSource={RelativeSource Self}}"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsFocused, ElementName=InputBox}" Value="False">
+                            <Setter Property="BorderBrush" Value="{StaticResource CustomGrayColor1}"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
             <TextBox Text="{Binding FormText, ElementName=Root, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                     x:Name="InputBox"
                      FontSize="18"
                      Height="{Binding InputHeight, ElementName=Root}"
                      Style="{StaticResource FormTextBox}"/>

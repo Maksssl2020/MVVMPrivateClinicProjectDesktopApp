@@ -27,6 +27,7 @@ public class ModalNavigationService(ModalNavigationStore modalNavigationStore, F
         AddNewAppointmentViewModel => new AddNewAppointmentView(),
         SelectPatientToAddSpecificDataViewModel => new SelectPatientToAddSpecificDataView(),
         AddNewInvoiceViewModel => new AddNewInvoiceView(),
+        InvoiceDetailsViewModel => new InvoiceDetailsModalView(),
         _ => new AddNewPatientView()
     };
 }

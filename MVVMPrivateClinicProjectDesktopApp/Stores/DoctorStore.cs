@@ -17,6 +17,17 @@ public class DoctorStore {
     public IEnumerable<DoctorDto> FamilyMedicineDoctorsDto => _familyMedicineDoctorsDto;
     public IEnumerable<DoctorDto> MostPopularDoctorsDto => _mostPopularDoctorsDto;
 
+    private int _selectedDoctorId;
+    public int SelectedDoctorId {
+        get => _selectedDoctorId;
+        set {
+            _selectedDoctorId = value;
+            DoctorStatisticsDto = null!;
+        }
+    }
+
+    public DoctorStatisticsDto DoctorStatisticsDto { get; set; } = null!;
+    
     public event Action<DoctorDto>? DoctorCreated;
     
     public DoctorStore(IUnitOfWork unitOfWork){
@@ -50,6 +61,22 @@ public class DoctorStore {
         OnDoctorCreated(savedDoctor);
     }
 
+    public async Task LoadDoctorStatistics(){
+        var countAppointments = await _unitOfWork.AppointmentRepository.CountAppointmentsByDoctorIdAsync(SelectedDoctorId);
+        var countReferrals = await _unitOfWork.ReferralRepository.CountIssuedReferralsByDoctorIdAsync(SelectedDoctorId);
+        var countPrescriptions = await _unitOfWork.PrescriptionRepository.CountIssuedPrescriptionsByDoctorIdAsync(SelectedDoctorId);
+        var countDiagnosis = await _unitOfWork.DiagnosisRepository.CountIssuedDiagnosisByDoctorIdAsync(SelectedDoctorId);
+        var countPatientNotes = await _unitOfWork.PatientNoteRepository.CountIssuedPatientNotesByDoctorIdAsync(SelectedDoctorId);
+
+        DoctorStatisticsDto = new DoctorStatisticsDto {
+            AmountOfAppointments = countAppointments,
+            IssuedReferrals = countReferrals,
+            IssuedPrescriptions = countPrescriptions,
+            IssuedDiagnosis = countDiagnosis,
+            IssuedPatientNotes = countPatientNotes
+        };
+    }
+    
     private void OnDoctorCreated(DoctorDto doctor){
         DoctorCreated?.Invoke(doctor);
     }

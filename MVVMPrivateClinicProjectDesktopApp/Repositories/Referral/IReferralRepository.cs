@@ -8,4 +8,5 @@ public interface IReferralRepository {
     Task<IEnumerable<ReferralDto>> GetPatientAllReferralsAsync(int patientId);
     Task<IEnumerable<ReferralDto>> GetAllReferralsDtoAsync();
     Task<int> CountIssuedReferralsAsync();
+    Task<int> CountIssuedReferralsByDoctorIdAsync(int doctorId);
 }

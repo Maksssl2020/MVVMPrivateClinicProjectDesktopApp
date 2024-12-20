@@ -131,6 +131,13 @@ public class PrescriptionRepository(
         return await context.Prescriptions.CountAsync();
     }
 
+    public async Task<int> CountIssuedPrescriptionsByDoctorIdAsync(int doctorId){
+        await using var context = dbContextFactory.CreateDbContext();
+        return await context.Prescriptions
+            .Where(prescription => prescription.IdDoctor == doctorId)
+            .CountAsync();
+    }
+
     private async Task AppendPatientCodeAndDoctorCodeToPrescriptionDto(PrescriptionDto prescriptionDto){
         var foundPatient = await patientRepository.GetPatientByIdAsync(prescriptionDto.IdPatient);
         var foundDoctor = await doctorRepository.GetDoctorByIdAsync(prescriptionDto.IdDoctor);

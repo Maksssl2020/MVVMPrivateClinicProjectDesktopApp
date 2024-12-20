@@ -28,7 +28,7 @@
                 </Grid.ColumnDefinitions>
                     
                 <StackPanel Orientation="Horizontal" Grid.Column="0">
-                    <components:SearchBar SearchBarText="{Binding PrescriptionFilter, Mode=TwoWay}"
+                    <components:SearchBar SearchBarText="{Binding Filter, Mode=TwoWay}"
                                           SearchBarTag="{StaticResource CustomOrangeColor1}"/>
                         
                     <components:SortingComboBox ComboBoxBorderBrush="{StaticResource CustomOrangeColor1}"
@@ -61,7 +61,7 @@
                 </Grid>
             </Border>
             <ScrollViewer  Style="{StaticResource ScrollBarTheme}" Grid.Row="2">
-                <ItemsControl ItemsSource="{Binding PrescriptionsView}" Padding="10 0" Margin="0 25 0 0">
+                <ItemsControl ItemsSource="{Binding EntitiesView}" Padding="10 0" Margin="0 25 0 0">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate DataType="{x:Type dto:PrescriptionDto}">
                             <Border Padding="5 0 5 0" BorderBrush="{StaticResource CustomGrayColor1}" BorderThickness="0 0 0 2" Height="45">

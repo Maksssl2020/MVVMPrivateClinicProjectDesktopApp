@@ -79,6 +79,13 @@ public class PatientNoteRepository(DbContextFactory dbContextFactory, IMapper ma
         return foundPatientNotes;
     }
 
+    public async Task<int> CountIssuedPatientNotesByDoctorIdAsync(int doctorId){
+        await using var context = dbContextFactory.CreateDbContext();
+        return await context.PatientNotes
+            .Where(p => p.IdDoctor == doctorId)
+            .CountAsync();
+    }
+
     private async Task AssignPatientCodeAndDoctorCodeToPatientNoteDto(PatientNoteDto patientNote){
         var foundPatient = await patientRepository.GetPatientByIdAsync(patientNote.IdPatient);
         var foundDoctor = await doctorRepository.GetDoctorByIdAsync(patientNote.IdDoctor);

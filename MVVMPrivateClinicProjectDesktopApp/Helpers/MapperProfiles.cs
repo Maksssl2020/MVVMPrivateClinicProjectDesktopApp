@@ -37,6 +37,11 @@ public class MapperProfiles : Profile {
             .ForMember(dest => dest.PatientCode, opt => opt.Ignore())
             .ForMember(dest => dest.Status, opt => opt.Ignore());
 
+        CreateMap<Invoice, InvoiceDetailsDto>()
+            .ForMember(dest => dest.PatientDetailsDto, opt => opt.Ignore())
+            .ForMember(dest => dest.PricingDto, opt => opt.Ignore())
+            .ForMember(dest => dest.Status, opt => opt.Ignore());
+        
         CreateMap<Pricing, PricingDto>();
         CreateMap<Pricing, TopPricingDto>()
             .ForMember(dest => dest.TotalUseAmount, opt => opt.MapFrom(src => src.Appointments.Count))

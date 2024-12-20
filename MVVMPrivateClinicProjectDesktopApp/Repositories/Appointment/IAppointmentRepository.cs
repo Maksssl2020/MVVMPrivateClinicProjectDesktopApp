@@ -9,4 +9,5 @@ public interface IAppointmentRepository {
     Task<IEnumerable<AppointmentDto>> GetAppointmentsByPatientIdAsync(int patientId);
     Task<IEnumerable<AppointmentDto>> GetUpcomingAppointmentsAsync(int amount);
     Task<int> CountAppointmentsAsync();
+    Task<int> CountAppointmentsByDoctorIdAsync(int doctorId);
 }

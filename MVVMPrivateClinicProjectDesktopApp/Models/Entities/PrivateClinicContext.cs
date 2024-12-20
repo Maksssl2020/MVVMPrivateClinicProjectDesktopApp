@@ -83,6 +83,10 @@ public partial class PrivateClinicContext : Microsoft.EntityFrameworkCore.DbCont
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Appointment_Doctor");
 
+            entity.HasOne(d => d.IdInvoiceNavigation).WithMany(p => p.Appointments)
+                .HasForeignKey(d => d.IdInvoice)
+                .HasConstraintName("FK_Appointment_Invoice");
+
             entity.HasOne(d => d.IdPatientNavigation).WithMany(p => p.Appointments)
                 .HasForeignKey(d => d.IdPatient)
                 .OnDelete(DeleteBehavior.ClientSetNull)

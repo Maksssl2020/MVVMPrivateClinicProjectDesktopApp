@@ -23,7 +23,7 @@ public class UnitOfWork(DbContextFactory dbContextFactory) : IUnitOfWork {
     private readonly IMapper _mapper = MyMapper.Mapper;
     
     public IAddressRepository AddressRepository => new AddressRepository(dbContextFactory);
-    public IAppointmentRepository AppointmentRepository => new AppointmentRepository(dbContextFactory, _mapper, PatientRepository, DoctorRepository, PricingRepository);
+    public IAppointmentRepository AppointmentRepository => new AppointmentRepository(dbContextFactory, _mapper, PatientRepository, DoctorRepository, PricingRepository, InvoiceRepository);
     public IDiseaseRepository DiseaseRepository => new DiseaseRepository(dbContextFactory, _mapper);
     public IDoctorRepository DoctorRepository =>
         new DoctorRepository(dbContextFactory, _mapper, DoctorSpecializationRepository);
@@ -34,7 +34,7 @@ public class UnitOfWork(DbContextFactory dbContextFactory) : IUnitOfWork {
         new PrescriptionRepository(dbContextFactory, _mapper, PatientRepository, DoctorRepository);
     public IReferralRepository ReferralRepository => new ReferralRepository(dbContextFactory, _mapper,
         PatientRepository, DoctorRepository, DiseaseRepository, ReferralTestRepository);
-    public IInvoiceRepository InvoiceRepository => new InvoiceRepository(dbContextFactory, _mapper, PatientRepository);
+    public IInvoiceRepository InvoiceRepository => new InvoiceRepository(dbContextFactory, _mapper, PatientRepository, PricingRepository);
     public IPricingRepository PricingRepository => new PricingRepository(dbContextFactory, _mapper);
     public IPatientNoteRepository PatientNoteRepository => new PatientNoteRepository(dbContextFactory, _mapper, PatientRepository, DoctorRepository);
     public IReferralTestRepository ReferralTestRepository => new ReferralTestRepository(dbContextFactory, _mapper);

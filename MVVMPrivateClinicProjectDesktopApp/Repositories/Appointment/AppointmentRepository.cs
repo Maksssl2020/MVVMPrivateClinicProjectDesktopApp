@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using MVVMPrivateClinicProjectDesktopApp.DbContext;
 using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
 using MVVMPrivateClinicProjectDesktopApp.Repositories.Doctor;
+using MVVMPrivateClinicProjectDesktopApp.Repositories.Invoice;
 using MVVMPrivateClinicProjectDesktopApp.Repositories.Patient;
 using MVVMPrivateClinicProjectDesktopApp.Repositories.Pricing;
 using static System.Enum;
@@ -14,7 +15,8 @@ public class AppointmentRepository(
     IMapper mapper,
     IPatientRepository patientRepository,
     IDoctorRepository doctorRepository,
-    IPricingRepository pricingRepository
+    IPricingRepository pricingRepository,
+    IInvoiceRepository invoiceRepository
     ) : IAppointmentRepository {
     public async Task<AppointmentDto> SaveAppointmentAsync(SaveAppointmentRequest saveAppointmentRequest){
         await using var context = dbContextFactory.CreateDbContext();
@@ -41,11 +43,22 @@ public class AppointmentRepository(
 
     public async Task<IEnumerable<AppointmentDto>> GetAllAppointmentsAsync(){
         await using var context = dbContextFactory.CreateDbContext();
+        var random = new Random();
         var foundAppointments = await context.Appointments
             .ToListAsync();
+        
+        foreach (var appointment in foundAppointments.Where(appointment => appointment.AppointmentDate < DateTime.Now && appointment.AppointmentStatus == AppointmentStatus.Scheduled.ToString())) {
+            await UpdateAppointmentStatusAsync(appointment.Id, AppointmentStatus.Canceled);
+        }
 
-        foreach (var appointment in foundAppointments.Where(appointment => appointment.AppointmentDate < DateTime.Now && appointment.AppointmentStatus == "Scheduled")) {
-            appointment.AppointmentStatus = "Canceled";
+        foreach (var appointment in foundAppointments.Where(appointment => appointment.AppointmentDate < DateTime.Now && AppointmentStatus.Accepted.ToString() == appointment.AppointmentStatus)) {
+            var chance = random.Next(100);
+            if (chance < 8) {
+                await UpdateAppointmentStatusAsync(appointment.Id, AppointmentStatus.PatientNoShow);
+            }
+            else {
+                await UpdateAppointmentStatusAsync(appointment.Id, AppointmentStatus.Completed);
+            }
         }
         
         var appointmentDtos = await CreateAppointmentsDto(foundAppointments);
@@ -58,6 +71,10 @@ public class AppointmentRepository(
         if (foundAppointment == null) throw new NullReferenceException("Appointment not found!");
         
         foundAppointment.AppointmentStatus = status.ToString();
+        if (!status.Equals(AppointmentStatus.Accepted) && !status.Equals(AppointmentStatus.Completed) && foundAppointment.IdInvoice != null) {
+            await invoiceRepository.CancelInvoice((int) foundAppointment.IdInvoice);
+        }
+        
         await context.SaveChangesAsync();
     }
 
@@ -75,7 +92,7 @@ public class AppointmentRepository(
         await using var context = dbContextFactory.CreateDbContext();
 
        var foundAppointments = await context.Appointments
-           .Where(appointment => appointment.AppointmentStatus.Equals("Accepted") && appointment.AppointmentDate > DateTime.Now)
+           .Where(appointment => appointment.AppointmentStatus.Equals(AppointmentStatus.Accepted.ToString()) && appointment.AppointmentDate > DateTime.Now)
            .OrderBy(appointment => appointment.AppointmentDate)
            .Take(amount)
            .ToListAsync();
@@ -87,9 +104,17 @@ public class AppointmentRepository(
         await using var context = dbContextFactory.CreateDbContext();
         return await context.Appointments
             .Where(appointment =>
-                !appointment.AppointmentStatus.Equals("Canceled") &&
-                !appointment.AppointmentStatus.Equals("PatientNoShow")
+                !appointment.AppointmentStatus.Equals(AppointmentStatus.Canceled.ToString()) &&
+                !appointment.AppointmentStatus.Equals(AppointmentStatus.PatientNoShow.ToString())
                 )
+            .CountAsync();
+    }
+
+    public async Task<int> CountAppointmentsByDoctorIdAsync(int doctorId){
+        await using var context = dbContextFactory.CreateDbContext();
+        
+        return await context.Appointments
+            .Where(appointment => appointment.IdDoctor == doctorId)
             .CountAsync();
     }
 
