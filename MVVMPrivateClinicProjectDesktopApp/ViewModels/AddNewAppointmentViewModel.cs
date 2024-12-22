@@ -184,8 +184,8 @@ public class AddNewAppointmentViewModel : ViewModelBase {
         try {
             if (SelectedDoctor == null || SelectedPatient == null) return;
         
-            await FilterDates(SelectedDoctor.Id, AppointmentDatePersonType.Doctor);
-            await FilterDates(SelectedPatient.Id, AppointmentDatePersonType.Patient);
+            await FilterDates(SelectedDoctor.Id, PersonType.Doctor);
+            await FilterDates(SelectedPatient.Id, PersonType.Patient);
             
             DaysView = CollectionViewSource.GetDefaultView(_filteredDates.Keys);
             OnPropertyChanged(nameof(DaysView));
@@ -196,9 +196,9 @@ public class AddNewAppointmentViewModel : ViewModelBase {
         }
     }
     
-    private async Task FilterDates(int personId, AppointmentDatePersonType appointmentDatePersonType){
+    private async Task FilterDates(int personId, PersonType personType){
         var chosenPersonAppointmentsDates =
-            await _appointmentDateStore.GetChosenPersonAppointmentsDates(personId, appointmentDatePersonType);
+            await _appointmentDateStore.GetChosenPersonAppointmentsDates(personId, personType);
         
         _filteredDates = _datesToChoose;
 

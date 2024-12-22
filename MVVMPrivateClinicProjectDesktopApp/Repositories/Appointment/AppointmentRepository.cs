@@ -78,14 +78,14 @@ public class AppointmentRepository(
         await context.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<AppointmentDto>> GetAppointmentsByPatientIdAsync(int patientId){
+    public async Task<IEnumerable<AppointmentDto>> GetAppointmentsByPatientIdOrDoctorIdAsync(int personId, PersonType personType){
         await using var context = dbContextFactory.CreateDbContext();
-        var foundPatientAppointments = await context.Appointments
-            .Where(appointment => appointment.IdPatient == patientId)
+        var foundAppointments = await context.Appointments
+            .Where(appointment => personType.Equals(PersonType.Patient) ? appointment.IdPatient == personId : appointment.IdDoctor == personId)
             .ToListAsync();
         
-        var appointmentDtos = await CreateAppointmentsDto(foundPatientAppointments);
-        return appointmentDtos;
+        var appointmentsDto = await CreateAppointmentsDto(foundAppointments);
+        return appointmentsDto;
     }
 
     public async Task<IEnumerable<AppointmentDto>> GetUpcomingAppointmentsAsync(int amount){

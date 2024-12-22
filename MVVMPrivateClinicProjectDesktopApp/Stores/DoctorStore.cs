@@ -62,6 +62,7 @@ public class DoctorStore {
     }
 
     public async Task LoadDoctorStatistics(){
+        var foundDoctor = await _unitOfWork.DoctorRepository.GetDoctorByIdAsync(SelectedDoctorId);
         var countAppointments = await _unitOfWork.AppointmentRepository.CountAppointmentsByDoctorIdAsync(SelectedDoctorId);
         var countReferrals = await _unitOfWork.ReferralRepository.CountIssuedReferralsByDoctorIdAsync(SelectedDoctorId);
         var countPrescriptions = await _unitOfWork.PrescriptionRepository.CountIssuedPrescriptionsByDoctorIdAsync(SelectedDoctorId);
@@ -69,6 +70,7 @@ public class DoctorStore {
         var countPatientNotes = await _unitOfWork.PatientNoteRepository.CountIssuedPatientNotesByDoctorIdAsync(SelectedDoctorId);
 
         DoctorStatisticsDto = new DoctorStatisticsDto {
+            DoctorCode = foundDoctor!.DoctorCode,
             AmountOfAppointments = countAppointments,
             IssuedReferrals = countReferrals,
             IssuedPrescriptions = countPrescriptions,

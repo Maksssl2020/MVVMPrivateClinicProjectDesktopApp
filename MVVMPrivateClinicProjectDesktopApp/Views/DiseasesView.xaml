@@ -52,6 +52,7 @@
                         <ColumnDefinition Width="35"/>
                         <ColumnDefinition Width="175"/>
                         <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="100"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock FontSize="15" Foreground="White" VerticalAlignment="Center" Grid.Column="0" Text="Id"/>
                     <TextBlock FontSize="15" Foreground="White" VerticalAlignment="Center" Grid.Column="1" Text="Disease Code"/>
@@ -68,10 +69,22 @@
                                         <ColumnDefinition Width="35"/>
                                         <ColumnDefinition Width="175"/>
                                         <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="100"/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock VerticalAlignment="Center" Foreground="White" Grid.Column="0" Text="{Binding Id}"/>
                                     <TextBlock VerticalAlignment="Center" Foreground="White" Grid.Column="1" Text="{Binding DiseaseCode}"/>
                                     <TextBlock VerticalAlignment="Center" Foreground="White" Grid.Column="2" Text="{Binding Name}"/>
+                                    <StackPanel Orientation="Horizontal" Grid.Column="3">
+                                        <Button Style="{StaticResource ButtonWithIconSmall}"
+                                                Tag="{StaticResource CustomBlueColor1}"
+                                                Click="SeeDiseaseDetailsButton_OnClick">
+                                            <fa:IconImage Style="{StaticResource IconButtonSmall}" Icon="Eye"/>
+                                        </Button>
+                                        <Button Style="{StaticResource ButtonWithIconSmall}"
+                                                Tag="{StaticResource CustomRedColor1}">
+                                            <fa:IconImage Style="{StaticResource IconButtonSmall}" Icon="Trash"/>
+                                        </Button>
+                                    </StackPanel>       
                                 </Grid>
                             </Border>
                         </DataTemplate>

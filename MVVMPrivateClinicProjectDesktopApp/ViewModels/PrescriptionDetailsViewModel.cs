@@ -10,7 +10,7 @@ public class PrescriptionDetailsViewModel : ViewModelBase {
     private PrescriptionDetailsDto _prescriptionDetails = null!;
     public PrescriptionDetailsDto Prescription {
         get => _prescriptionDetails;
-        private set {
+        set {
             _prescriptionDetails = value;
             OnPropertyChanged();
         }
@@ -32,7 +32,4 @@ public class PrescriptionDetailsViewModel : ViewModelBase {
         return prescriptionDetailsViewModel;
     }
 
-    public void UpdatePrescription(PrescriptionDetailsDto prescription){
-        Prescription = prescription;
-    }
 }

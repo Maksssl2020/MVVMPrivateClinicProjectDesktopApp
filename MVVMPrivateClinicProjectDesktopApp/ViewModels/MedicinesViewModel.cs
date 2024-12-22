@@ -11,13 +11,20 @@ using MVVMPrivateClinicProjectDesktopApp.Stores;
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
 public class MedicinesViewModel : DisplayEntitiesViewModelBase<MedicineDto> {
-   private ICommand LoadMedicinesCommand { get; set; }
+    private readonly MedicineStore _medicineStore;
+    
+    private ICommand LoadMedicinesCommand { get; set; }
     public ICommand ShowAddNewMedicineModal { get; set; }
+    public ICommand ShowMedicineDetailsModal { get; set; }
 
     private MedicinesViewModel(MedicineStore medicineStore, ModalNavigationViewModel modalNavigationViewModel)
         :base([SortingOptions.IdAscending, SortingOptions.IdDescending, SortingOptions.AlphabeticalAscending, SortingOptions.AlphabeticalDescending]) {
+        _medicineStore = medicineStore;
+        
         LoadMedicinesCommand = new LoadMedicinesDtoCommand(UpdateEntities, medicineStore);
         ShowAddNewMedicineModal = modalNavigationViewModel.ShowAddNewMedicineModal;
+        ShowMedicineDetailsModal  = modalNavigationViewModel.ShowMedicineDetailsModal;
+        
         medicineStore.MedicineCreated += OnMedicineCreated;
     }
 
@@ -29,6 +36,10 @@ public class MedicinesViewModel : DisplayEntitiesViewModelBase<MedicineDto> {
         return medicinesViewModel;
     }
 
+    public void SetMedicineIdToShowDetails(int medicineId){
+        _medicineStore.SelectedMedicineId = medicineId;
+    }
+    
     private void OnMedicineCreated(MedicineDto medicineDto){
         Entities.Add(medicineDto);
     }

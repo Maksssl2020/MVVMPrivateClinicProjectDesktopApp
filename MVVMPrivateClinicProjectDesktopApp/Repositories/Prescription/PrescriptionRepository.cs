@@ -111,11 +111,11 @@ public class PrescriptionRepository(
         return foundPrescriptionsDto;
     }
 
-    public async Task<IEnumerable<PrescriptionDto>> GetPatientAllPrescriptionsDtoAsync(int patientId){
+    public async Task<IEnumerable<PrescriptionDto>> GetIssuedPrescriptionsByPatientIdOrDoctorId(int personId, PersonType personType){
         await using var context = dbContextFactory.CreateDbContext();
         
         var foundPrescriptionsDto =  await context.Prescriptions
-            .Where(prescription => prescription.IdPatient == patientId)
+            .Where(prescription => personType.Equals(PersonType.Patient) ? prescription.IdPatient == personId : prescription.IdDoctor == personId)
             .ProjectTo<PrescriptionDto>(mapper.ConfigurationProvider)
             .ToListAsync();
 
@@ -136,6 +136,14 @@ public class PrescriptionRepository(
         return await context.Prescriptions
             .Where(prescription => prescription.IdDoctor == doctorId)
             .CountAsync();
+    }
+
+    public async Task<int> CountMedicineUsesAsync(int medicineId){
+        await using var context = dbContextFactory.CreateDbContext();
+        
+        return await context.Prescriptions
+            .SelectMany(prescription => prescription.Medicines)
+            .CountAsync(medicine  => medicine.Id == medicineId);
     }
 
     private async Task AppendPatientCodeAndDoctorCodeToPrescriptionDto(PrescriptionDto prescriptionDto){

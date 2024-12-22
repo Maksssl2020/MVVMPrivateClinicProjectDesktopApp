@@ -67,7 +67,7 @@
                             BorderBrush="{StaticResource CustomGrayColor1}" 
                             CornerRadius="10"
                     >
-                        <TextBlock Text="{Binding PatientNote.DateIssued}"
+                        <TextBlock Text="{Binding PatientNote.DateIsuued}"
                                    Foreground="White"
                                    FontWeight="Bold"
                                    FontSize="15"

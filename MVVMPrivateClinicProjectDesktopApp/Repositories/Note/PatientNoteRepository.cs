@@ -64,16 +64,16 @@ public class PatientNoteRepository(DbContextFactory dbContextFactory, IMapper ma
         return foundPatientsNotes;
     }
 
-    public async Task<IEnumerable<PatientNoteWithDoctorDataDto>> GetAllPatientNotesByPatientIdAsync(int patientId){
+    public async Task<IEnumerable<PatientNoteWithDoctorDataDto>> GetIssuedPatientNotesByPatientOrDoctorId(int personId, PersonType personType){
         await using var context = dbContextFactory.CreateDbContext();
 
         var foundPatientNotes = await context.PatientNotes
-            .Where(p => p.IdPatient == patientId)
+            .Where(p => personType.Equals(PersonType.Patient) ? p.IdPatient == personId : p.IdDoctor == personId)
             .ProjectTo<PatientNoteWithDoctorDataDto>(mapper.ConfigurationProvider)
             .ToListAsync();
 
         foreach (var patientNote in foundPatientNotes) {
-            await AssignDoctorDataToPatientNoteWithDoctorDataDto(patientNote);
+            await AssignDoctorDataToPatientNoteWithDoctorDataDtoAndPatientCode(patientNote);
         }
         
         return foundPatientNotes;
@@ -94,16 +94,17 @@ public class PatientNoteRepository(DbContextFactory dbContextFactory, IMapper ma
         if (foundDoctor?.DoctorCode != null) patientNote.DoctorCode = foundDoctor.DoctorCode;  
     }
 
-    private async Task AssignDoctorDataToPatientNoteWithDoctorDataDto(
+    private async Task AssignDoctorDataToPatientNoteWithDoctorDataDtoAndPatientCode(
         PatientNoteWithDoctorDataDto patientNoteWithDoctorDataDto){
+        var foundPatient = await patientRepository.GetPatientByIdAsync(patientNoteWithDoctorDataDto.IdPatient);
         var foundDoctor = await doctorRepository.GetDoctorByIdAsync(patientNoteWithDoctorDataDto.IdDoctor);
-        Console.WriteLine(foundDoctor?.DoctorSpecialization);
 
         if (foundDoctor != null) {
-            patientNoteWithDoctorDataDto.DoctorFirstName = foundDoctor.FirstName;
-            patientNoteWithDoctorDataDto.DoctorLastName = foundDoctor.LastName;
-            patientNoteWithDoctorDataDto.DoctorCode = foundDoctor.DoctorCode;
-            patientNoteWithDoctorDataDto.DoctorSpecialization = foundDoctor.DoctorSpecialization!;
+            patientNoteWithDoctorDataDto.DoctorDto = foundDoctor;
+        }
+
+        if (foundPatient != null) {
+            patientNoteWithDoctorDataDto.PatientCode = foundPatient.PatientCode;
         }
     }
 }

@@ -28,6 +28,10 @@ public class ModalNavigationService(ModalNavigationStore modalNavigationStore, F
         SelectPatientToAddSpecificDataViewModel => new SelectPatientToAddSpecificDataView(),
         AddNewInvoiceViewModel => new AddNewInvoiceView(),
         InvoiceDetailsViewModel => new InvoiceDetailsModalView(),
+        DoctorDetailsViewModel => new DoctorDetailsView(),
+        MedicineDetailsViewModel => new MedicineDetailsView(),
+        DiseaseDetailsViewModel => new DiseaseDetailsView(),
+        ReferralTestDetailsViewModel => new ReferralTestDetailsView(),
         _ => new AddNewPatientView()
     };
 }

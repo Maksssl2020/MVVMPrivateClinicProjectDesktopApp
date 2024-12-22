@@ -11,21 +11,30 @@ using MVVMPrivateClinicProjectDesktopApp.Stores;
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
 public class ReferralTestsViewModel : DisplayEntitiesViewModelBase<ReferralTestDto> {
+    private readonly ReferralTestStore _referralTestStore;
     private ICommand LoadReferralTestsCommand { get; set; }
+    public ICommand ShowReferralTestDetailsModalCommand { get; set; }
 
-    private ReferralTestsViewModel(ReferralTestStore referralTestStore)
+    private ReferralTestsViewModel(ReferralTestStore referralTestStore, ModalNavigationViewModel modalNavigationViewModel)
         :base([SortingOptions.IdAscending, SortingOptions.IdDescending, SortingOptions.AlphabeticalAscending, SortingOptions.AlphabeticalDescending]) {
+        _referralTestStore = referralTestStore;
+        
         LoadReferralTestsCommand = new LoadReferralTestsCommand(UpdateEntities, referralTestStore);
+        ShowReferralTestDetailsModalCommand = modalNavigationViewModel.ShowReferralTestDetailsModal;
     }
 
-    public static ReferralTestsViewModel LoadReferralTestsViewModel(ReferralTestStore referralTestStore){
-        var referralTestsViewModel = new ReferralTestsViewModel(referralTestStore);
+    public static ReferralTestsViewModel LoadReferralTestsViewModel(ReferralTestStore referralTestStore, ModalNavigationViewModel modalNavigationViewModel){
+        var referralTestsViewModel = new ReferralTestsViewModel(referralTestStore, modalNavigationViewModel);
         
         referralTestsViewModel.LoadReferralTestsCommand.Execute(null);
         
         return referralTestsViewModel;
     }
 
+    public void SetReferralTestIdToShowDetails(int referralTestId){
+        _referralTestStore.SelectedReferralTestId = referralTestId;
+    }
+    
     public override void UpdateEntities(IEnumerable<ReferralTestDto> entities){
         Entities.Clear();
 

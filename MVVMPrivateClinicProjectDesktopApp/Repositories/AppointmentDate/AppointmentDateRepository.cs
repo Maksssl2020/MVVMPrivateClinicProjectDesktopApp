@@ -29,11 +29,11 @@ public class AppointmentDateRepository(DbContextFactory dbContextFactory, IMappe
         return appointmentDateDto;
     }
 
-    public async Task<List<DateTime>> GetChosenPersonAppointmentsDates(int personId, AppointmentDatePersonType appointmentDatePersonType){
+    public async Task<List<DateTime>> GetChosenPersonAppointmentsDates(int personId, PersonType personType){
         await using var context = dbContextFactory.CreateDbContext();
 
         return await context.AppointmentDates
-            .Where(appointment => (appointmentDatePersonType == AppointmentDatePersonType.Patient ? appointment.IdPatient : appointment.IdDoctor) == personId)
+            .Where(appointment => (personType == PersonType.Patient ? appointment.IdPatient : appointment.IdDoctor) == personId)
             .Select(appointment => appointment.AppointmentDate1)
             .ToListAsync();
     }

@@ -7,17 +7,34 @@ public class PatientNoteStore {
     private readonly IUnitOfWork _unitOfWork;
 
     private readonly List<PatientNoteDto> _allPatientsNotesDto;
-    private readonly Lazy<Task> _initializeAllPatientsNotesLazy;
     private readonly List<PatientNoteWithDoctorDataDto> _selectedPatientNotes;
-    private readonly Lazy<Task> _initializeSelectedPatientNotesLazy;
+    private readonly List<PatientNoteWithDoctorDataDto> _selectedDoctorIssuedPatientNotes;
+    
+    private readonly Lazy<Task> _initializeAllPatientsNotesLazy;
 
     public IEnumerable<PatientNoteDto> AllPatientsNotesDto => _allPatientsNotesDto;
     public IEnumerable<PatientNoteWithDoctorDataDto> SelectedPatientNotes => _selectedPatientNotes;
+    public IEnumerable<PatientNoteWithDoctorDataDto> SelectedDoctorIssuedPatientNotes => _selectedDoctorIssuedPatientNotes;
 
-    public int SelectedPatientId { get; set; }
+    private int _selectedPatientId;
+    public int SelectedPatientId {
+        get => _selectedPatientId;
+        set {
+            _selectedPatientId = value;
+            _selectedPatientNotes.Clear();
+        }
+    }
 
+    private int _selectedDoctorId;
+    public int SelectedDoctorId {
+        get => _selectedDoctorId;
+        set {
+            _selectedDoctorId = value;
+            _selectedDoctorIssuedPatientNotes.Clear();
+        }
+    }
+    
     private int _selectedPatientNoteId;
-
     public int SelectedPatientNoteId {
         get => _selectedPatientNoteId;
         set {
@@ -26,16 +43,18 @@ public class PatientNoteStore {
         }
     }
 
-    public PatientNoteDetailsDto SelectedPatientNote { get; set; } = null!;
+    
+    public PatientNoteDetailsDto SelectedPatientNote { get; private set; } = null!;
 
     public event Action<PatientNoteDto>? PatientNoteCreated;
+    
     public PatientNoteStore(IUnitOfWork unitOfWork){
         _unitOfWork = unitOfWork;
 
         _allPatientsNotesDto = [];
         _selectedPatientNotes = [];
+        _selectedDoctorIssuedPatientNotes = [];
         _initializeAllPatientsNotesLazy = new Lazy<Task>(InitializePatientsNotes);
-        _initializeSelectedPatientNotesLazy = new Lazy<Task>(InitializeSelectedPatientNotes);
     }
 
     public async Task LoadPatientsNotes(){
@@ -43,9 +62,18 @@ public class PatientNoteStore {
     }
 
     public async Task LoadSelectedPatientNotes(){
-        await _initializeSelectedPatientNotesLazy.Value;
+        var foundPatientNotes =
+            await _unitOfWork.PatientNoteRepository.GetIssuedPatientNotesByPatientOrDoctorId(SelectedPatientId,
+                PersonType.Patient);
+        _selectedPatientNotes.AddRange(foundPatientNotes);
     }
 
+    public async Task LoadSelectedDoctorIssuedPatientNotes(){
+        var foundPatientNotes =await _unitOfWork.PatientNoteRepository.GetIssuedPatientNotesByPatientOrDoctorId(SelectedDoctorId,
+            PersonType.Doctor);
+        _selectedDoctorIssuedPatientNotes.AddRange(foundPatientNotes);
+    }
+    
     public async Task LoadSelectedPatientNote(){
         var loadedPatientNote = await _unitOfWork.PatientNoteRepository.GetPatientNoteDetailsAsync(SelectedPatientNoteId).ConfigureAwait(false);
         if (loadedPatientNote != null) SelectedPatientNote = loadedPatientNote;
@@ -63,13 +91,6 @@ public class PatientNoteStore {
         
         _allPatientsNotesDto.Clear();
         _allPatientsNotesDto.AddRange(loadedPatientsNotes);
-    }
-
-    private async Task InitializeSelectedPatientNotes(){
-        var loadedSelectedPatientNotes = await _unitOfWork.PatientNoteRepository.GetAllPatientNotesByPatientIdAsync(SelectedPatientId);
-        
-        _selectedPatientNotes.Clear();
-        _selectedPatientNotes.AddRange(loadedSelectedPatientNotes);
     }
     
     private void OnPatientNoteCreated(PatientNoteDto savedPatientNoteDto){

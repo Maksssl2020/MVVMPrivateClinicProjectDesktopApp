@@ -40,13 +40,13 @@ public class DiagnosisRepository(
         return diagnosisDto;
     }
 
-    public async Task<IEnumerable<DiagnosisDto>> GetPatientAllDiagnosisAsync(int patientId){
+    public async Task<IEnumerable<DiagnosisDto>> GetIssuedDiagnosesByPatientIdOrDoctorId(int personId, PersonType personType){
         await using var context = dbContextFactory.CreateDbContext();
 
         List<DiagnosisDto> diagnosesDto = [];
         
         var diagnoses = await context.Diagnoses
-            .Where(diagnosis => diagnosis.IdPatient == patientId)
+            .Where(diagnosis => personType.Equals(PersonType.Patient) ? diagnosis.IdPatient == personId : diagnosis.IdDoctor == personId)
             .ToListAsync();
 
         foreach (var diagnosis in diagnoses) {
@@ -83,6 +83,13 @@ public class DiagnosisRepository(
         await using var context = dbContextFactory.CreateDbContext();
         return await context.Diagnoses
             .Where(diagnosis => diagnosis.IdDoctor == doctorId)
+            .CountAsync();
+    }
+
+    public async Task<int> CountDiagnosedDiseaseAsync(int diseaseId){
+        await using var context = dbContextFactory.CreateDbContext();
+        return await context.Diagnoses
+            .Where(diagnosis => diagnosis.IdDisease == diseaseId)
             .CountAsync();
     }
 

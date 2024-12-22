@@ -162,7 +162,7 @@
                                             
                                             <StackPanel Orientation="Horizontal" Grid.Row="0">
                                                 <StackPanel HorizontalAlignment="Left" Orientation="Vertical">
-                                                    <TextBlock FontSize="15" Foreground="White" Text="{Binding DateIssued, Converter={StaticResource DateTimeFormatConverter}}"/>
+                                                    <TextBlock FontSize="15" Foreground="White" Text="{Binding DateIsuued, Converter={StaticResource DateTimeFormatConverter}}"/>
                                                     <TextBlock Margin="0 5 0 0" FontSize="15" Foreground="White">
                                                         <Run Text="Issued By Doctor:"/>
                                                         <LineBreak />

@@ -28,12 +28,9 @@ public class DiseaseRepository(DbContextFactory dbContextFactory, IMapper mapper
         var stringBuilder = new StringBuilder(DiseaseCodeBeginning);
         var splitDiseaseName = diseaseName.ToUpper().Split(' ');
 
-        Console.WriteLine(splitDiseaseName);
-        
         if (diseaseName.Length > 1) {
             foreach (var splitElement in splitDiseaseName) {
                 stringBuilder.Append(splitElement.Trim()[..1]);
-                Console.WriteLine(splitElement);
             }
         }
         else {
@@ -45,6 +42,15 @@ public class DiseaseRepository(DbContextFactory dbContextFactory, IMapper mapper
         stringBuilder.Append(maxId);
         
         return stringBuilder.ToString();
+    }
+
+    public async Task<DiseaseDetailsDto?> GetDiseaseDetailsByIdAsync(int diseaseId){
+        await using var context = dbContextFactory.CreateDbContext();
+
+        return await context.Diseases
+            .Where(d => d.Id == diseaseId)
+            .ProjectTo<DiseaseDetailsDto>(mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync();
     }
 
     public async Task<IEnumerable<DiseaseDto>> GetAllDiseasesAsync(){

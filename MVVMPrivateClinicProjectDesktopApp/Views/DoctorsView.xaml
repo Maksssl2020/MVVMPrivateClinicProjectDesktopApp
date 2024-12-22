@@ -90,7 +90,8 @@
                                     <TextBlock VerticalAlignment="Center" Foreground="White" Grid.Column="5" Text="{Binding DoctorSpecialization}"/>
                                     <StackPanel Orientation="Horizontal" Grid.Column="6">
                                         <Button Style="{StaticResource ButtonWithIconSmall}"
-                                                Tag="{StaticResource CustomBlueColor1}">
+                                                Tag="{StaticResource CustomBlueColor1}"
+                                                Click="SeeDoctorDetailsButton_OnClick">
                                             <fa:IconImage Style="{StaticResource IconButtonSmall}" Icon="Eye"/>
                                         </Button>
                                         <Button Style="{StaticResource ButtonWithIconSmall}"

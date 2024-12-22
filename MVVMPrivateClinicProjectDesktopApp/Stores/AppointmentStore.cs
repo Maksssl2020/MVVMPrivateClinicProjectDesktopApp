@@ -1,3 +1,4 @@
+using System.Windows.Documents;
 using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
 using MVVMPrivateClinicProjectDesktopApp.UnitOfWork;
 
@@ -7,19 +8,21 @@ public class AppointmentStore {
     private readonly IUnitOfWork _unitOfWork;
     
     private readonly List<AppointmentDto> _allAppointments;
-    private readonly Lazy<Task> _initializeLazyAllAppointments;
     private readonly List<AppointmentDto> _selectedPatientAllAppointments;
     private readonly List<AppointmentDto> _upcomingAppointments;
+    private readonly List<AppointmentDto> _selectedDoctorAppointments;
+    private readonly Lazy<Task> _initializeLazyAllAppointments;
     private readonly Lazy<Task> _initializeLazyUpcomingAppointments;
-    private int _selectedPatientId;
     
     public IEnumerable<AppointmentDto> AllAppointments => _allAppointments;
     public IEnumerable<AppointmentDto> SelectedPatientAllAppointments => _selectedPatientAllAppointments;
+    public IEnumerable<AppointmentDto> SelectedDoctorAppointments => _selectedDoctorAppointments;
     public IEnumerable<AppointmentDto> UpcomingAppointments => _upcomingAppointments;
     
     public event Action<AppointmentDto>? AppointmentStatusUpdated;
     public event Action<AppointmentDto>? AppointmentCreated;
     
+    private int _selectedPatientId;
     public int SelectedPatientId {
         get => _selectedPatientId;
         set {
@@ -27,11 +30,21 @@ public class AppointmentStore {
             _selectedPatientAllAppointments.Clear();
         }
     }
+
+    private int _selectedDoctorId;
+    public int SelectedDoctorId {
+        get => _selectedDoctorId;
+        set {
+            _selectedDoctorId = value;
+            _selectedDoctorAppointments.Clear();
+        }
+    }
     
     public AppointmentStore(IUnitOfWork unitOfWork){
         _unitOfWork = unitOfWork;
         _allAppointments = [];
         _selectedPatientAllAppointments = [];
+        _selectedDoctorAppointments = [];
         _upcomingAppointments = [];
         
         _initializeLazyAllAppointments = new Lazy<Task>(InitializeAppointments);
@@ -39,8 +52,14 @@ public class AppointmentStore {
     }
 
     public async Task LoadPatientAppointments(){
-        var foundAppointments = await _unitOfWork.AppointmentRepository.GetAppointmentsByPatientIdAsync(SelectedPatientId);
+        var foundAppointments = await _unitOfWork.AppointmentRepository.GetAppointmentsByPatientIdOrDoctorIdAsync(SelectedPatientId, PersonType.Patient);
         _selectedPatientAllAppointments.AddRange(foundAppointments);
+    }
+
+    public async Task LoadDoctorAppointments(){
+        var foundAppointments = await _unitOfWork.AppointmentRepository.GetAppointmentsByPatientIdOrDoctorIdAsync(SelectedDoctorId,
+            PersonType.Doctor);
+        _selectedDoctorAppointments.AddRange(foundAppointments);
     }
     
     public async Task LoadAppointments(){

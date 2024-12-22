@@ -12,6 +12,17 @@ public class ReferralTestStore {
 
     public IEnumerable<ReferralTestDto> ReferralTests => _referralTests;
     
+    private int _selectedReferralTestId;
+    public int SelectedReferralTestId {
+        get => _selectedReferralTestId;
+        set {
+            _selectedReferralTestId = value;
+            ReferralTestDetails = null!;
+        }
+    }
+
+    public ReferralTestDetailsDto ReferralTestDetails { get; set; } = null!;
+    
     public ReferralTestStore(IUnitOfWork unitOfWork){
         _unitOfWork = unitOfWork;
 
@@ -23,6 +34,17 @@ public class ReferralTestStore {
         await _initializeLazyReferralTests.Value;
     }
 
+    public async Task LoadReferralTest(){
+        var foundReferral = await _unitOfWork.ReferralTestRepository.GetReferralTestDetailsByIdAsync(SelectedReferralTestId);
+
+        if (foundReferral != null) {
+            var referralTestUses = await _unitOfWork.ReferralRepository.CountReferralTestUsesAsync(SelectedReferralTestId);
+            
+            foundReferral.TotalUses = referralTestUses;
+            ReferralTestDetails = foundReferral;
+        }
+    }
+    
     private async Task InitializeReferralTests(){
         var loadedReferralTests = await _unitOfWork.ReferralTestRepository.GetAllReferralTestsDtoAsync();
         

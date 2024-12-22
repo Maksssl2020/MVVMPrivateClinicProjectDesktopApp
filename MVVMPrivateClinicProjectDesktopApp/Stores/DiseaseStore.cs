@@ -11,6 +11,18 @@ public class DiseaseStore {
 
     public IEnumerable<DiseaseDto> DiseasesDto => _diseasesDto;
 
+    private int _selectedDiseaseId;
+
+    public int SelectedDiseaseId {
+        get => _selectedDiseaseId;
+        set {
+            _selectedDiseaseId = value;
+            DiseaseDetails = null!;
+        }
+    }
+
+    public DiseaseDetailsDto DiseaseDetails { get; set; } = null!;
+    
     public event Action<DiseaseDto>? DiseaseCreated;
     
     public DiseaseStore(IUnitOfWork unitOfWork){
@@ -24,6 +36,16 @@ public class DiseaseStore {
         await _initializeLazy.Value;
     }
 
+    public async Task LoadDisease(){
+        var foundDisease = await _unitOfWork.DiseaseRepository.GetDiseaseDetailsByIdAsync(SelectedDiseaseId);
+        var countDiagnosedDiseaseAsync = await _unitOfWork.DiagnosisRepository.CountDiagnosedDiseaseAsync(SelectedDiseaseId);
+
+        if (foundDisease != null) {
+            foundDisease.TotalDiagnoses = countDiagnosedDiseaseAsync;
+            DiseaseDetails = foundDisease;
+        }
+    }
+    
     public async Task CreateDisease(SaveDiseaseRequest diseaseRequest){
         var savedDisease = await _unitOfWork.DiseaseRepository.SaveDiseaseAsync(diseaseRequest);
         _diseasesDto.Add(savedDisease);

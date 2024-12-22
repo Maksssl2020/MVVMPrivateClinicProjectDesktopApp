@@ -14,6 +14,17 @@ public class MedicineStore {
     
     public IEnumerable<MedicineDto> MedicinesDto => _medicinesDto;
     public IEnumerable<MedicineTypeDto> MedicineTypes => _medicineTypes;
+
+    private int _selectedMedicineId;
+    public int SelectedMedicineId {
+        get => _selectedMedicineId;
+        set {
+            _selectedMedicineId = value;
+            MedicineDetails = null!;
+        }
+    }
+
+    public MedicineDetailsDto MedicineDetails { get; set; } = null!;
     
     public event Action<MedicineDto>? MedicineCreated; 
     
@@ -46,6 +57,13 @@ public class MedicineStore {
         OnMedicineCreated(savedMedicine);
     }
 
+    public async Task LoadMedicine(){
+        var foundMedicine = await _unitOfWork.MedicineRepository.GetMedicineByIdAsync(SelectedMedicineId);
+        var medicineUses = await _unitOfWork.PrescriptionRepository.CountMedicineUsesAsync(SelectedMedicineId);
+        foundMedicine.TotalUses = medicineUses;
+        MedicineDetails = foundMedicine;
+    }
+    
     private void OnMedicineCreated(MedicineDto medicine){
         MedicineCreated?.Invoke(medicine);
     }

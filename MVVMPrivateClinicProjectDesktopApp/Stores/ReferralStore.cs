@@ -9,11 +9,15 @@ public class ReferralStore {
     private readonly IUnitOfWork _unitOfWork;
     
     private readonly List<ReferralDto> _referralsDto;
-    private readonly Lazy<Task> _initializeLazy;
     private readonly List<ReferralDto> _selectedPatientReferralsDto;
+    private readonly List<ReferralDto> _selectedDoctorIssuedReferralsDto;
+    private readonly Lazy<Task> _initializeLazy;
     
     public IEnumerable<ReferralDto> ReferralsDto => _referralsDto;
     public IEnumerable<ReferralDto> SelectedPatientReferralsDto => _selectedPatientReferralsDto;
+    public IEnumerable<ReferralDto> SelectedDoctorIssuedReferrals => _selectedDoctorIssuedReferralsDto;
+    
+    public event Action<ReferralDto>? ReferralCreated;
     
     private int _selectedPatientId;
     public int SelectedPatientId {
@@ -24,10 +28,16 @@ public class ReferralStore {
         }
     }
     
-    public event Action<ReferralDto>? ReferralCreated;
+    private int _selectedDoctorId;
+    public int SelectedDoctorId {
+        get => _selectedDoctorId;
+        set {
+            _selectedDoctorId = value;
+            _selectedDoctorIssuedReferralsDto.Clear();
+        }
+    }
 
     private int _selectedReferralId;
-
     public int SelectedReferralId {
         get => _selectedReferralId;
         set {
@@ -43,6 +53,7 @@ public class ReferralStore {
         
         _referralsDto = [];
         _selectedPatientReferralsDto = [];
+        _selectedDoctorIssuedReferralsDto = [];
         _initializeLazy = new Lazy<Task>(InitializeReferrals);
     }
 
@@ -51,10 +62,15 @@ public class ReferralStore {
     }
 
     public async Task LoadPatientReferrals(){
-        var loadedPatientReferrals = await _unitOfWork.ReferralRepository.GetPatientAllReferralsAsync(SelectedPatientId);
+        var loadedPatientReferrals = await _unitOfWork.ReferralRepository.GetIssuedReferralsByPatientIdOrDoctorId(SelectedPatientId, PersonType.Patient);
         _selectedPatientReferralsDto.AddRange(loadedPatientReferrals);
     }
 
+    public async Task LoadDoctorIssuedReferrals(){
+        var foundReferrals = await _unitOfWork.ReferralRepository.GetIssuedReferralsByPatientIdOrDoctorId(SelectedPatientId, PersonType.Doctor);
+        _selectedDoctorIssuedReferralsDto.AddRange(foundReferrals);
+    }
+    
     public async Task CreateReferral(SaveReferralRequest referralRequest){
         var savedReferral = await _unitOfWork.ReferralRepository.SaveReferralAsync(referralRequest);
         _referralsDto.Add(savedReferral);

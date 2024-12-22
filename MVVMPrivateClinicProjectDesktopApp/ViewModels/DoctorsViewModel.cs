@@ -12,8 +12,9 @@ using MVVMPrivateClinicProjectDesktopApp.Views;
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
 public class DoctorsViewModel : DisplayEntitiesViewModelBase<DoctorDto> {
-    private string _doctorSpecialization = string.Empty;
+    private readonly DoctorStore _doctorStore;
     
+    private string _doctorSpecialization = string.Empty;
     public string DoctorSpecialization {
         get => _doctorSpecialization;
         set {
@@ -24,11 +25,16 @@ public class DoctorsViewModel : DisplayEntitiesViewModelBase<DoctorDto> {
 
     private ICommand LoadDoctorsCommand { get; set; }
     public ICommand ShowAddNewDoctorViewCommand { get; set; }
+    public ICommand ShowDoctorDetailsCommand { get; set; }
     
     private DoctorsViewModel(DoctorStore doctorStore, ModalNavigationViewModel modalNavigationViewModel)
         :base([SortingOptions.AlphabeticalAscending, SortingOptions.AlphabeticalDescending, SortingOptions.IdAscending, SortingOptions.IdDescending]) {
+        _doctorStore = doctorStore;
+        
         LoadDoctorsCommand = new LoadDoctorsCommand(UpdateEntities, doctorStore);
         ShowAddNewDoctorViewCommand = modalNavigationViewModel.ShowAddNewDoctorModal;
+        ShowDoctorDetailsCommand = modalNavigationViewModel.ShowDoctorDetailsModal;
+        
         doctorStore.DoctorCreated += OnDoctorCreated;
     }
 
@@ -40,6 +46,10 @@ public class DoctorsViewModel : DisplayEntitiesViewModelBase<DoctorDto> {
         return doctorsViewModel;
     }
 
+    public void SetDoctorIdToShowDetails(int doctorId){
+        _doctorStore.SelectedDoctorId = doctorId;
+    }
+    
     public override void UpdateEntities(IEnumerable<DoctorDto> entities){
         Entities.Clear();
 

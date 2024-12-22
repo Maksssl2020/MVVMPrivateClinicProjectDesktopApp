@@ -16,6 +16,15 @@ public class ReferralTestRepository(DbContextFactory dbContextFactory, IMapper m
             .FirstOrDefaultAsync();
     }
 
+    public async Task<ReferralTestDetailsDto?> GetReferralTestDetailsByIdAsync(int referralTestId){
+        await using var context = dbContextFactory.CreateDbContext();
+        
+        return await context.ReferralTests
+            .Where(r => r.Id == referralTestId)
+            .ProjectTo<ReferralTestDetailsDto>(mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync();
+    }
+
     public async Task<IEnumerable<ReferralTestDto>> GetAllReferralTestsDtoAsync(){
         await using var context = dbContextFactory.CreateDbContext();
 

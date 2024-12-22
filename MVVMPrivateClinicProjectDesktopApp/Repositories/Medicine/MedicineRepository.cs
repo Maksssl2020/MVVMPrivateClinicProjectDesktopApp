@@ -22,13 +22,13 @@ public class MedicineRepository(DbContextFactory dbContextFactory, IMapper mappe
         return mapper.Map<MedicineDto>(medicine);
     }
 
-    public async Task<MedicineDto> GetMedicineByIdAsync(int medicineId){
+    public async Task<MedicineDetailsDto> GetMedicineByIdAsync(int medicineId){
         await using var context = dbContextFactory.CreateDbContext();
         
         var medicine = await context.Medicines
             .FirstOrDefaultAsync(m => m.Id == medicineId);
         
-        return mapper.Map<MedicineDto>(medicine);
+        return mapper.Map<MedicineDetailsDto>(medicine);
     }
 
     public async Task<IEnumerable<MedicineDto>> GetAllMedicinesDtoAsync(){

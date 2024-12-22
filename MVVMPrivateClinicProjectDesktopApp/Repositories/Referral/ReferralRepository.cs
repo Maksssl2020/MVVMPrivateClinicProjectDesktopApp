@@ -62,11 +62,11 @@ public class ReferralRepository(
         return foundReferral;
     }
 
-    public async Task<IEnumerable<ReferralDto>> GetPatientAllReferralsAsync(int patientId){
+    public async Task<IEnumerable<ReferralDto>> GetIssuedReferralsByPatientIdOrDoctorId(int personId, PersonType personType){
         await using var context = dbContextFactory.CreateDbContext();
 
         return await context.Referrals
-            .Where(referral => referral.IdPatient == patientId)
+            .Where(referral => personType.Equals(PersonType.Patient) ? referral.IdPatient == personId : referral.IdDoctor == personId)
             .ProjectTo<ReferralDto>(mapper.ConfigurationProvider)
             .ToListAsync();
     }
@@ -100,6 +100,14 @@ public class ReferralRepository(
         await using var context = dbContextFactory.CreateDbContext();
         return await context.Referrals
             .Where(referral => referral.IdDoctor == doctorId)
+            .CountAsync();
+    }
+
+    public async Task<int> CountReferralTestUsesAsync(int referralTestId){
+        await using var context = dbContextFactory.CreateDbContext();
+        
+        return await context.Referrals
+            .Where(referral => referral.IdReferralTest == referralTestId)
             .CountAsync();
     }
 }

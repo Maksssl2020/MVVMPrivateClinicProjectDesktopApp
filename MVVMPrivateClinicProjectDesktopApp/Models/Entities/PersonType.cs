@@ -1,5 +1,5 @@
 namespace MVVMPrivateClinicProjectDesktopApp.Models.Entities;
 
-public enum AppointmentDatePersonType {
+public enum PersonType {
     Doctor, Patient
 }

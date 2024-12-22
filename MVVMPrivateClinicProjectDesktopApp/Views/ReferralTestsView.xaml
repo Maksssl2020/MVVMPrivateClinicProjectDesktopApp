@@ -71,10 +71,17 @@
                                     <TextBlock VerticalAlignment="Center" Foreground="White" Grid.Column="0" Text="{Binding Id}"/>
                                     <TextBlock VerticalAlignment="Center" Foreground="White" Grid.Column="1" Text="{Binding Name}"/>
                                     <TextBlock VerticalAlignment="Center" Foreground="White" Grid.Column="2" Text="{Binding Description}"/>
-                                    <Button Grid.Column="3" Style="{StaticResource ButtonWithIconSmall}"
-                                            Tag="{StaticResource CustomRedColor1}">
-                                        <fa:IconImage Style="{StaticResource IconButtonSmall}" Icon="Trash"/>
-                                    </Button>
+                                    <StackPanel Orientation="Horizontal" Grid.Column="3">
+                                        <Button Style="{StaticResource ButtonWithIconSmall}"
+                                                Tag="{StaticResource CustomBlueColor1}"
+                                                Click="SeeReferralTestDetailsButton_OnClick">
+                                            <fa:IconImage Style="{StaticResource IconButtonSmall}" Icon="Eye"/>
+                                        </Button>
+                                        <Button Style="{StaticResource ButtonWithIconSmall}"
+                                                Tag="{StaticResource CustomRedColor1}">
+                                            <fa:IconImage Style="{StaticResource IconButtonSmall}" Icon="Trash"/>
+                                        </Button>
+                                    </StackPanel>       
                                 </Grid>
                             </Border>
                         </DataTemplate>

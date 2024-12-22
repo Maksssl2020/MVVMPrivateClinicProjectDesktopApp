@@ -7,7 +7,7 @@ public class LoadPrescriptionCommand(PrescriptionDetailsViewModel viewModel, Pre
     public override async Task ExecuteAsync(object? parameter){
         try {
             await prescriptionStore.LoadPrescriptionById();
-            viewModel.UpdatePrescription(prescriptionStore.SelectedPrescription);
+            viewModel.Prescription = prescriptionStore.SelectedPrescription;
         }
         catch (Exception e) {
             Console.WriteLine(e);

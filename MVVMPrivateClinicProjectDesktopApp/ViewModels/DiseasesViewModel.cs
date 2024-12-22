@@ -7,14 +7,20 @@ using MVVMPrivateClinicProjectDesktopApp.Stores;
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
 public class DiseasesViewModel : DisplayEntitiesViewModelBase<DiseaseDto> {
+    private readonly DiseaseStore _diseaseStore;
+    
     private ICommand LoadDiseasesCommand { get; set; }
     public ICommand ShowAddNewDiseaseModalCommand { get; set; }
+    public ICommand ShowDiseaseDetailsModalCommand { get; set; }
     
     private DiseasesViewModel(DiseaseStore diseaseStore, ModalNavigationViewModel modalNavigationViewModel)
         :base([SortingOptions.IdAscending, SortingOptions.IdDescending, SortingOptions.AlphabeticalAscending, SortingOptions.AlphabeticalDescending]){
+        _diseaseStore = diseaseStore;
+        
         LoadDiseasesCommand = new LoadDiseasesCommand(UpdateEntities, diseaseStore);
         ShowAddNewDiseaseModalCommand = modalNavigationViewModel.ShowAddNewDiseaseModal;
-
+        ShowDiseaseDetailsModalCommand = modalNavigationViewModel.ShowDiseaseDetailsModal;
+        
         diseaseStore.DiseaseCreated += OnDiseaseCreated;
     }
 
@@ -24,6 +30,10 @@ public class DiseasesViewModel : DisplayEntitiesViewModelBase<DiseaseDto> {
         diseasesViewModel.LoadDiseasesCommand.Execute(null);
 
         return diseasesViewModel;
+    }
+
+    public void SetDiseaseIdToSeeDetails(int diseaseId){
+        _diseaseStore.SelectedDiseaseId = diseaseId;
     }
     
     private void OnDiseaseCreated(DiseaseDto diseaseDto){

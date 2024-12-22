@@ -4,26 +4,64 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Views"
-             xmlns:viewModel="clr-namespace:MVVMPrivateClinicProjectDesktopApp.ViewModels"
-             xmlns:converters="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Converters"
-             xmlns:components="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Views.Components"
-             xmlns:dto="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Models.DTOs"
-             xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
-             mc:Ignorable="d"
-             d:DesignHeight="550"
-             d:DesignWidth="1205"
-             Background="Transparent"
-             d:DataContext="{d:DesignInstance viewModel:PatientDetailsViewModel}">
+        xmlns:converters="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Converters"
+        xmlns:components="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Views.Components"
+        xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+        xmlns:viewModel="clr-namespace:MVVMPrivateClinicProjectDesktopApp.ViewModels"
+        xmlns:views="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Views"
+        xmlns:dto="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Models.DTOs"
+        mc:Ignorable="d"
+        Height="650" 
+        Width="1255"
+        WindowStyle="None" 
+        WindowStartupLocation="CenterScreen"
+        AllowsTransparency="True"
+        Background="Transparent"
+        d:DataContext="{d:DesignInstance viewModel:DoctorDetailsViewModel}">
     <local:WindowViewBase.Resources>
         <converters:DateTimeFormatConverter x:Key="DateTimeFormatConverter"/>
-        <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
     </local:WindowViewBase.Resources>
     
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="370"/>
-            <ColumnDefinition Width="370"/>
-            <ColumnDefinition Width="465"/>
+    <Border MouseLeftButtonDown="MouseLeftButtonDown_Hold" BorderThickness="2" BorderBrush="{StaticResource CustomGrayColor1}" Background="{StaticResource CustomBlackColor1}" CornerRadius="20" Padding="20">
+        <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <Border Height="50" Grid.Row="0" >
+            <StackPanel Orientation="Horizontal">
+                <Grid VerticalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="50"/>
+                    </Grid.ColumnDefinitions>
+                        
+                    <StackPanel Width="1145" Grid.Row="0">
+                        <TextBlock Foreground="White" FontSize="18" FontWeight="Bold">
+                            <Run Text="Doctor Nr. #"/>
+                            <Run Text="{Binding DoctorStatistics.DoctorCode}"/>
+                            <Run Text="Details"/>
+                        </TextBlock>
+                    </StackPanel>
+                    
+                    <StackPanel Grid.Column="1" HorizontalAlignment="Right">
+                        <Button  Click="buttonClose_Click"
+                                 Style="{StaticResource ControlBarButton}"
+                                 Tag="{StaticResource CustomRedColor1}"
+                        >
+                            <fa:IconImage Icon="Xmark" Style="{StaticResource ControlBarButtonIcon}"/>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
+        </Border>
+        
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="400"/>
+            <ColumnDefinition Width="410"/>
+            <ColumnDefinition Width="400"/>
         </Grid.ColumnDefinitions>
                 
         <Grid Grid.Column="0" Margin="0 0 5 0">
@@ -49,14 +87,11 @@
                             <Label FontSize="14" Foreground="White" Content="Issued patient notes:"/>
                         </StackPanel>
                         <StackPanel Grid.Column="1">
-                            <Label FontSize="14" Foreground="White" Content="{Binding SelectedPatientAddress.PostalCode }"/>
-                            <Label FontSize="14" Foreground="White" Content="{Binding SelectedPatientAddress.City }"/>
-                            <Label FontSize="14" Foreground="White" Content="{Binding SelectedPatientAddress.Street }"/>
-                            <Label FontSize="14" Foreground="White" Content="{Binding SelectedPatientAddress.BuildingNumber }"/>
-                            <Label Visibility="{Binding SelectedPatientAddress.BuildingNumber, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type viewModel:PatientDetailsViewModel}}, Converter={StaticResource NullToVisibilityConverter} }" 
-                                   FontSize="14" 
-                                   Foreground="White" 
-                                   Content="{Binding SelectedPatientAddress.LocalNumber}"/>
+                            <Label FontSize="14" Foreground="White" Content="{Binding DoctorStatistics.AmountOfAppointments }"/>
+                            <Label FontSize="14" Foreground="White" Content="{Binding DoctorStatistics.IssuedReferrals }"/>
+                            <Label FontSize="14" Foreground="White" Content="{Binding DoctorStatistics.IssuedPrescriptions }"/>
+                            <Label FontSize="14" Foreground="White" Content="{Binding DoctorStatistics.IssuedDiagnosis }"/>
+                            <Label FontSize="14" Foreground="White" Content="{Binding DoctorStatistics.IssuedPatientNotes}"/>
                         </StackPanel>
                     </Grid>
                 </StackPanel>
@@ -65,9 +100,9 @@
                 <StackPanel >
                     <Label FontSize="18" Foreground="White" Margin="0 0 0 10" Content="Issued Patient Notes"/>
                     <ScrollViewer Height="200" Style="{StaticResource ScrollBarTheme}">
-                        <ItemsControl ItemsSource="{Binding SelectedPatientPrescriptionsView}">
+                        <ItemsControl ItemsSource="{Binding IssuedPatientNotesView}">
                             <ItemsControl.ItemTemplate>
-                                <DataTemplate DataType="{x:Type dto:PrescriptionDto}">
+                                <DataTemplate DataType="{x:Type dto:PatientNoteWithDoctorDataDto}">
                                     <Border Padding="5" BorderBrush="{StaticResource CustomGrayColor1}" BorderThickness="0 0 0 5">
                                         <Grid>
                                             <Grid.ColumnDefinitions>
@@ -78,9 +113,9 @@
                                             </Grid.ColumnDefinitions>
                                                 
                                             <TextBlock Grid.Column="0" Text="{Binding Id}" Foreground="White"/>
-                                            <TextBlock Grid.Column="1" Text="{Binding DateIssued, Converter={StaticResource DateTimeFormatConverter}}" FontWeight="Bold" Foreground="White"/>
-                                            <TextBlock Grid.Column="2" Text="{Binding ExpirationDate, Converter={StaticResource DateTimeFormatConverter}}" FontWeight="Bold" Foreground="White"/>
-                                            <TextBlock Grid.Column="3" Text="{Binding DoctorCode}" FontWeight="Bold" Foreground="White"/>
+                                            <TextBlock Grid.Column="1" Text="{Binding DateIsuued, Converter={StaticResource DateTimeFormatConverter}}" FontWeight="Bold" Foreground="White"/>
+                                            <TextBlock Grid.Column="2" Text="{Binding PatientCode}" FontWeight="Bold" Foreground="White"/>
+                                            <TextBlock Grid.Column="3" Text="{Binding DoctorDto.DoctorCode}" FontWeight="Bold" Foreground="White"/>
                                         </Grid>
                                     </Border>
                                 </DataTemplate>
@@ -101,7 +136,7 @@
                 <StackPanel >
                     <Label FontSize="18" Foreground="White" Margin="0 0 0 10" Content="Doctor Appointments"/>
                     <ScrollViewer Height="200" Style="{StaticResource ScrollBarTheme}">
-                        <ItemsControl ItemsSource="{Binding SelectedPatientAppointmentsView}">
+                        <ItemsControl ItemsSource="{Binding DoctorAppointmentsView}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate DataType="{x:Type dto:AppointmentDto}">
                                     <Border Padding="5" BorderBrush="{StaticResource CustomGrayColor1}" BorderThickness="0 0 0 5">
@@ -128,7 +163,7 @@
                 <StackPanel>
                     <Label FontSize="18" Foreground="White" Margin="0 0 0 10" Content="Issued Prescriptions"/>
                     <ScrollViewer Height="200" Style="{StaticResource ScrollBarTheme}">
-                        <ItemsControl ItemsSource="{Binding SelectedPatientPrescriptionsView}">
+                        <ItemsControl ItemsSource="{Binding IssuedPrescriptionsView}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate DataType="{x:Type dto:PrescriptionDto}">
                                     <Border Padding="5" BorderBrush="{StaticResource CustomGrayColor1}" BorderThickness="0 0 0 5">
@@ -163,10 +198,10 @@
             <Border Grid.Row="0"  Margin="0 0 0 5" Padding="10" BorderThickness="2" BorderBrush="{StaticResource CustomYellowColor1}" CornerRadius="15">
             <StackPanel>
                 <Label FontSize="18" Foreground="White" Margin="0 0 0 10" Content="Issued Referrals"/>
-                <ScrollViewer Height="475" Style="{StaticResource ScrollBarTheme}">
-                    <ItemsControl ItemsSource="{Binding SelectedPatientDiagnosesView}">
+                <ScrollViewer Height="200" Style="{StaticResource ScrollBarTheme}">
+                    <ItemsControl ItemsSource="{Binding IssuedReferralsView}">
                         <ItemsControl.ItemTemplate>
-                            <DataTemplate DataType="{x:Type dto:DiagnosisDto}">
+                            <DataTemplate DataType="{x:Type dto:ReferralDto}">
                                 <Border Padding="5" BorderBrush="{StaticResource CustomGrayColor1}" BorderThickness="0 0 0 5">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
@@ -174,14 +209,12 @@
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
                                                 
                                         <TextBlock Grid.Column="0" Text="{Binding Id}" Foreground="White"/>
-                                        <TextBlock Grid.Column="1" Text="{Binding DiagnosisDate, Converter={StaticResource DateTimeFormatConverter}}" FontWeight="Bold" Foreground="White"/>
-                                        <TextBlock Grid.Column="2" Text="{Binding DoctorCode}" FontWeight="Bold" Foreground="White"/>
-                                        <TextBlock Grid.Column="3" Text="{Binding DiseaseCode}" FontWeight="Bold" Foreground="White"/>
-                                        <TextBlock Grid.Column="4" Text="{Binding Description}" FontWeight="Bold" Foreground="White"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding DateIssued, Converter={StaticResource DateTimeFormatConverter}}" FontWeight="Bold" Foreground="White"/>
+                                        <TextBlock Grid.Column="2" Text="{Binding Name}" FontWeight="Bold" Foreground="White"/>
+                                        <TextBlock Grid.Column="3" Text="{Binding DoctorCode}" FontWeight="Bold" Foreground="White"/>
                                     </Grid>
                                 </Border>
                             </DataTemplate>
@@ -193,9 +226,9 @@
             
              <Border Grid.Row="1"  Margin="0 5 0 0" Padding="10" BorderThickness="2" BorderBrush="{StaticResource CustomGreenColor1}" CornerRadius="15">
             <StackPanel>
-                <Label FontSize="18" Foreground="White" Margin="0 0 0 10" Content="Issued Referrals"/>
-                <ScrollViewer Height="475" Style="{StaticResource ScrollBarTheme}">
-                    <ItemsControl ItemsSource="{Binding SelectedPatientDiagnosesView}">
+                <Label FontSize="18" Foreground="White" Margin="0 0 0 10" Content="Issued Diagnoses"/>
+                <ScrollViewer Height="200" Style="{StaticResource ScrollBarTheme}">
+                    <ItemsControl ItemsSource="{Binding IssuedDiagnosesView}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate DataType="{x:Type dto:DiagnosisDto}">
                                 <Border Padding="5" BorderBrush="{StaticResource CustomGrayColor1}" BorderThickness="0 0 0 5">
@@ -222,5 +255,7 @@
             </StackPanel>
         </Border>
         </Grid>
+        </Grid>
     </Grid>
+</Border>
 </local:WindowViewBase>
