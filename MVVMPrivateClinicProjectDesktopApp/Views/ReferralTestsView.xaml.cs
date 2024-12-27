@@ -15,7 +15,14 @@ public partial class ReferralTestsView : UserControl {
         if (sender is not Button { DataContext: ReferralTestDto referralTest }) return;
         if (viewModel is null) return;
         
-        viewModel.SetReferralTestIdToShowDetails(referralTest.Id);
+        viewModel.SetEntityIdToShowDetails(referralTest.Id);
         viewModel.ShowReferralTestDetailsModalCommand.Execute(null);
+    }
+
+    private void DeleteReferralTest_OnClick(object sender, RoutedEventArgs e){
+        var viewModel = DataContext as ReferralTestsViewModel;
+        if (sender is not Button { DataContext: ReferralTestDto referralTest }) return;
+
+        viewModel?.SetEntityIdToDelete(referralTest.Id);
     }
 }

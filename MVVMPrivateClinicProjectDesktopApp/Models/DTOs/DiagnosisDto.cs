@@ -7,4 +7,7 @@ public class DiagnosisDto {
     public required string PatientCode { get; set; }
     public required string DoctorCode { get; set; }
     public required string DiseaseCode { get; set; }
+    public int IdPatient { get; set; }
+    public int IdDoctor { get; set; }
+    public int IdDisease { get; set; }
 }

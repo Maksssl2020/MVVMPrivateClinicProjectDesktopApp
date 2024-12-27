@@ -13,10 +13,10 @@ public class LoadPatientDetailsCommand(
     ) : AsyncRelayCommand {
     public override async Task ExecuteAsync(object? parameter){
         try {
-            appointmentStore.SelectedPatientId = patientStore.PatientIdToShowDetails;
-            prescriptionStore.SelectedPatientId = patientStore.PatientIdToShowDetails;
-            referralStore.SelectedPatientId = patientStore.PatientIdToShowDetails;
-            diagnosisStore.SelectedPatientId = patientStore.PatientIdToShowDetails;
+            appointmentStore.SelectedPatientId = patientStore.EntityIdToShowDetails;
+            prescriptionStore.SelectedPatientId = patientStore.EntityIdToShowDetails;
+            referralStore.SelectedPatientId = patientStore.EntityIdToShowDetails;
+            diagnosisStore.SelectedPatientId = patientStore.EntityIdToShowDetails;
             
             await patientStore.LoadPatientDetails();
             await appointmentStore.LoadPatientAppointments();
@@ -24,9 +24,9 @@ public class LoadPatientDetailsCommand(
             await referralStore.LoadPatientReferrals();
             await diagnosisStore.LoadPatientDiagnoses();
 
-            if (patientStore is { SelectedPatientData: not null, SelectedPatientAddress: not null })
-                patientDetailsViewModel.UpdatePatientDetails(patientStore.SelectedPatientData,
-                    patientStore.SelectedPatientAddress, appointmentStore.SelectedPatientAllAppointments,
+            if (patientStore is { SelectedEntityDetails: not null, SelectedPatientAddress: not null })
+                patientDetailsViewModel.UpdatePatientDetails(patientStore.SelectedEntityDetails,
+                    patientStore.SelectedPatientAddress, appointmentStore.SelectedPatientAppointments,
                     prescriptionStore.SelectedPatientPrescriptionsDto, referralStore.SelectedPatientReferralsDto,
                     diagnosisStore.SelectedPatientDiagnoses);
         }

@@ -5,30 +5,15 @@ using MVVMPrivateClinicProjectDesktopApp.Stores;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
-public class PrescriptionDetailsViewModel : ViewModelBase {
+public class PrescriptionDetailsViewModel(PrescriptionStore prescriptionStore)
+    : EntityDetailsViewModelBase<PrescriptionDetailsDto>(
+        new LoadEntityDetailsCommand<PrescriptionDto, PrescriptionDetailsDto>(prescriptionStore)) {
     
-    private PrescriptionDetailsDto _prescriptionDetails = null!;
-    public PrescriptionDetailsDto Prescription {
-        get => _prescriptionDetails;
-        set {
-            _prescriptionDetails = value;
-            OnPropertyChanged();
-        }
-    }
-
-    private ICommand LoadPrescriptionCommand { get; set; }
-    
-    private PrescriptionDetailsViewModel(PrescriptionStore prescriptionStore){
-        LoadPrescriptionCommand = new LoadPrescriptionCommand(this, prescriptionStore);
-    }
-
     public static PrescriptionDetailsViewModel LoadPrescriptionDetailsViewModel(PrescriptionStore prescriptionStore){
         var prescriptionDetailsViewModel = new PrescriptionDetailsViewModel(prescriptionStore);
         
-        prescriptionDetailsViewModel.LoadPrescriptionCommand.Execute(null);
+        prescriptionDetailsViewModel.LoadEntityCommand.Execute(prescriptionDetailsViewModel);
 
-        Console.WriteLine(prescriptionStore.SelectedPrescriptionId);
-        
         return prescriptionDetailsViewModel;
     }
 

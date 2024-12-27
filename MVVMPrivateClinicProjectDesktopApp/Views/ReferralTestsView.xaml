@@ -37,10 +37,11 @@
                 </StackPanel>
                     
                 <components:ButtonWithIcon Grid.Column="1"
-                                           ButtonText="Add New Pricing"
+                                           ButtonText="Add New Referral Test"
                                            ButtonHeight="60"
-                                           ButtonWidth="200"
-                                           TextColor="{StaticResource CustomWarmBeigeColor1}"/>
+                                           ButtonWidth="225"
+                                           TextColor="{StaticResource CustomWarmBeigeColor1}"
+                                           Command="{Binding ShowAddNewReferralTestModalCommand}"/>
             </Grid>
             
             <Border Grid.Row="1" Padding="10 0" Height="50" Background="{StaticResource CustomGrayColor1}" Margin="0 10 20 0" CornerRadius="15">
@@ -78,7 +79,8 @@
                                             <fa:IconImage Style="{StaticResource IconButtonSmall}" Icon="Eye"/>
                                         </Button>
                                         <Button Style="{StaticResource ButtonWithIconSmall}"
-                                                Tag="{StaticResource CustomRedColor1}">
+                                                Tag="{StaticResource CustomRedColor1}"
+                                                Click="DeleteReferralTest_OnClick">
                                             <fa:IconImage Style="{StaticResource IconButtonSmall}" Icon="Trash"/>
                                         </Button>
                                     </StackPanel>       

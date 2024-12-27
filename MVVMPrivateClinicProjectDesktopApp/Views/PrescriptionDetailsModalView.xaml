@@ -17,7 +17,7 @@
         AllowsTransparency="True"
         d:DataContext="{d:DesignInstance viewModel:PrescriptionDetailsViewModel}">
     
-    <Border MouseLeftButtonDown="MouseLeftButtonDown_Hold" BorderThickness="2" BorderBrush="{StaticResource CustomGrayColor1}" Background="{StaticResource CustomBlackColor1}" CornerRadius="20" Padding="20">
+    <Border MouseLeftButtonDown="MouseLeftButtonDown_Hold" BorderThickness="2" BorderBrush="{StaticResource CustomOrangeColor1}" Background="{StaticResource CustomBlackColor1}" CornerRadius="20" Padding="20">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"/>
@@ -35,14 +35,13 @@
                         <StackPanel Width="850" Grid.Row="0">
                             <TextBlock Foreground="White" FontSize="18" FontWeight="Bold">
                                 <Run Text="Prescription #"/>
-                                <Run Text="{Binding Prescription.Id}"/>
+                                <Run Text="{Binding Entity.Id}"/>
                                 <Run Text="Details"/>
                             </TextBlock>
                         </StackPanel>
                     
                         <StackPanel Grid.Column="1" HorizontalAlignment="Right">
-                            <Button  x:Name="closeButton" 
-                                     Click="buttonClose_Click"
+                            <Button  Click="buttonClose_Click"
                                      Style="{StaticResource ControlBarButton}"
                                      Tag="{StaticResource CustomRedColor1}"
                             >
@@ -81,7 +80,7 @@
                                 BorderBrush="{StaticResource CustomGrayColor1}" 
                                 CornerRadius="10"
                         >
-                            <TextBlock Text="{Binding Prescription.DateIssued}"
+                            <TextBlock Text="{Binding Entity.DateIssued}"
                                        Foreground="White"
                                        FontWeight="Bold"
                                        FontSize="15"
@@ -96,7 +95,7 @@
                                 BorderBrush="{StaticResource CustomGrayColor1}" 
                                 CornerRadius="10"
                         >
-                            <TextBlock Text="{Binding Prescription.ExpirationDate}"
+                            <TextBlock Text="{Binding Entity.ExpirationDate}"
                                        Foreground="White"
                                        FontWeight="Bold"
                                        FontSize="15"
@@ -119,10 +118,10 @@
                                    Padding="5 0 0 0"
                                    HorizontalAlignment="Left"
                                    VerticalAlignment="Center">
-                            <Run Text="{Binding Prescription.DoctorDtoBase.FirstName}"/>
-                            <Run Text="{Binding Prescription.DoctorDtoBase.LastName}"/>
+                            <Run Text="{Binding Entity.DoctorDtoBase.FirstName}"/>
+                            <Run Text="{Binding Entity.DoctorDtoBase.LastName}"/>
                             <Run Text="-"/>
-                            <Run Text="{Binding Prescription.DoctorDtoBase.DoctorSpecialization}"/>
+                            <Run Text="{Binding Entity.DoctorDtoBase.DoctorSpecialization}"/>
                         </TextBlock>
                     </Border>
                 </StackPanel>
@@ -140,10 +139,10 @@
                                    Padding="5 0 0 0"
                                    HorizontalAlignment="Left"
                                    VerticalAlignment="Center">
-                            <Run Text="{Binding Prescription.PatientDetailsCto.FirstName}"/>
-                            <Run Text="{Binding Prescription.PatientDetailsCto.LastName}"/>
+                            <Run Text="{Binding Entity.PatientDetailsDto.FirstName}"/>
+                            <Run Text="{Binding Entity.PatientDetailsDto.LastName}"/>
                             <Run Text="-"/>
-                            <Run Text="{Binding Prescription.PatientDetailsCto.PatientCode}"/>
+                            <Run Text="{Binding Entity.PatientDetailsDto.PatientCode}"/>
                         </TextBlock>
                     </Border>
                 </StackPanel>
@@ -156,7 +155,7 @@
                             Padding="5"
                             Margin="0 5 0 0"
                     >
-                        <TextBlock MinHeight="275" FontWeight="Normal" FontSize="15" Foreground="White" TextWrapping="Wrap" Text="{Binding Prescription.PrescriptionDescription }"/>
+                        <TextBlock MinHeight="275" FontWeight="Normal" FontSize="15" Foreground="White" TextWrapping="Wrap" Text="{Binding Entity.PrescriptionDescription }"/>
                     </Border>
                 </StackPanel >
                     </Grid>
@@ -184,7 +183,7 @@
                         </Border>
                         
                         <ScrollViewer Grid.Row="1">
-                            <ItemsControl ItemsSource="{Binding Prescription.MedicinesDto}" Padding="5 0">
+                            <ItemsControl ItemsSource="{Binding Entity.MedicinesDto}" Padding="5 0">
                                <ItemsControl.ItemTemplate>
                                    <DataTemplate DataType="{x:Type dto:MedicineDto}">
                                        <Border Height="50" BorderThickness="0 0 0 2" BorderBrush="{StaticResource CustomGrayColor1}">

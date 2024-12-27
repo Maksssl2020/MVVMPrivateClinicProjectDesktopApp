@@ -9,7 +9,6 @@ using MVVMPrivateClinicProjectDesktopApp.Stores;
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
 public class HomeViewModel : ViewModelBase {
-   
     private readonly ObservableCollection<DoctorDto> _mostPopularDoctors;
     private readonly ObservableCollection<TopPricingDto> _topPricing;
     private readonly ObservableCollection<AppointmentDto> _upcomingAppointments;

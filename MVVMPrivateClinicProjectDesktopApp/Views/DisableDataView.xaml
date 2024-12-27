@@ -1,0 +1,199 @@
+<UserControl x:Class="MVVMPrivateClinicProjectDesktopApp.Views.DisableDataView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewModel="clr-namespace:MVVMPrivateClinicProjectDesktopApp.ViewModels"
+             xmlns:components="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Views.Components"
+             xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+             xmlns:dto="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Models.DTOs"
+             xmlns:converters="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Converters"
+             mc:Ignorable="d"
+             FontFamily="/Fonts/#OpenSans"
+             d:DesignHeight="675" 
+             d:DesignWidth="1070"
+             d:DataContext="{d:DesignInstance viewModel:DisabledDataViewModel}">
+    
+    <UserControl.Resources>
+        <converters:DateTimeFormatConverter x:Key="DateTimeFormatConverter"/>
+    </UserControl.Resources>
+    
+    <Border Background="{StaticResource CustomBlackColor1}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="75"/>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="250"/>
+                </Grid.ColumnDefinitions>
+                    
+                <StackPanel Orientation="Horizontal" Grid.Column="0">
+                    <components:SearchBar SearchBarText="{Binding Filter, Mode=TwoWay}"
+                                          SearchBarTag="{StaticResource CustomSlateGrayColor1}"/>
+                        
+                    <components:SortingComboBox ComboBoxBorderBrush="{StaticResource CustomSlateGrayColor1}"
+                                                ItemsSource="{Binding SortingOptionsList}"
+                                                SelectedItem="{Binding SelectedSortingOption, Mode=TwoWay}"/>
+                </StackPanel>
+                
+            </Grid>
+            
+            
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Left" Orientation="Horizontal" Grid.Row="1">
+                <RadioButton Style="{StaticResource FilterRadioButtonStyle}" 
+                              Tag="{StaticResource CustomGreenColor1}"
+                              Command="{Binding ChooseCategory}"
+                              CommandParameter="Patients"
+                              Width="85"
+                              IsChecked="True">
+                    <StackPanel Style="{StaticResource ToggleButtonStackPanel}">
+                        <TextBlock Text="Patients" Style="{StaticResource ToggleButtonText}"/>
+                    </StackPanel>
+                </RadioButton>
+                <RadioButton Style="{StaticResource FilterRadioButtonStyle}" 
+                              Tag="{StaticResource CustomVioletColor1}"
+                              Command="{Binding ChooseCategory}"
+                              Width="85"
+                              CommandParameter="Doctors">
+                    <StackPanel Style="{StaticResource ToggleButtonStackPanel}">
+                        <TextBlock Text="Doctors" Style="{StaticResource ToggleButtonText}"/>
+                    </StackPanel>
+                </RadioButton>
+                <RadioButton Style="{StaticResource FilterRadioButtonStyle}" 
+                              Tag="{StaticResource CustomPaleGoldColor1}"
+                              Command="{Binding ChooseCategory}"
+                              Width="85"
+                              CommandParameter="Pricing">
+                    <StackPanel Style="{StaticResource ToggleButtonStackPanel}">
+                        <TextBlock Text="Pricing" Style="{StaticResource ToggleButtonText}"/>
+                    </StackPanel>
+                </RadioButton>
+                <RadioButton Style="{StaticResource FilterRadioButtonStyle}" 
+                              Tag="{StaticResource CustomOrangeColor1}"
+                              Command="{Binding ChooseCategory}"
+                              CommandParameter="Prescriptions"
+                              Width="105">
+                    <StackPanel Style="{StaticResource ToggleButtonStackPanel}">
+                        <TextBlock Text="Prescriptions" Style="{StaticResource ToggleButtonText}"/>
+                    </StackPanel>
+                </RadioButton>
+                <RadioButton Style="{StaticResource FilterRadioButtonStyle}" 
+                              Tag="{StaticResource CustomBlueColor1}"
+                              Command="{Binding ChooseCategory}"
+                              CommandParameter="Pat. Notes"
+                              Width="90">
+                    <StackPanel Style="{StaticResource ToggleButtonStackPanel}">
+                        <TextBlock Text="Pat. Notes" Style="{StaticResource ToggleButtonText}"/>
+                    </StackPanel>
+                </RadioButton>
+                <RadioButton Style="{StaticResource FilterRadioButtonStyle}" 
+                             Tag="{StaticResource CustomYellowColor1}"
+                             Command="{Binding ChooseCategory}"
+                             CommandParameter="Referrals"
+                             Width="85">
+                    <StackPanel Style="{StaticResource ToggleButtonStackPanel}">
+                        <TextBlock Text="Referrals" Style="{StaticResource ToggleButtonText}"/>
+                    </StackPanel>
+                </RadioButton>
+                <RadioButton Style="{StaticResource FilterRadioButtonStyle}" 
+                             Tag="{StaticResource CustomWarmBeigeColor1}"
+                             Command="{Binding ChooseCategory}"
+                             CommandParameter="Ref. Tests"
+                             Width="90">
+                    <StackPanel Style="{StaticResource ToggleButtonStackPanel}">
+                        <TextBlock Text="Ref. Tests" Style="{StaticResource ToggleButtonText}"/>
+                    </StackPanel>
+                </RadioButton>
+                <RadioButton Style="{StaticResource FilterRadioButtonStyle}" 
+                             Tag="{StaticResource CustomCoralColor1}"
+                             Command="{Binding ChooseCategory}"
+                             CommandParameter="Invoices"
+                             Width="85">
+                    <StackPanel Style="{StaticResource ToggleButtonStackPanel}">
+                        <TextBlock Text="Invoices" Style="{StaticResource ToggleButtonText}"/>
+                    </StackPanel>
+                </RadioButton>
+                <RadioButton Style="{StaticResource FilterRadioButtonStyle}" 
+                             Tag="{StaticResource CustomTurquoiseColor1}"
+                             Command="{Binding ChooseCategory}"
+                             CommandParameter="Diseases"
+                             Width="85">
+                    <StackPanel Style="{StaticResource ToggleButtonStackPanel}">
+                        <TextBlock Text="Diseases" Style="{StaticResource ToggleButtonText}"/>
+                    </StackPanel>
+                </RadioButton>
+                <RadioButton Style="{StaticResource FilterRadioButtonStyle}" 
+                             Tag="{StaticResource CustomPlumColor1}"
+                             Command="{Binding ChooseCategory}"
+                             CommandParameter="Medicines"
+                             Width="105">
+                    <StackPanel Style="{StaticResource ToggleButtonStackPanel}">
+                        <TextBlock Text="Medicines" Style="{StaticResource ToggleButtonText}"/>
+                    </StackPanel>
+                </RadioButton>
+                <RadioButton Style="{StaticResource FilterRadioButtonStyle}" 
+                             Tag="{StaticResource CustomLavenderColor1}"
+                             Command="{Binding ChooseCategory}"
+                             CommandParameter="Diagnoses"
+                             Width="105">
+                    <StackPanel Style="{StaticResource ToggleButtonStackPanel}">
+                        <TextBlock Text="Diagnoses" Style="{StaticResource ToggleButtonText}"/>
+                    </StackPanel>
+                </RadioButton>
+            </StackPanel>
+            
+            <Border Grid.Row="2" Padding="10 0" Height="50" Background="{StaticResource CustomGrayColor1}" Margin="0 10 20 0" CornerRadius="15">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="35"/>
+                        <ColumnDefinition Width="125"/>
+                        <ColumnDefinition Width="125"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="100"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock FontSize="15" Foreground="White" VerticalAlignment="Center" Grid.Column="0" Text="Id"/>
+                    <TextBlock FontSize="15" Foreground="White" VerticalAlignment="Center" Grid.Column="1" Text="Data Type"/>
+                    <TextBlock FontSize="15" Foreground="White" VerticalAlignment="Center" Grid.Column="2" Text="Disabled Date"/>
+                    <TextBlock FontSize="15" Foreground="White" VerticalAlignment="Center" Grid.Column="3" Text="Details"/>
+                </Grid>
+            </Border>
+            
+            <ScrollViewer  Style="{StaticResource ScrollBarTheme}" Grid.Row="3">
+                <ItemsControl ItemsSource="{Binding EntitiesView}" Padding="10 0" Margin="0 25 0 0">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type dto:DisabledDataDto}">
+                            <Border Padding="5 0 5 0" BorderBrush="{StaticResource CustomGrayColor1}" BorderThickness="0 0 0 2" Height="45">
+                                <Grid  VerticalAlignment="Center">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="35"/>
+                                        <ColumnDefinition Width="125"/>
+                                        <ColumnDefinition Width="125"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="100"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock VerticalAlignment="Center" Foreground="White" Grid.Column="0" Text="{Binding Id}"/>
+                                    <TextBlock VerticalAlignment="Center" Foreground="White" Grid.Column="1" Text="{Binding DisabledDataType}"/>
+                                    <TextBlock VerticalAlignment="Center" Foreground="White" Grid.Column="2" Text="{Binding DisabledDate, Converter={StaticResource DateTimeFormatConverter}}"/>
+                                    <TextBlock VerticalAlignment="Center" Foreground="White" Grid.Column="3" Text="{Binding DataDetails}"/>
+                                    <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" Grid.Column="4">
+                                        <Button Style="{StaticResource ButtonWithIconSmall}"
+                                                Tag="{StaticResource CustomRedColor1}"
+                                                Click="RestoreData_OnClick">
+                                            <fa:IconImage Style="{StaticResource IconButtonSmall}" Icon="TrashArrowUp"/>
+                                        </Button>
+                                    </StackPanel>       
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
+    </Border>
+</UserControl>

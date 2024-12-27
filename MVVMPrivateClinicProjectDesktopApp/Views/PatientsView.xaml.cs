@@ -15,7 +15,7 @@ public partial class PatientsView : UserControl {
         if (sender is not Button { DataContext: PatientDto patient }) return;
         if (viewModel is null) return;
         
-        viewModel.SetPatientIdToShowDetails(patient.Id);
+        viewModel.SetEntityIdToShowDetails(patient.Id);
         viewModel.ShowPatientDataModal.Execute(null);
     }
 
@@ -24,7 +24,6 @@ public partial class PatientsView : UserControl {
 
         if (sender is not Button { DataContext: PatientDto patient }) return;
         
-        viewModel?.SetPatientIdToDelete(patient.Id);
-        viewModel?.ShowDeletePatientModal.Execute(null);
+        viewModel?.SetEntityIdToDelete(patient.Id);
     }
 }

@@ -10,41 +10,27 @@ using MVVMPrivateClinicProjectDesktopApp.Stores;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
-public class MedicinesViewModel : DisplayEntitiesViewModelBase<MedicineDto> {
-    private readonly MedicineStore _medicineStore;
-    
-    private ICommand LoadMedicinesCommand { get; set; }
+public class MedicinesViewModel : DisplayEntitiesViewModelBase<MedicineDto, MedicineDetailsDto> {
     public ICommand ShowAddNewMedicineModal { get; set; }
-    public ICommand ShowMedicineDetailsModal { get; set; }
+    public ICommand ShowMedicineDetailsModal { get; }
 
     private MedicinesViewModel(MedicineStore medicineStore, ModalNavigationViewModel modalNavigationViewModel)
-        :base([SortingOptions.IdAscending, SortingOptions.IdDescending, SortingOptions.AlphabeticalAscending, SortingOptions.AlphabeticalDescending]) {
-        _medicineStore = medicineStore;
-        
-        LoadMedicinesCommand = new LoadMedicinesDtoCommand(UpdateEntities, medicineStore);
+        :base([SortingOptions.IdAscending, SortingOptions.IdDescending, SortingOptions.AlphabeticalAscending, SortingOptions.AlphabeticalDescending],
+            medicineStore, 
+            modalNavigationViewModel) {
         ShowAddNewMedicineModal = modalNavigationViewModel.ShowAddNewMedicineModal;
-        ShowMedicineDetailsModal  = modalNavigationViewModel.ShowMedicineDetailsModal;
-        
-        medicineStore.MedicineCreated += OnMedicineCreated;
+        ShowMedicineDetailsModal = modalNavigationViewModel.ShowMedicineDetailsModal;
     }
 
     public static MedicinesViewModel LoadMedicinesViewModel(MedicineStore medicineStore, ModalNavigationViewModel modalNavigationViewModel){
         var medicinesViewModel = new MedicinesViewModel(medicineStore, modalNavigationViewModel);
         
-        medicinesViewModel.LoadMedicinesCommand.Execute(null);
+        medicinesViewModel.LoadEntitiesCommand.Execute(null);
         
         return medicinesViewModel;
     }
 
-    public void SetMedicineIdToShowDetails(int medicineId){
-        _medicineStore.SelectedMedicineId = medicineId;
-    }
-    
-    private void OnMedicineCreated(MedicineDto medicineDto){
-        Entities.Add(medicineDto);
-    }
-
-    public override void UpdateEntities(IEnumerable<MedicineDto> entities){
+    protected override void UpdateEntities(IEnumerable<MedicineDto> entities){
         Entities.Clear();
 
         foreach (var entity in entities) {

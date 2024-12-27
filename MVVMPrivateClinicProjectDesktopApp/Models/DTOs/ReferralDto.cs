@@ -1,6 +1,8 @@
+using MVVMPrivateClinicProjectDesktopApp.Interfaces;
+
 namespace MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
 
-public class ReferralDto {
+public class ReferralDto : IEntity {
     public int Id { get; set; }
     public DateTime DateIssued { get; set; }
     public required string Name { get; set; }

@@ -38,7 +38,7 @@
         </DataTemplate>
     </Window.Resources>
     
-    <Border MouseLeftButtonDown="MouseLeftButtonDown_Hold" BorderThickness="3" BorderBrush="{StaticResource CustomGrayColor2}" Background="{StaticResource CustomBlackColor1}" CornerRadius="20" Padding="10">
+    <Border MouseLeftButtonDown="MouseLeftButtonDown_Hold" BorderThickness="3" BorderBrush="{StaticResource CustomGreenColor1}" Background="{StaticResource CustomBlackColor1}" CornerRadius="20" Padding="10">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"/>
@@ -56,9 +56,9 @@
                     <StackPanel VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Left" Grid.Column="0">
                         <TextBlock FontWeight="Medium" FontFamily="/Fonts/#OpenSans" FontSize="22" Foreground="White">
                             <Run Text="Patient's Data: "/>
-                            <Run Text="{Binding SelectedPatient.FirstName}"/>
-                            <Run Text="{Binding SelectedPatient.LastName}"/>
-                            <Run Text="{Binding SelectedPatient.PatientCode}"/>
+                            <Run Text="{Binding Entity.FirstName}"/>
+                            <Run Text="{Binding Entity.LastName}"/>
+                            <Run Text="{Binding Entity.PatientCode}"/>
                         </TextBlock>
                     </StackPanel>
                     <StackPanel Grid.Column="1" HorizontalAlignment="Right" >

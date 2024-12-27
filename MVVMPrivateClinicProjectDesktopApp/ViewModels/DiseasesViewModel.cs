@@ -6,41 +6,32 @@ using MVVMPrivateClinicProjectDesktopApp.Stores;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
-public class DiseasesViewModel : DisplayEntitiesViewModelBase<DiseaseDto> {
-    private readonly DiseaseStore _diseaseStore;
-    
-    private ICommand LoadDiseasesCommand { get; set; }
+public class DiseasesViewModel : DisplayEntitiesViewModelBase<DiseaseDto, DiseaseDetailsDto> {
     public ICommand ShowAddNewDiseaseModalCommand { get; set; }
     public ICommand ShowDiseaseDetailsModalCommand { get; set; }
-    
+
     private DiseasesViewModel(DiseaseStore diseaseStore, ModalNavigationViewModel modalNavigationViewModel)
-        :base([SortingOptions.IdAscending, SortingOptions.IdDescending, SortingOptions.AlphabeticalAscending, SortingOptions.AlphabeticalDescending]){
-        _diseaseStore = diseaseStore;
-        
-        LoadDiseasesCommand = new LoadDiseasesCommand(UpdateEntities, diseaseStore);
+        : base(
+            [
+                SortingOptions.IdAscending, SortingOptions.IdDescending, SortingOptions.AlphabeticalAscending,
+                SortingOptions.AlphabeticalDescending
+            ],
+            diseaseStore,
+            modalNavigationViewModel){
+
         ShowAddNewDiseaseModalCommand = modalNavigationViewModel.ShowAddNewDiseaseModal;
         ShowDiseaseDetailsModalCommand = modalNavigationViewModel.ShowDiseaseDetailsModal;
-        
-        diseaseStore.DiseaseCreated += OnDiseaseCreated;
     }
 
     public static DiseasesViewModel LoadDiseasesViewModel(DiseaseStore diseaseStore, ModalNavigationViewModel modalNavigationViewModel){
         var diseasesViewModel = new DiseasesViewModel(diseaseStore, modalNavigationViewModel);
         
-        diseasesViewModel.LoadDiseasesCommand.Execute(null);
+        diseasesViewModel.LoadEntitiesCommand.Execute(null);
 
         return diseasesViewModel;
     }
 
-    public void SetDiseaseIdToSeeDetails(int diseaseId){
-        _diseaseStore.SelectedDiseaseId = diseaseId;
-    }
-    
-    private void OnDiseaseCreated(DiseaseDto diseaseDto){
-        Entities.Add(diseaseDto);
-    }
-
-    public override void UpdateEntities(IEnumerable<DiseaseDto> entities){
+    protected override void UpdateEntities(IEnumerable<DiseaseDto> entities){
         Entities.Clear();
 
         foreach (var entity in entities) {

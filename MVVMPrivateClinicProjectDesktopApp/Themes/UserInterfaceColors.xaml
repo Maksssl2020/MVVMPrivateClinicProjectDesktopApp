@@ -32,4 +32,5 @@
     <SolidColorBrush x:Key="CustomMutedPurpleColor1" Color="#C5A3FF"/>
     <SolidColorBrush x:Key="CustomMintGreenColor1" Color="#A8E6CF"/>
     <SolidColorBrush x:Key="CustomSoftLavenderColor1" Color="#D4A5EB"/>
+    <SolidColorBrush x:Key="CustomSlateGrayColor1" Color="#708090"/>
 </ResourceDictionary>

@@ -29,7 +29,7 @@ public class StatisticsStore {
         var amountOfIssuedReferrals = await _unitOfWork.ReferralRepository.CountIssuedReferralsAsync();
         var amountAppointments = await _unitOfWork.AppointmentRepository.CountAppointmentsAsync();
         var totalInvoicesSum = await _unitOfWork.InvoiceRepository.CountTotalInvoicesSumAsync();
-        var amountOfIssuedDiagnosis = await _unitOfWork.DiagnosisRepository.CountIssuedDiagnosisAsync();
+        var amountOfIssuedDiagnosis = await _unitOfWork.DiagnosesRepository.CountIssuedDiagnosisAsync();
         
         _statistics.Clear();
         _statistics.Add(new StatisticDto("Amount of Patients", amountOfPatients.ToString()));

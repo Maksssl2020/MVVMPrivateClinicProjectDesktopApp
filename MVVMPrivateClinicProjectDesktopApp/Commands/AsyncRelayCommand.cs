@@ -2,8 +2,7 @@ namespace MVVMPrivateClinicProjectDesktopApp.Commands;
 
 public abstract class AsyncRelayCommand : RelayCommand {
     private bool _isExecuting;
-
-    public bool IsExecuting {
+    private bool IsExecuting {
         get => _isExecuting;
         set {
             _isExecuting = value;

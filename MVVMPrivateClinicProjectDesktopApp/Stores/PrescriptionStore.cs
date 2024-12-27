@@ -1,18 +1,15 @@
 using System.Windows.Documents;
+using MVVMPrivateClinicProjectDesktopApp.Helpers;
 using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
 using MVVMPrivateClinicProjectDesktopApp.UnitOfWork;
 
 namespace MVVMPrivateClinicProjectDesktopApp.Stores;
 
-public class PrescriptionStore {
-    private readonly IUnitOfWork _unitOfWork;
+public class PrescriptionStore(IUnitOfWork unitOfWork)
+    : EntityStore<PrescriptionDto, PrescriptionDetailsDto>(unitOfWork) {
+    private readonly List<PrescriptionDto> _selectedPatientPrescriptionsDto = [];
+    private readonly List<PrescriptionDto> _selectedDoctorIssuedPrescriptionsDto = [];
 
-    private readonly List<PrescriptionDto> _prescriptionsDto;
-    private readonly List<PrescriptionDto> _selectedPatientPrescriptionsDto;
-    private readonly List<PrescriptionDto> _selectedDoctorIssuedPrescriptionsDto;
-    private readonly Lazy<Task> _initializeLazy;
-
-    public IEnumerable<PrescriptionDto> PrescriptionsDto => _prescriptionsDto;
     public IEnumerable<PrescriptionDto> SelectedPatientPrescriptionsDto => _selectedPatientPrescriptionsDto;
     public IEnumerable<PrescriptionDto> SelectedDoctorIssuedPrescriptions => _selectedDoctorIssuedPrescriptionsDto;
     
@@ -35,65 +32,47 @@ public class PrescriptionStore {
         }
     }
     
-    private int _selectedPrescriptionId;
-    public int SelectedPrescriptionId {
-        get => _selectedPrescriptionId;
-        set {
-            _selectedPrescriptionId = value;
-            SelectedPrescription = null!;
-        }
-    }
-
-    public PrescriptionDetailsDto SelectedPrescription { get; set; } = null!;
-
-    public event Action<PrescriptionDto>? PrescriptionCreated;
-    
-    public PrescriptionStore(IUnitOfWork unitOfWork){
-        _unitOfWork = unitOfWork;
-        
-        _prescriptionsDto = [];
-        _selectedPatientPrescriptionsDto = [];
-       _selectedDoctorIssuedPrescriptionsDto = []; 
-        
-        _initializeLazy = new Lazy<Task>(InitializePrescriptions);
-    }
-
-    public async Task LoadPrescriptions(){
-        await _initializeLazy.Value;
-    }
-
     public async Task LoadPatientPrescriptions(){
-        var loadedPatientPrescriptions = await _unitOfWork.PrescriptionRepository.GetIssuedPrescriptionsByPatientIdOrDoctorId(SelectedPatientId, PersonType.Patient);
+        var loadedPatientPrescriptions = await UnitOfWork.PrescriptionRepository.GetIssuedPrescriptionsByPatientIdOrDoctorId(SelectedPatientId, PersonType.Patient);
         _selectedPatientPrescriptionsDto.AddRange(loadedPatientPrescriptions);
     }
 
     public async Task LoadDoctorIssuedPrescriptions(){
-        var foundPrescriptions = await _unitOfWork.PrescriptionRepository.GetIssuedPrescriptionsByPatientIdOrDoctorId(SelectedDoctorId,
+        var foundPrescriptions = await UnitOfWork.PrescriptionRepository.GetIssuedPrescriptionsByPatientIdOrDoctorId(SelectedDoctorId,
             PersonType.Doctor);
         _selectedDoctorIssuedPrescriptionsDto.AddRange(foundPrescriptions);
     }
     
-    public async Task LoadPrescriptionById(){
-        var loadedPrescription = await _unitOfWork.PrescriptionRepository.GetPrescriptionDetailsDtoByIdAsync(SelectedPrescriptionId);
-        SelectedPrescription = loadedPrescription;
+    public override async Task CreateEntity(object entityRequest){
+        if (entityRequest is SavePrescriptionRequest savePrescriptionRequest) {
+            var savedPrescription = await UnitOfWork.PrescriptionRepository.SavePrescriptionAsync(savePrescriptionRequest);
+            Entities.Add(savedPrescription);
+            _selectedPatientPrescriptionsDto.Add(savedPrescription);
+            
+            OnEntityCreated(savedPrescription);
+        }
+    }
+
+    public override async Task DeleteEntity(int entityId){
+        await UnitOfWork.PrescriptionRepository.DeleteEntityAsync(entityId);
+        Entities.RemoveAll(e => e.Id == entityId);
+        OnEntityDeleted(entityId);
+    }
+
+    public override async Task LoadEntityDetails(){
+        var loadedPrescription = await UnitOfWork.PrescriptionRepository.GetPrescriptionDetailsDtoByIdAsync(EntityIdToShowDetails);
+        SelectedEntityDetails = loadedPrescription;
+    }
+
+    public async Task GeneratePrescriptionPdfDocument(int prescriptionId){
+        var loadedPrescription = await UnitOfWork.PrescriptionRepository.GetPrescriptionDetailsDtoByIdAsync(prescriptionId);
+        PdfGenerator.GeneratePrescriptionPdf(loadedPrescription);
     }
     
-    public async Task CreatePrescription(SavePrescriptionRequest prescriptionRequest){
-        var savedPrescription = await _unitOfWork.PrescriptionRepository.SavePrescriptionAsync(prescriptionRequest);
-        _prescriptionsDto.Add(savedPrescription);
-        _selectedPatientPrescriptionsDto.Add(savedPrescription);
+    protected override async Task InitializeEntities(){
+        var prescriptionsDto = await UnitOfWork.PrescriptionRepository.GetAllPrescriptionsDtoAsync();
         
-        OnPrescriptionCreated(savedPrescription);
-    }
-    
-    private void OnPrescriptionCreated(PrescriptionDto prescription){
-        PrescriptionCreated?.Invoke(prescription);
-    }
-    
-    private async Task InitializePrescriptions(){
-        var prescriptionsDto = await _unitOfWork.PrescriptionRepository.GetAllPrescriptionsDtoAsync();
-        
-        _prescriptionsDto.Clear();
-        _prescriptionsDto.AddRange(prescriptionsDto);
+        Entities.Clear();
+        Entities.AddRange(prescriptionsDto);
     }
 }

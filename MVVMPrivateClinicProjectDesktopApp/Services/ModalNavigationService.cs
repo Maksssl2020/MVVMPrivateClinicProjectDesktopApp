@@ -13,9 +13,9 @@ public class ModalNavigationService(ModalNavigationStore modalNavigationStore, F
         modalNavigationStore.OpenModal(viewModel, view);
     }
 
-    private static Window? GetModalViewDependsOnViewModel(ViewModelBase viewModel) => viewModel switch {
+    private static Window GetModalViewDependsOnViewModel(ViewModelBase viewModel) => viewModel switch {
         AddNewPatientViewModel => new AddNewPatientView(),
-        DeletePatientViewModel => new DeletePatientView(),
+        DeleteEntityViewModel => new DeleteEntityView(),
         PatientDataModalViewModel => new PatientDataModalView(),
         AddNewDiseaseViewModel => new AddNewDiseaseView(),
         AddNewMedicineViewModel => new AddNewMedicineView(),
@@ -32,6 +32,9 @@ public class ModalNavigationService(ModalNavigationStore modalNavigationStore, F
         MedicineDetailsViewModel => new MedicineDetailsView(),
         DiseaseDetailsViewModel => new DiseaseDetailsView(),
         ReferralTestDetailsViewModel => new ReferralTestDetailsView(),
+        PricingDetailsViewModel => new PricingDetailsView(),
+        AppointmentDetailsViewModel => new AppointmentDetailsView(),
+        AddNewReferralTestViewModel => new AddNewReferralTestView(),
         _ => new AddNewPatientView()
     };
 }

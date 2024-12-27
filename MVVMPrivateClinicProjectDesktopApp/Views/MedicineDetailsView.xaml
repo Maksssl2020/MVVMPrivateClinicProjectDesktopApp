@@ -16,7 +16,7 @@
         Background="Transparent"
         AllowsTransparency="True"
         d:DataContext="{d:DesignInstance viewModel:MedicineDetailsViewModel}">
-    <Border MouseLeftButtonDown="MouseLeftButtonDown_Hold" BorderThickness="2" BorderBrush="{StaticResource CustomGrayColor1}" Background="{StaticResource CustomBlackColor1}" CornerRadius="20" Padding="20">
+    <Border MouseLeftButtonDown="MouseLeftButtonDown_Hold" BorderThickness="2" BorderBrush="{StaticResource CustomPlumColor1}" Background="{StaticResource CustomBlackColor1}" CornerRadius="20" Padding="20">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"/>
@@ -34,7 +34,7 @@
                         <StackPanel Width="400" Grid.Row="0">
                             <TextBlock Foreground="White" FontSize="18" FontWeight="Bold">
                                 <Run Text="Medicine Nr. #"/>
-                                <Run Text="{Binding MedicineDetails.Id}"/>
+                                <Run Text="{Binding Entity.Id}"/>
                                 <Run Text="Details"/>
                             </TextBlock>
                         </StackPanel>
@@ -66,7 +66,7 @@
                             BorderBrush="{StaticResource CustomGrayColor1}" 
                             CornerRadius="10"
                     >
-                        <TextBlock Text="{Binding MedicineDetails.Name}"
+                        <TextBlock Text="{Binding Entity.Name}"
                                    Foreground="White"
                                    FontSize="15"
                                    FontWeight="Bold"
@@ -83,7 +83,7 @@
                             BorderBrush="{StaticResource CustomGrayColor1}" 
                             CornerRadius="10"
                     >
-                        <TextBlock Text="{Binding MedicineDetails.Type}"
+                        <TextBlock Text="{Binding Entity.Type}"
                                    Foreground="White"
                                    FontSize="15"
                                    FontWeight="Bold"
@@ -100,7 +100,7 @@
                             BorderBrush="{StaticResource CustomGrayColor1}" 
                             CornerRadius="10"
                     >
-                        <TextBlock Text="{Binding MedicineDetails.TotalUses}"
+                        <TextBlock Text="{Binding Entity.TotalUses}"
                                    Foreground="White"
                                    FontSize="15"
                                    FontWeight="Bold"
@@ -117,7 +117,7 @@
                             BorderBrush="{StaticResource CustomGrayColor1}" 
                             CornerRadius="10"
                     >
-                        <TextBlock Text="{Binding MedicineDetails.Description}"
+                        <TextBlock Text="{Binding Entity.Description}"
                                    Foreground="White"
                                    FontSize="15"
                                    FontWeight="Normal"

@@ -7,6 +7,7 @@ using MVVMPrivateClinicProjectDesktopApp.Commands;
 using MVVMPrivateClinicProjectDesktopApp.Interfaces;
 using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
 using MVVMPrivateClinicProjectDesktopApp.Stores;
+using static MVVMPrivateClinicProjectDesktopApp.Helpers.RegexPatterns;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
@@ -17,9 +18,9 @@ public class IssueReferralViewModel : AddNewEntityViewModelBase {
     private readonly ObservableCollection<DiseaseDto> _diseases;
     private readonly ObservableCollection<ReferralTestDto> _referralTests;
 
-    public ICollectionView DoctorsView { get; set; }
-    public ICollectionView DiseasesView { get; set; }
-    public ICollectionView ReferralTestsView { get; set; }
+    public ICollectionView DoctorsView { get; }
+    public ICollectionView DiseasesView { get; }
+    public ICollectionView ReferralTestsView { get; }
 
     private DoctorDto _selectedDoctor = null!;
 
@@ -59,7 +60,7 @@ public class IssueReferralViewModel : AddNewEntityViewModelBase {
     private string _referralName = string.Empty;
 
     [Required(ErrorMessage = "Referral's Name is required!")]
-    [RegularExpression(@"([\p{L}]+[\s]?)+", ErrorMessage = "Use letters only please!")]
+    [RegularExpression(LettersOnlyRegexWithAdditionalCharacters, ErrorMessage = "Use letters only please!")]
     public string ReferralName {
         get => _referralName;
         set {
@@ -73,7 +74,6 @@ public class IssueReferralViewModel : AddNewEntityViewModelBase {
     private string _referralDescription = string.Empty;
     
     [Required(ErrorMessage = "Referral's Description is required!")]
-    [RegularExpression(@"([\p{L}]+[\s]?)+", ErrorMessage = "Use letters only please!")]
     public string ReferralDescription { 
         get => _referralDescription;
         set {
@@ -84,25 +84,25 @@ public class IssueReferralViewModel : AddNewEntityViewModelBase {
         }
     }
     
-    private ICommand LoadFamilyDoctorsCommand { get; set; }
+    private ICommand LoadFamilyDoctorsCommand { get; }
     private ICommand LoadDiseasesCommand { get; }
     private ICommand LoadReferralTestsCommand { get; }
-    public ICommand CreateReferralCommand { get; set; }
-    public int SelectedPatientId { get; set; }
+    public ICommand CreateReferralCommand { get; }
+    public int SelectedPatientId { get; }
 
     private IssueReferralViewModel(PatientStore patientStore, ReferralStore referralStore,  DoctorStore doctorStore, DiseaseStore diseaseStore, ReferralTestStore referralTestStore){
         _doctors = [];
         _diseases = [];
         _referralTests = [];
-        SelectedPatientId = patientStore.PatientIdToShowDetails;
+        SelectedPatientId = patientStore.EntityIdToShowDetails;
         
         DoctorsView = CollectionViewSource.GetDefaultView(_doctors);
         DiseasesView = CollectionViewSource.GetDefaultView(_diseases);
         ReferralTestsView = CollectionViewSource.GetDefaultView(_referralTests);
 
         LoadFamilyDoctorsCommand = new LoadFamilyDoctorsCommand(UpdateDoctorsDto, doctorStore);
-        LoadDiseasesCommand = new LoadDiseasesCommand(UpdateDiseasesDto, diseaseStore);
-        LoadReferralTestsCommand = new LoadReferralTestsCommand(UpdateReferralTests, referralTestStore);
+        LoadDiseasesCommand = new LoadEntitiesCommand<DiseaseDto, DiseaseDetailsDto>(UpdateDiseasesDto, diseaseStore);
+        LoadReferralTestsCommand = new LoadEntitiesCommand<ReferralTestDto, ReferralTestDetailsDto>(UpdateReferralTests, referralTestStore);
         CreateReferralCommand = new CreateReferralCommand(this, referralStore, ResetForm);
     }
 
@@ -121,7 +121,7 @@ public class IssueReferralViewModel : AddNewEntityViewModelBase {
         CreateReferralCommand.Execute(null);
     }
 
-    public void UpdateDoctorsDto(IEnumerable<DoctorDto> doctorsDto){
+    private void UpdateDoctorsDto(IEnumerable<DoctorDto> doctorsDto){
         _doctors.Clear();
 
         foreach (var doctorDto in doctorsDto) {

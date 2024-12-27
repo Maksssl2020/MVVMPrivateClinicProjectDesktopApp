@@ -11,32 +11,34 @@ using MVVMPrivateClinicProjectDesktopApp.Stores;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
-public class ReferralsViewModel : DisplayEntitiesViewModelBase<ReferralDto> {
-    private readonly ReferralStore _referralStore;
+public class ReferralsViewModel : DisplayEntitiesViewModelBase<ReferralDto, ReferralDetailsDto> {
     private readonly AddSpecificDataToPatientStore _addSpecificDataToPatientStore;
     
-    private ICommand LoadReferralsCommand { get; set; }
     public ICommand ShowReferralDetailsCommand { get; set; }
     public ICommand ShowSelectPatientToAddSpecificDataModal { get; set; }
-
+    public ICommand GenerateReferralPdfCommand { get; set; }
+    
     private ReferralsViewModel(ReferralStore referralStore, AddSpecificDataToPatientStore addSpecificDataToPatientStore, ModalNavigationViewModel modalNavigationViewModel)
-        :base([SortingOptions.IdAscending, SortingOptions.IdDescending, SortingOptions.AlphabeticalAscending, SortingOptions.AlphabeticalDescending, SortingOptions.DateAscending, SortingOptions.DateDescending]){
-        _referralStore = referralStore;
+        :base([SortingOptions.IdAscending, SortingOptions.IdDescending, SortingOptions.AlphabeticalAscending, SortingOptions.AlphabeticalDescending, SortingOptions.DateAscending, SortingOptions.DateDescending],
+            referralStore,
+            modalNavigationViewModel){
         _addSpecificDataToPatientStore = addSpecificDataToPatientStore;
         
-        LoadReferralsCommand = new LoadReferralsDtoCommand(this, referralStore);
         ShowReferralDetailsCommand = modalNavigationViewModel.ShowReferralDetailsModal;
         ShowSelectPatientToAddSpecificDataModal = modalNavigationViewModel.ShowSelectPatientToAddSpecificDataModal;
-
-        referralStore.ReferralCreated += OnReferralCreated;
+        GenerateReferralPdfCommand = new GenerateReferralPdfCommand(referralStore);
     }
 
     public static ReferralsViewModel LoadReferralsViewModel(ReferralStore referralStore, AddSpecificDataToPatientStore addSpecificDataToPatientStore, ModalNavigationViewModel modalNavigationViewModel){
         var referralsViewModel = new ReferralsViewModel(referralStore, addSpecificDataToPatientStore, modalNavigationViewModel);
         
-        referralsViewModel.LoadReferralsCommand.Execute(null);
+        referralsViewModel.LoadEntitiesCommand.Execute(null);
         
         return referralsViewModel;
+    }
+
+    public void GenerateReferralPdf(int referralId){
+        GenerateReferralPdfCommand.Execute(referralId);
     }
     
     public void SetDataInAddSpecificDataToPatientStore(){
@@ -44,16 +46,8 @@ public class ReferralsViewModel : DisplayEntitiesViewModelBase<ReferralDto> {
         _addSpecificDataToPatientStore.DataColor =
             (SolidColorBrush) Application.Current.Resources["CustomYellowColor1"]!;
     }
-    
-    private void OnReferralCreated(ReferralDto referralDto){
-        Entities.Add(referralDto);
-    }
-    
-    public void SetReferralIdToShowDetails(int referralId){
-        _referralStore.SelectedReferralId = referralId;
-    }
 
-    public override void UpdateEntities(IEnumerable<ReferralDto> entities){
+    protected override void UpdateEntities(IEnumerable<ReferralDto> entities){
         Entities.Clear();
 
         foreach (var entity in entities) {

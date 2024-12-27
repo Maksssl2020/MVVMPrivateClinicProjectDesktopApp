@@ -40,4 +40,12 @@ public partial class AppointmentsView : UserControl {
         viewModel.UpdateAppointmentStatusId = appointment.Id;
         viewModel.CancelAppointmentCommand.Execute(null);
     }
+    
+    private void ShowPricingDetails_OnClick(object sender, RoutedEventArgs e){
+        if (DataContext is not AppointmentsViewModel viewModel) return;
+        if (sender is not Button { DataContext: AppointmentDto appointmentDto }) return;
+        
+        viewModel.SetEntityIdToShowDetails(appointmentDto.Id);
+        viewModel.ShowAppointmentDetailsModalCommand.Execute(null);
+    }
 }

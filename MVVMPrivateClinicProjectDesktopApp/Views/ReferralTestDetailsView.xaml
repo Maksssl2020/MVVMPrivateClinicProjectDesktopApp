@@ -16,7 +16,7 @@
         Background="Transparent"
         AllowsTransparency="True"
         d:DataContext="{d:DesignInstance viewModel:ReferralTestDetailsViewModel}">
-    <Border MouseLeftButtonDown="MouseLeftButtonDown_Hold" BorderThickness="2" BorderBrush="{StaticResource CustomGrayColor1}" Background="{StaticResource CustomBlackColor1}" CornerRadius="20" Padding="20">
+    <Border MouseLeftButtonDown="MouseLeftButtonDown_Hold" BorderThickness="2" BorderBrush="{StaticResource CustomWarmBeigeColor1}" Background="{StaticResource CustomBlackColor1}" CornerRadius="20" Padding="20">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"/>

@@ -56,7 +56,7 @@ public class SelectPatientToAddSpecificDataViewModel : ViewModelBase {
         PatientsView = CollectionViewSource.GetDefaultView(_patients);
         PatientsView.Filter = FilterPatients;
 
-        LoadPatientsCommand = new LoadPatientsCommand(UpdatePatients, patientStore);
+        LoadPatientsCommand = new LoadEntitiesCommand<PatientDto, PatientDto>(UpdatePatients, patientStore);
         ShowPatientDataModalCommand = modalNavigationViewModel.ShowPatientDataModal;
         SubmitCommand = new SubmitCommand(Submit, CanSubmit);
     }
@@ -82,7 +82,7 @@ public class SelectPatientToAddSpecificDataViewModel : ViewModelBase {
     }
 
     private void SetPatientIdToShowData(){
-        _patientStore.PatientIdToShowDetails = SelectedPatient.Id;
+        _patientStore.EntityIdToShowDetails = SelectedPatient.Id;
     }
 
     private void UpdatePatients(IEnumerable<PatientDto> patients){

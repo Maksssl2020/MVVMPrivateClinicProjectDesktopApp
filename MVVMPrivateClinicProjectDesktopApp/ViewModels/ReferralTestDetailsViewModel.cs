@@ -7,7 +7,7 @@ namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
 public class ReferralTestDetailsViewModel : EntityDetailsViewModelBase<ReferralTestDetailsDto> {
     private ReferralTestDetailsViewModel(ReferralTestStore referralTestStore) : 
-        base(new LoadReferralTestCommand(referralTestStore)) {
+        base(new LoadEntityDetailsCommand<ReferralTestDto, ReferralTestDetailsDto>(referralTestStore)) {
     }
 
     public static ReferralTestDetailsViewModel LoadReferralTestDetailsViewModel(ReferralTestStore referralTestStore){

@@ -10,7 +10,7 @@ public class CreateDiseaseCommand(AddNewDiseaseViewModel viewModel, DiseaseStore
             DiseaseName = viewModel.DiseaseName
         };
 
-        await diseaseStore.CreateDisease(saveDiseaseRequest);
+        await diseaseStore.CreateEntity(saveDiseaseRequest);
         resetForm.Invoke();
     }
 }

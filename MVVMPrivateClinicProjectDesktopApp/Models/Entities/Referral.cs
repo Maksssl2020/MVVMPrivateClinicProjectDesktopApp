@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using MVVMPrivateClinicProjectDesktopApp.Interfaces;
 
 namespace MVVMPrivateClinicProjectDesktopApp.Models.Entities;
 
-public partial class Referral
+public partial class Referral : IDeletableEntity
 {
     public int Id { get; set; }
 
@@ -20,6 +21,10 @@ public partial class Referral
     public int? IdDisease { get; set; }
 
     public int IdReferralTest { get; set; }
+
+    public bool? IsDeleted { get; set; }
+
+    public DateTime? DisabledDate { get; set; }
 
     public virtual ICollection<AppointmentCard> AppointmentCards { get; set; } = new List<AppointmentCard>();
 

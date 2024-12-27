@@ -12,7 +12,7 @@ public class CreateMedicineCommand(AddNewMedicineViewModel viewModel, MedicineSt
             Type = viewModel.MedicineType
         };
         
-        await medicineStore.CreateMedicine(saveMedicineRequest);
+        await medicineStore.CreateEntity(saveMedicineRequest);
         resetForm.Invoke();
     }
 }

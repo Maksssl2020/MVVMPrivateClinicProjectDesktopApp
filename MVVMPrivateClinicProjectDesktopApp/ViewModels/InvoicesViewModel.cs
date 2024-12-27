@@ -9,37 +9,28 @@ using MVVMPrivateClinicProjectDesktopApp.Stores;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
-public class InvoicesViewModel : DisplayEntitiesViewModelBase<InvoiceDto> {
-    private readonly InvoiceStore _invoiceStore;
-    
-    private ICommand LoadInvoicesCommand { get; set; }
+public class InvoicesViewModel : DisplayEntitiesViewModelBase<InvoiceDto, InvoiceDetailsDto> {
     public ICommand ShowAddNewInvoiceModalCommand { get; set; }
     public ICommand ShowInvoiceDetailsModalCommand { get; set; }
    
     private InvoicesViewModel(InvoiceStore invoiceStore, ModalNavigationViewModel modalNavigationViewModel)
-        :base([SortingOptions.IdAscending, SortingOptions.IdDescending, SortingOptions.PriceAscending, SortingOptions.PriceDescending, SortingOptions.DateAscending, SortingOptions.DateDescending]) {
-        _invoiceStore = invoiceStore;
-        
-        LoadInvoicesCommand = new LoadInvoicesDtoCommand(this, invoiceStore);
+        :base(
+            [SortingOptions.IdAscending, SortingOptions.IdDescending, SortingOptions.PriceAscending, SortingOptions.PriceDescending, SortingOptions.DateAscending, SortingOptions.DateDescending],
+            invoiceStore, 
+            modalNavigationViewModel) {
         ShowAddNewInvoiceModalCommand = modalNavigationViewModel.ShowAddNewInvoiceModal;
         ShowInvoiceDetailsModalCommand = modalNavigationViewModel.ShowInvoiceDetailsModal;
-        
-        invoiceStore.InvoiceCreated += OnInvoiceCreated;
     }
 
     public static InvoicesViewModel LoadInvoicesViewModel(InvoiceStore invoiceStore, ModalNavigationViewModel modalNavigationViewModel){
         var invoicesViewModel = new InvoicesViewModel(invoiceStore, modalNavigationViewModel);
         
-        invoicesViewModel.LoadInvoicesCommand.Execute(null);
+        invoicesViewModel.LoadEntitiesCommand.Execute(null);
         
         return invoicesViewModel;
     }
 
-    public void SetInvoiceIdToShowDetails(int invoiceId){
-        _invoiceStore.SelectedInvoiceId = invoiceId;
-    }
-    
-    public override void UpdateEntities(IEnumerable<InvoiceDto> entities){
+    protected override void UpdateEntities(IEnumerable<InvoiceDto> entities){
         Entities.Clear();
 
         foreach (var entity in entities) {
@@ -72,9 +63,5 @@ public class InvoicesViewModel : DisplayEntitiesViewModelBase<InvoiceDto> {
         
         var filter = Filter.Trim().ToLower();
         return invoiceDto.PatientCode.Contains(filter, StringComparison.CurrentCultureIgnoreCase);
-    }
-
-    private void OnInvoiceCreated(InvoiceDto invoiceDto){
-        Entities.Add(invoiceDto);
     }
 }

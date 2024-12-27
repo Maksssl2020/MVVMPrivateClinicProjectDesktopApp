@@ -17,7 +17,7 @@
         AllowsTransparency="True"
         d:DataContext="{d:DesignInstance viewModel:PatientNoteDetailsViewModel}">
     
-    <Border MouseLeftButtonDown="MouseLeftButtonDown_Hold" BorderThickness="2" BorderBrush="{StaticResource CustomGrayColor1}" Background="{StaticResource CustomBlackColor1}" CornerRadius="20" Padding="20">
+    <Border MouseLeftButtonDown="MouseLeftButtonDown_Hold" BorderThickness="2" BorderBrush="{StaticResource CustomBlueColor1}" Background="{StaticResource CustomBlackColor1}" CornerRadius="20" Padding="20">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"/>
@@ -35,7 +35,7 @@
                         <StackPanel Width="400" Grid.Row="0">
                             <TextBlock Foreground="White" FontSize="18" FontWeight="Bold">
                                 <Run Text="Patient Note Nr. #"/>
-                                <Run Text="{Binding PatientNote.Id}"/>
+                                <Run Text="{Binding Entity.Id}"/>
                                 <Run Text="Details"/>
                             </TextBlock>
                         </StackPanel>
@@ -67,7 +67,7 @@
                             BorderBrush="{StaticResource CustomGrayColor1}" 
                             CornerRadius="10"
                     >
-                        <TextBlock Text="{Binding PatientNote.DateIsuued}"
+                        <TextBlock Text="{Binding Entity.DateIsuued}"
                                    Foreground="White"
                                    FontWeight="Bold"
                                    FontSize="15"
@@ -89,10 +89,10 @@
                                    Padding="5 0 0 0"
                                    HorizontalAlignment="Left"
                                    VerticalAlignment="Center">
-                            <Run Text="{Binding PatientNote.DoctorDtoBase.FirstName}"/>
-                            <Run Text="{Binding PatientNote.DoctorDtoBase.LastName}"/>
+                            <Run Text="{Binding Entity.DoctorDtoBase.FirstName}"/>
+                            <Run Text="{Binding Entity.DoctorDtoBase.LastName}"/>
                             <Run Text="-"/>
-                            <Run Text="{Binding PatientNote.DoctorDtoBase.DoctorSpecialization}"/>
+                            <Run Text="{Binding Entity.DoctorDtoBase.DoctorSpecialization}"/>
                         </TextBlock>
                     </Border>
                 </StackPanel>
@@ -110,10 +110,10 @@
                                    Padding="5 0 0 0"
                                    HorizontalAlignment="Left"
                                    VerticalAlignment="Center">
-                            <Run Text="{Binding PatientNote.PatientDetailsDto.FirstName}"/>
-                            <Run Text="{Binding PatientNote.PatientDetailsDto.LastName}"/>
+                            <Run Text="{Binding Entity.PatientDetailsDto.FirstName}"/>
+                            <Run Text="{Binding Entity.PatientDetailsDto.LastName}"/>
                             <Run Text="-"/>
-                            <Run Text="{Binding PatientNote.PatientDetailsDto.PatientCode}"/>
+                            <Run Text="{Binding Entity.PatientDetailsDto.PatientCode}"/>
                         </TextBlock>
                     </Border>
                 </StackPanel>
@@ -126,7 +126,7 @@
                             Padding="5"
                             Margin="0 5 0 0"
                     >
-                        <TextBlock MinHeight="300" FontWeight="Normal" FontSize="15" Foreground="White" TextWrapping="Wrap" Text="{Binding PatientNote.Description }"/>
+                        <TextBlock MinHeight="300" FontWeight="Normal" FontSize="15" Foreground="White" TextWrapping="Wrap" Text="{Binding Entity.Description }"/>
                     </Border>
                 </StackPanel >
             </Grid>

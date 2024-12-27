@@ -10,7 +10,7 @@ public abstract class AddNewEntityViewModelBase : ViewModelBase {
         SubmitCommand = new SubmitCommand(Submit, CanSubmit);
     }
 
-    private bool CanSubmit(){
+    protected bool CanSubmit(){
         var context = new ValidationContext(this);
         var results = new List<ValidationResult>();
         return Validator.TryValidateObject(this, context, results, true);

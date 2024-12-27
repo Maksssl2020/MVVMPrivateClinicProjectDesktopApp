@@ -1,6 +1,8 @@
+using MVVMPrivateClinicProjectDesktopApp.Interfaces;
+
 namespace MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
 
-public class PrescriptionDto {
+public class PrescriptionDto : IEntity {
     public int Id { get; set; }
     public DateOnly DateIssued { get; set; }
     public DateOnly ExpirationDate { get; set; }

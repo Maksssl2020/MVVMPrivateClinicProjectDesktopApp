@@ -9,17 +9,8 @@ using MVVMPrivateClinicProjectDesktopApp.Stores;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
-public class PatientDetailsViewModel : ViewModelBase {
-    private PatientDto _selectedPatient = null!;
+public class PatientDetailsViewModel : EntityDetailsViewModelBase<PatientDto> {
     private Address _selectedPatientAddress = null!;
-    
-    public PatientDto SelectedPatient {
-        get => _selectedPatient;
-        private set {
-            _selectedPatient = value;
-            OnPropertyChanged();
-        }
-    }
 
     public Address SelectedPatientAddress {
         get => _selectedPatientAddress;
@@ -47,7 +38,7 @@ public class PatientDetailsViewModel : ViewModelBase {
         PrescriptionStore prescriptionStore,
         ReferralStore referralStore,
         DiagnosisStore diagnosisStore
-        ) {
+        ): base(new LoadEntityDetailsCommand<PatientDto, PatientDto>(patientStore)) {
         _selectedPatientAppointments = [];
         _selectedPatientPrescriptions = [];
         _selectedPatientReferrals = [];
@@ -60,8 +51,8 @@ public class PatientDetailsViewModel : ViewModelBase {
         
         LoadPatientDetailsCommand = new LoadPatientDetailsCommand(this, patientStore, appointmentStore, prescriptionStore, referralStore, diagnosisStore);
 
-        referralStore.ReferralCreated += OnReferralCreated;
-        prescriptionStore.PrescriptionCreated += OnPrescriptionCreated;
+        referralStore.EntityCreated += OnReferralCreated;
+        prescriptionStore.EntityCreated += OnPrescriptionCreated;
     }
 
     public static PatientDetailsViewModel LoadPatientDetailsViewModel(
@@ -73,7 +64,7 @@ public class PatientDetailsViewModel : ViewModelBase {
         ){
         var patientDetailsViewModel = new PatientDetailsViewModel(patientStore, appointmentStore, prescriptionStore,referralStore, diagnosisStore);
         
-        patientDetailsViewModel.LoadPatientDetailsCommand.Execute(null);
+        patientDetailsViewModel.LoadPatientDetailsCommand.Execute(patientDetailsViewModel);
         
         return patientDetailsViewModel;
     }
@@ -87,7 +78,7 @@ public class PatientDetailsViewModel : ViewModelBase {
     }
     
     public void UpdatePatientDetails(PatientDto patient, Address address, IEnumerable<AppointmentDto> appointments, IEnumerable<PrescriptionDto> prescriptions, IEnumerable<ReferralDto> referrals, IEnumerable<DiagnosisDto> diagnoses) {
-        SelectedPatient = patient;
+        Entity = patient;
         SelectedPatientAddress = address;
         _selectedPatientAppointments.Clear();
         _selectedPatientPrescriptions.Clear();

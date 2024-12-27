@@ -3,58 +3,31 @@ using MVVMPrivateClinicProjectDesktopApp.UnitOfWork;
 
 namespace MVVMPrivateClinicProjectDesktopApp.Stores;
 
-public class InvoiceStore {
-    private readonly IUnitOfWork _unitOfWork;
-    
-    private readonly List<InvoiceDto> _invoicesDto;
-    private readonly Lazy<Task> _initializeLazy;
-
-    public IEnumerable<InvoiceDto> InvoicesDto => _invoicesDto;
-
-    public event Action<InvoiceDto>? InvoiceCreated; 
-    
-    private int _selectedInvoiceId;
-    public int SelectedInvoiceId {
-        get => _selectedInvoiceId;
-        set {
-            _selectedInvoiceId = value;
-            SelectedInvoice = null!;
+public class InvoiceStore(IUnitOfWork unitOfWork) : EntityStore<InvoiceDto, InvoiceDetailsDto>(unitOfWork) {
+    public override async Task CreateEntity(object entityRequest){
+        if (entityRequest is SaveInvoiceRequest saveInvoiceRequest) {
+            var savedInvoice = await UnitOfWork.InvoiceRepository.SaveInvoiceAsync(saveInvoiceRequest);
+            Entities.Add(savedInvoice);
+            
+            OnEntityCreated(savedInvoice);
         }
     }
 
-    public InvoiceDetailsDto SelectedInvoice { get; set; } = null!;
-    
-    public InvoiceStore(IUnitOfWork unitOfWork){
-        _unitOfWork = unitOfWork;
-
-        _invoicesDto = [];
-        _initializeLazy = new Lazy<Task>(InitializeInvoices);
+    public override async Task DeleteEntity(int entityId){
+        await UnitOfWork.InvoiceRepository.DeleteEntityAsync(entityId);
+        Entities.RemoveAll(e => e.Id == entityId);
+        OnEntityDeleted(entityId);
     }
 
-    public async Task LoadInvoices(){
-        await _initializeLazy.Value;
+    public override async Task LoadEntityDetails(){
+        var loadedInvoice = await UnitOfWork.InvoiceRepository.GetInvoiceDetailsDtoAsync(EntityIdToShowDetails);
+        if (loadedInvoice != null) SelectedEntityDetails = loadedInvoice;
     }
 
-    public async Task CreateInvoice(SaveInvoiceRequest invoiceRequest){
-        var savedInvoice = await _unitOfWork.InvoiceRepository.SaveInvoiceAsync(invoiceRequest);
-        _invoicesDto.Add(savedInvoice);
+    protected override async Task InitializeEntities(){
+        var loadedInvoices = await UnitOfWork.InvoiceRepository.GetAllInvoicesDtoAsync();
         
-        OnInvoiceCreated(savedInvoice);
-    }
-
-    public async Task LoadInvoiceDetails(){
-        var loadedInvoice = await _unitOfWork.InvoiceRepository.GetInvoiceDetailsDtoAsync(SelectedInvoiceId);
-        if (loadedInvoice != null) SelectedInvoice = loadedInvoice;
-    }
-    
-    private void OnInvoiceCreated(InvoiceDto invoiceDto){
-        InvoiceCreated?.Invoke(invoiceDto);
-    }
-    
-    private async Task InitializeInvoices(){
-        var loadedInvoices = await _unitOfWork.InvoiceRepository.GetAllInvoicesDtoAsync();
-        
-        _invoicesDto.Clear();
-        _invoicesDto.AddRange(loadedInvoices);
+        Entities.Clear();
+        Entities.AddRange(loadedInvoices);
     }
 }

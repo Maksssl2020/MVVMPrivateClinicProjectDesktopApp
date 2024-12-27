@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using MVVMPrivateClinicProjectDesktopApp.Interfaces;
 
 namespace MVVMPrivateClinicProjectDesktopApp.Models.Entities;
 
-public partial class Pricing
+public partial class Pricing : IDeletableEntity
 {
     public int Id { get; set; }
 
@@ -13,9 +14,11 @@ public partial class Pricing
 
     public decimal Price { get; set; }
 
-    public bool IsAvailable { get; set; }
+    public bool? IsDeleted { get; set; }
 
     public DateOnly EffectiveDate { get; set; }
+
+    public DateTime? DisabledDate { get; set; }
 
     public virtual ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
 

@@ -1,19 +1,12 @@
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Windows.Data;
 using System.Windows.Input;
 using MVVMPrivateClinicProjectDesktopApp.Commands;
 using MVVMPrivateClinicProjectDesktopApp.Helpers;
-using MVVMPrivateClinicProjectDesktopApp.Interfaces;
 using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
 using MVVMPrivateClinicProjectDesktopApp.Stores;
-using MVVMPrivateClinicProjectDesktopApp.Views;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
-public class DoctorsViewModel : DisplayEntitiesViewModelBase<DoctorDto> {
-    private readonly DoctorStore _doctorStore;
-    
+public class DoctorsViewModel : DisplayEntitiesViewModelBase<DoctorDto, DoctorStatisticsDto> {
     private string _doctorSpecialization = string.Empty;
     public string DoctorSpecialization {
         get => _doctorSpecialization;
@@ -23,34 +16,26 @@ public class DoctorsViewModel : DisplayEntitiesViewModelBase<DoctorDto> {
         }
     }
 
-    private ICommand LoadDoctorsCommand { get; set; }
     public ICommand ShowAddNewDoctorViewCommand { get; set; }
     public ICommand ShowDoctorDetailsCommand { get; set; }
     
     private DoctorsViewModel(DoctorStore doctorStore, ModalNavigationViewModel modalNavigationViewModel)
-        :base([SortingOptions.AlphabeticalAscending, SortingOptions.AlphabeticalDescending, SortingOptions.IdAscending, SortingOptions.IdDescending]) {
-        _doctorStore = doctorStore;
-        
-        LoadDoctorsCommand = new LoadDoctorsCommand(UpdateEntities, doctorStore);
+        :base([SortingOptions.AlphabeticalAscending, SortingOptions.AlphabeticalDescending, SortingOptions.IdAscending, SortingOptions.IdDescending],
+            doctorStore,
+            modalNavigationViewModel) {
         ShowAddNewDoctorViewCommand = modalNavigationViewModel.ShowAddNewDoctorModal;
         ShowDoctorDetailsCommand = modalNavigationViewModel.ShowDoctorDetailsModal;
-        
-        doctorStore.DoctorCreated += OnDoctorCreated;
     }
 
     public static DoctorsViewModel LoadDoctorsViewModel(DoctorStore doctorStore, ModalNavigationViewModel modalNavigationViewModel){
         var doctorsViewModel = new DoctorsViewModel(doctorStore, modalNavigationViewModel);
         
-        doctorsViewModel.LoadDoctorsCommand.Execute(null);
+        doctorsViewModel.LoadEntitiesCommand.Execute(null);
         
         return doctorsViewModel;
     }
 
-    public void SetDoctorIdToShowDetails(int doctorId){
-        _doctorStore.SelectedDoctorId = doctorId;
-    }
-    
-    public override void UpdateEntities(IEnumerable<DoctorDto> entities){
+    protected override void UpdateEntities(IEnumerable<DoctorDto> entities){
         Entities.Clear();
 
         foreach (var entity in entities) {
@@ -82,9 +67,5 @@ public class DoctorsViewModel : DisplayEntitiesViewModelBase<DoctorDto> {
         return doctorDto.DoctorCode!.Contains(filter, StringComparison.CurrentCultureIgnoreCase) ||
                doctorDto.FirstName.Contains(filter, StringComparison.CurrentCultureIgnoreCase) ||
                doctorDto.LastName.Contains(filter, StringComparison.CurrentCultureIgnoreCase);
-    }
-    
-    private void OnDoctorCreated(DoctorDto doctor){
-        Entities.Add(doctor);
     }
 }

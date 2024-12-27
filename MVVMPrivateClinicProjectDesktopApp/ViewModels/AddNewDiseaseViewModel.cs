@@ -5,7 +5,7 @@ using MVVMPrivateClinicProjectDesktopApp.Stores;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
-public class AddNewDiseaseViewModel : ViewModelBase {
+public class AddNewDiseaseViewModel : AddNewEntityViewModelBase {
     private string _diseaseName = string.Empty;
 
     [Required(ErrorMessage = "Disease Name is required!")]
@@ -16,10 +16,10 @@ public class AddNewDiseaseViewModel : ViewModelBase {
             _diseaseName = value;
             Validate(nameof(DiseaseName), value);
             SubmitCommand.OnCanExecuteChanged();
+            OnPropertyChanged();
         }
     }
 
-    public SubmitCommand SubmitCommand { get; set; }
     private ICommand CreateDiseaseCommand { get; set; }
     
     public AddNewDiseaseViewModel(DiseaseStore diseaseStore){
@@ -27,17 +27,11 @@ public class AddNewDiseaseViewModel : ViewModelBase {
         CreateDiseaseCommand = new CreateDiseaseCommand(this, diseaseStore, ResetForm);
     }
 
-    private bool CanSubmit(){
-        var context = new ValidationContext(this);
-        var results = new List<ValidationResult>();
-        return Validator.TryValidateObject(this, context, results, true);
-    }
-
-    private void Submit(){
+    protected override void Submit(){
         CreateDiseaseCommand.Execute(null);
     }
 
-    private void ResetForm(){
+    protected override void ResetForm(){
         DiseaseName = string.Empty;
     }
 }

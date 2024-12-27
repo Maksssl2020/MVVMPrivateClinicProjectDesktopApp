@@ -4,13 +4,13 @@ using System.ComponentModel.DataAnnotations;
 using System.Windows.Data;
 using System.Windows.Input;
 using MVVMPrivateClinicProjectDesktopApp.Commands;
-using MVVMPrivateClinicProjectDesktopApp.Interfaces;
 using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
 using MVVMPrivateClinicProjectDesktopApp.Stores;
+using static MVVMPrivateClinicProjectDesktopApp.Helpers.RegexPatterns;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
-public class AddNewDiagnosisViewModel : ViewModelBase, IDiseasesViewModel {
+public class AddNewDiagnosisViewModel : AddNewEntityViewModelBase {
     public static string Today => DateTime.Now.ToString("dd-MM-yyyy");
     
     private readonly ObservableCollection<DoctorDto> _doctors;
@@ -28,19 +28,20 @@ public class AddNewDiagnosisViewModel : ViewModelBase, IDiseasesViewModel {
             _selectedDoctor = value;
             Validate(nameof(SelectedDoctor), value);
             SubmitCommand.OnCanExecuteChanged();
+            OnPropertyChanged();
         }
     }
 
     private string _diagnosisDescription = string.Empty;
 
     [Required(ErrorMessage = "Diagnosis is required!")]
-    [RegularExpression(@"([\p{L} .,!?]+[\s]?)+", ErrorMessage = "Use letters only please!")]
     public string DiagnosisDescription {
         get => _diagnosisDescription;
         set {
             _diagnosisDescription = value;
             Validate(nameof(DiagnosisDescription), value);
             SubmitCommand.OnCanExecuteChanged();
+            OnPropertyChanged();
         }
     }
     
@@ -53,6 +54,7 @@ public class AddNewDiagnosisViewModel : ViewModelBase, IDiseasesViewModel {
             _selectedDisease  = value;
             Validate(nameof(SelectedDisease), value);
             SubmitCommand.OnCanExecuteChanged();
+            OnPropertyChanged();
         }
     }
 
@@ -60,19 +62,18 @@ public class AddNewDiagnosisViewModel : ViewModelBase, IDiseasesViewModel {
     
     private ICommand LoadDoctorsCommand { get; set; }
     private ICommand LoadDiseasesCommand { get; set; }
-    public SubmitCommand SubmitCommand { get; set; }
     private ICommand CreateDiagnosisCommand { get; set; }
 
     private AddNewDiagnosisViewModel(PatientStore patientStore, DiagnosisStore diagnosisStore, DoctorStore doctorStore, DiseaseStore diseaseStore){
         _doctors = [];
         _diseases = [];
-        SelectedPatientId = patientStore.PatientIdToShowDetails;
+        SelectedPatientId = patientStore.EntityIdToShowDetails;
         
         DoctorsView = CollectionViewSource.GetDefaultView(_doctors);
         DiseasesView = CollectionViewSource.GetDefaultView(_diseases);
 
-        LoadDoctorsCommand = new LoadDoctorsCommand(UpdateDoctorsDto, doctorStore);
-        LoadDiseasesCommand = new LoadDiseasesCommand(UpdateDiseasesDto, diseaseStore);
+        LoadDoctorsCommand = new LoadEntitiesCommand<DoctorDto, DoctorStatisticsDto>(UpdateDoctorsDto, doctorStore);
+        LoadDiseasesCommand = new LoadEntitiesCommand<DiseaseDto, DiseaseDetailsDto>(UpdateDiseasesDto, diseaseStore);
         SubmitCommand = new SubmitCommand(Submit, CanSubmit);
         CreateDiagnosisCommand = new CreateDiagnosisCommand(this, diagnosisStore, ResetForm);
     }
@@ -85,18 +86,12 @@ public class AddNewDiagnosisViewModel : ViewModelBase, IDiseasesViewModel {
         
         return addDiagnosisViewModel;
     }
-    
-    private bool CanSubmit(){
-        var context = new ValidationContext(this);
-        var results = new List<ValidationResult>();
-        return Validator.TryValidateObject(this, context, results, true);
-    }
 
-    private void Submit(){
+    protected override void Submit(){
         CreateDiagnosisCommand.Execute(null);
     }
-    
-    public void UpdateDoctorsDto(IEnumerable<DoctorDto> doctorsDto){
+
+    private void UpdateDoctorsDto(IEnumerable<DoctorDto> doctorsDto){
         _doctors.Clear();
 
         foreach (var doctorDto in doctorsDto) {
@@ -112,7 +107,7 @@ public class AddNewDiagnosisViewModel : ViewModelBase, IDiseasesViewModel {
         }
     }
 
-    private void ResetForm(){
+    protected override void ResetForm(){
         SelectedDoctor = null!;
         SelectedDisease = null!;
         DiagnosisDescription = string.Empty;

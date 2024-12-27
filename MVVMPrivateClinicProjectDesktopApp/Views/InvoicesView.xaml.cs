@@ -14,7 +14,14 @@ public partial class InvoicesView : UserControl {
         if (DataContext is not InvoicesViewModel viewModel) return;
         if (sender is not Button { DataContext: InvoiceDto invoiceDto }) return;
 
-        viewModel.SetInvoiceIdToShowDetails(invoiceDto.Id);
+        viewModel.SetEntityIdToShowDetails(invoiceDto.Id);
         viewModel.ShowInvoiceDetailsModalCommand.Execute(null);
+    }
+    
+    private void ShowDeleteInvoiceModal_OnClick(object sender, RoutedEventArgs e){
+        if (DataContext is not InvoicesViewModel viewModel) return;
+        if (sender is not Button { DataContext: InvoiceDto invoiceDto }) return;
+
+        viewModel.SetEntityIdToDelete(invoiceDto.Id);
     }
 }

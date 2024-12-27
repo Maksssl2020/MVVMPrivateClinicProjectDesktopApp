@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using MVVMPrivateClinicProjectDesktopApp.Interfaces;
 
 namespace MVVMPrivateClinicProjectDesktopApp.Models.Entities;
 
-public partial class PatientNote
+public partial class PatientNote : IDeletableEntity
 {
     public int Id { get; set; }
 
@@ -14,6 +15,10 @@ public partial class PatientNote
     public int IdPatient { get; set; }
 
     public int IdDoctor { get; set; }
+
+    public bool? IsDeleted { get; set; }
+
+    public DateTime? DisabledDate { get; set; }
 
     public virtual Doctor IdDoctorNavigation { get; set; } = null!;
 

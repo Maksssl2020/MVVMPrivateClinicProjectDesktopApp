@@ -80,7 +80,7 @@
             </StackPanel>
             
             <ScrollViewer Grid.Row="1" HorizontalContentAlignment="Center">
-                <ItemsControl ItemsSource="{Binding AppointmentsView }">
+                <ItemsControl ItemsSource="{Binding EntitiesView }">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <UniformGrid Columns="3" Rows="2"/>
@@ -99,7 +99,8 @@
                                     
                                     <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
                                         <Button Style="{StaticResource ButtonWithIconSmall}"
-                                                Tag="{StaticResource CustomBlueColor1}">
+                                                Tag="{StaticResource CustomBlueColor1}"
+                                                Click="ShowPricingDetails_OnClick">
                                             <fa:IconImage Style="{StaticResource IconButtonSmall}" Icon="Eye"/>
                                         </Button>
                                     </StackPanel>

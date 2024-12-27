@@ -1,5 +1,4 @@
 using System.Windows.Input;
-using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
@@ -14,6 +13,10 @@ public abstract class EntityDetailsViewModelBase<T>(ICommand loadEntityCommand) 
             OnPropertyChanged();
         }
     }
+
+    public void UpdateEntity(T entity) {
+        Entity = entity;
+    }
     
-    protected ICommand LoadEntityCommand { get; set; } = loadEntityCommand;
+    protected ICommand LoadEntityCommand { get; } = loadEntityCommand;
 }

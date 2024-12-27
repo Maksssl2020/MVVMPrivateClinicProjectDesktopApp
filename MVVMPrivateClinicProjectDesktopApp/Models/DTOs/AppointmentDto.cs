@@ -1,6 +1,8 @@
+using MVVMPrivateClinicProjectDesktopApp.Interfaces;
+
 namespace MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
 
-public class AppointmentDto {
+public class AppointmentDto : IEntity {
     public int Id { get; set; }
     public required string AppointmentStatus { get; set; }
     public required DoctorDtoBase DoctorDtoBase { get; set; }

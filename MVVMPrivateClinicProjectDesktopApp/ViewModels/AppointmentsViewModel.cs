@@ -12,102 +12,90 @@ using static System.Enum;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
-public class AppointmentsViewModel : ViewModelBase {
-    private readonly AppointmentStore _appointmentStore;
-    
-    private readonly ObservableCollection<AppointmentDto> _appointments;
+public class AppointmentsViewModel : DisplayEntitiesViewModelBase<AppointmentDto, AppointmentDto> {
     private ObservableCollection<AppointmentDto> _filteredAppointments;
-    private ObservableCollection<AppointmentDto> PageCollection { get; set; }
-    public ICollectionView AppointmentsView { get; set; }
+    private ObservableCollection<AppointmentDto> PageCollection { get; }
 
     private int _currentPage;
-    private AppointmentStatus _activeFilter = AppointmentStatus.Accepted;
-    
-    public ObservableCollection<SortingOptions> SortingOptionsList { get; } = [
-        SortingOptions.DateAscending,
-        SortingOptions.DateDescending
-    ];
-    
-    private SortingOptions _selectedSortingOption;
-    public SortingOptions SelectedSortingOption {
-        get => _selectedSortingOption;
-        set {
-            _selectedSortingOption = value;
-            OnPropertyChanged();
-            SortAppointments();
-            AppointmentsView.Refresh();
-        }
-    }
     
     public int CurrentPageDisplay => _currentPage + 1;
     private int AmountOfItemsToSkip { get; set; }
 
+    private AppointmentStatus _activeFilter = AppointmentStatus.Accepted;
     private AppointmentStatus ActiveFilter {
         get => _activeFilter;
         set {
             _activeFilter = value;
             OnPropertyChanged();
-            
             ApplyFilter();
         }
     }
 
     public int UpdateAppointmentStatusId { get; set; }
 
-    private ICommand LoadAppointmentsCommand { get; set; }
     public ICommand AppendFilterCommand { get; set; }
     public ICommand AcceptAppointmentCommand { get; set; }
     public ICommand CancelAppointmentCommand { get; set; }
     public ICommand ShowAddNewAppointmentModalCommand { get; set; }
+    public ICommand ShowAppointmentDetailsModalCommand { get; set; }
 
-    private AppointmentsViewModel(AppointmentStore appointmentStore, ModalNavigationViewModel modalNavigationViewModel){
-        _appointmentStore = appointmentStore;
-        _appointments = [];
-        _filteredAppointments = new ObservableCollection<AppointmentDto>(_appointments);
-        
+    private AppointmentsViewModel(AppointmentStore appointmentStore, ModalNavigationViewModel modalNavigationViewModel)
+        :base([
+            SortingOptions.DateAscending,
+            SortingOptions.DateDescending
+        ], appointmentStore, modalNavigationViewModel) {
+        _filteredAppointments = new ObservableCollection<AppointmentDto>(Entities);
         PageCollection = [];
-        AppointmentsView = CollectionViewSource.GetDefaultView(PageCollection);
+        EntitiesView = CollectionViewSource.GetDefaultView(PageCollection);
         
-        LoadAppointmentsCommand = new LoadAppointmentsCommand(this, _appointmentStore);
         AppendFilterCommand = new RelayCommand<string>(SetFilter);
-        AcceptAppointmentCommand = new UpdateAppointmentStatusCommand(this, _appointmentStore, AppointmentStatus.Accepted);
-        CancelAppointmentCommand = new UpdateAppointmentStatusCommand(this, _appointmentStore, AppointmentStatus.Canceled);
+        AcceptAppointmentCommand = new UpdateAppointmentStatusCommand(this, appointmentStore, AppointmentStatus.Accepted);
+        CancelAppointmentCommand = new UpdateAppointmentStatusCommand(this, appointmentStore, AppointmentStatus.Canceled);
         ShowAddNewAppointmentModalCommand = modalNavigationViewModel.ShowAddNewAppointmentModal;
-            
+        ShowAppointmentDetailsModalCommand = modalNavigationViewModel.ShowAppointmentDetailsModal;
+        
         ApplyFilter();
         
-        _appointmentStore.AppointmentStatusUpdated += OnAppointmentStatusUpdated;
-        _appointmentStore.AppointmentCreated += OnAppointmentCreated;
+        appointmentStore.AppointmentStatusUpdated += OnAppointmentStatusUpdated;
     }
 
     public static AppointmentsViewModel LoadAppointmentsViewModel(AppointmentStore appointmentStore, ModalNavigationViewModel modalNavigationViewModel){
         var appointmentsViewModel = new AppointmentsViewModel(appointmentStore, modalNavigationViewModel);
         
-        appointmentsViewModel.LoadAppointmentsCommand.Execute(null);
+        appointmentsViewModel.LoadEntitiesCommand.Execute(null);
         
         return appointmentsViewModel;
     }
 
-    public void UpdateAppointments(IEnumerable<AppointmentDto> appointments){
-        _appointments.Clear();
 
-        foreach (var appointment in appointments) {
-            _appointments.Add(appointment);
+    protected override void UpdateEntities(IEnumerable<AppointmentDto> entities){
+        Entities.Clear();
+
+        foreach (var appointment in entities) {
+            Entities.Add(appointment);
         }
         
         SelectedSortingOption = SortingOptions.DateAscending;
         ApplyFilter();
     }
 
+    protected override void SortEntities(){
+        ApplySortingOptions.ApplySortingWithOneProperty(
+            EntitiesView,
+            SelectedSortingOption,
+            nameof(AppointmentDto.AppointmentDate)
+        );
+    }
+
+    protected override bool ApplyFilter(object obj){
+        return true;
+    }
+    
     private void OnAppointmentStatusUpdated(AppointmentDto appointmentDto){
-        var foundAppointment = _appointments.FirstOrDefault(a => a.Id == appointmentDto.Id);
+        var foundAppointment = Entities.FirstOrDefault(a => a.Id == appointmentDto.Id);
         if (foundAppointment != null) {
             foundAppointment.AppointmentStatus = appointmentDto.AppointmentStatus;
         }
-    }
-
-    private void OnAppointmentCreated(AppointmentDto appointmentDto) {
-        _filteredAppointments.Add(appointmentDto);
     }
     
     public void NextPage(){
@@ -127,14 +115,6 @@ public class AppointmentsViewModel : ViewModelBase {
        
         UpdatePageCollection();
     }
-
-    private void SortAppointments(){
-        ApplySortingOptions.ApplySortingWithOneProperty(
-            AppointmentsView,
-            SelectedSortingOption,
-            nameof(AppointmentDto.AppointmentDate)
-            );
-    }
     
     private void SetFilter(string? filter){
         if (string.IsNullOrEmpty(filter)) return;
@@ -147,7 +127,7 @@ public class AppointmentsViewModel : ViewModelBase {
 
     private void ApplyFilter(){
        _filteredAppointments = new ObservableCollection<AppointmentDto>(
-            _appointments.Where(dto => 
+            Entities.Where(dto => 
                 TryParse(dto.AppointmentStatus, out AppointmentStatus status) && 
                 status == ActiveFilter)
             );
@@ -162,7 +142,7 @@ public class AppointmentsViewModel : ViewModelBase {
         if (_filteredAppointments.Count == 0) {
             PageCollection.Clear();
             OnPropertyChanged(nameof(CurrentPageDisplay));
-            AppointmentsView.Refresh();
+            EntitiesView.Refresh();
             return;
         }
         
@@ -174,6 +154,6 @@ public class AppointmentsViewModel : ViewModelBase {
         }
         
         OnPropertyChanged(nameof(CurrentPageDisplay));
-        AppointmentsView.Refresh();
+        EntitiesView.Refresh();
     }
 }

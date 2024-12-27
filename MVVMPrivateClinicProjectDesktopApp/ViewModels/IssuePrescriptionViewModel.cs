@@ -18,8 +18,8 @@ public class IssuePrescriptionViewModel : AddNewEntityViewModelBase {
 
     private readonly ObservableCollection<MedicineDto> _medicinesDto;
     private readonly ObservableCollection<DoctorDto> _doctorsDto;
-    public ICollectionView MedicinesDtoView { get; set; }
-    public ICollectionView DoctorsDtoView { get; set; }
+    public ICollectionView MedicinesDtoView { get; }
+    public ICollectionView DoctorsDtoView { get; }
     
     private DoctorDto _selectedDoctor = null!;
     
@@ -37,7 +37,6 @@ public class IssuePrescriptionViewModel : AddNewEntityViewModelBase {
     private string _prescriptionDescription = string.Empty;
 
     [Required(ErrorMessage = "Prescription Description is required!")]
-    [RegularExpression(@"([\p{L}]+[\s]?)+", ErrorMessage = "Use letters only please!")]
     public string PrescriptionDescription {
         get => _prescriptionDescription;
         set {
@@ -106,9 +105,9 @@ public class IssuePrescriptionViewModel : AddNewEntityViewModelBase {
     private IssuePrescriptionViewModel(MedicineStore medicineStore, DoctorStore doctorStore, PatientStore patientStore, PrescriptionStore prescriptionStore){
         _medicinesDto = [];
         _doctorsDto = [];
-        SelectedPatientId = patientStore.PatientIdToShowDetails;
+        SelectedPatientId = patientStore.EntityIdToShowDetails;
 
-        LoadMedicinesDtoCommand = new LoadMedicinesDtoCommand(UpdateMedicines, medicineStore);
+        LoadMedicinesDtoCommand = new LoadEntitiesCommand<MedicineDto, MedicineDetailsDto>(UpdateMedicines, medicineStore);
         LoadDoctorsCommand = new LoadFamilyDoctorsCommand(UpdateDoctorsDto, doctorStore);
         SetPrescriptionValidityCommand = new RelayCommand<string>(SetPrescriptionValidity);
         CreatePrescriptionCommand = new CreatePrescriptionCommand(this, prescriptionStore, ResetForm);

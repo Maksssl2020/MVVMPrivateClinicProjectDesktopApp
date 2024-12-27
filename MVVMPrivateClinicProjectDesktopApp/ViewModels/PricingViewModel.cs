@@ -1,35 +1,32 @@
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Windows.Data;
 using System.Windows.Input;
-using MVVMPrivateClinicProjectDesktopApp.Commands;
 using MVVMPrivateClinicProjectDesktopApp.Helpers;
-using MVVMPrivateClinicProjectDesktopApp.Interfaces;
 using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
 using MVVMPrivateClinicProjectDesktopApp.Stores;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
-public class PricingViewModel : DisplayEntitiesViewModelBase<PricingDto> {
-    private ICommand LoadPricingCommand { get; set; }
+public class PricingViewModel : DisplayEntitiesViewModelBase<PricingDto, PricingDetailsDto> {
     public ICommand ShowAddNewPricingViewCommand { get; set; }
+    public ICommand ShowPricingDetailsModalCommand { get; set; }
 
     private PricingViewModel(PricingStore pricingStore, ModalNavigationViewModel modalNavigationViewModel) 
-        :base([SortingOptions.IdAscending, SortingOptions.IdDescending, SortingOptions.PriceAscending, SortingOptions.PriceDescending]){
-        LoadPricingCommand = new LoadPricingCommand(UpdateEntities, pricingStore);
+        :base([SortingOptions.IdAscending, SortingOptions.IdDescending, SortingOptions.PriceAscending, SortingOptions.PriceDescending],
+            pricingStore,
+            modalNavigationViewModel) {
+        
         ShowAddNewPricingViewCommand = modalNavigationViewModel.ShowAddNewPricingModal;
-        pricingStore.PricingCreated += OnPricingCreated;
+        ShowPricingDetailsModalCommand = modalNavigationViewModel.ShowPricingDetailsModal;
     }
 
     public static PricingViewModel LoadPricingViewModel(PricingStore pricingStore, ModalNavigationViewModel modalNavigationViewModel){
         var pricingViewModel = new PricingViewModel(pricingStore, modalNavigationViewModel);
         
-        pricingViewModel.LoadPricingCommand.Execute(null);
+        pricingViewModel.LoadEntitiesCommand.Execute(null);
         
         return pricingViewModel;
     }
 
-    public override void UpdateEntities(IEnumerable<PricingDto> entities){
+    protected override void UpdateEntities(IEnumerable<PricingDto> entities){
         Entities.Clear();
 
         foreach (var entity in entities) {
@@ -58,8 +55,5 @@ public class PricingViewModel : DisplayEntitiesViewModelBase<PricingDto> {
         var filter = Filter.Trim().ToLower();
         return pricingDto.ServiceName.Contains(filter, StringComparison.CurrentCultureIgnoreCase);
     }
-    
-    private void OnPricingCreated(PricingDto pricingDto){
-        Entities.Add(pricingDto);
-    }
+
 }

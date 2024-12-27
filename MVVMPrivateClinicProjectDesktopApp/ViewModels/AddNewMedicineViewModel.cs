@@ -17,7 +17,6 @@ public class AddNewMedicineViewModel : AddNewEntityViewModelBase {
     
     [Required(ErrorMessage = "Medicine Name is required!")]
     [MinLength(3, ErrorMessage = "Medicine Name must be at least 3 characters long!")]
-    [RegularExpression(@"([\p{L}]+[\s]?)+", ErrorMessage = "Use letters only please!")]
     public string MedicineName {
         get => _medicineName;
         set {
@@ -29,7 +28,6 @@ public class AddNewMedicineViewModel : AddNewEntityViewModelBase {
     }
 
     private MedicineTypeDto _selectedMedicineType = null!;
-
     public MedicineTypeDto SelectedMedicineType {
         get => _selectedMedicineType;
         set {
@@ -43,14 +41,12 @@ public class AddNewMedicineViewModel : AddNewEntityViewModelBase {
     private string _medicineType = string.Empty;
 
     [Required(ErrorMessage = "Medicine Type is required!")]
-    [RegularExpression(@"([\p{L}]+[\s]?)+", ErrorMessage = "Use letters only please!")]
     public string MedicineType {
         get => _medicineType;
         set {
             _medicineType = value;
             Validate(nameof(MedicineType), value);
             SubmitCommand.OnCanExecuteChanged();
-            OnPropertyChanged();
         }
     }
     
@@ -58,7 +54,6 @@ public class AddNewMedicineViewModel : AddNewEntityViewModelBase {
     
     [Required(ErrorMessage = "Medicine Description is required!")]
     [MinLength(10, ErrorMessage = "Medicine Description must be at least 10 characters long!")]
-    [RegularExpression(@"([\p{L}]+[\s]?)+", ErrorMessage = "Use letters only please!")]
     public string MedicineDescription {
         get => _medicineDescription;
         set {

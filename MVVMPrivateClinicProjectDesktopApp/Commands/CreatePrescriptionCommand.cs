@@ -14,7 +14,7 @@ public class CreatePrescriptionCommand(IssuePrescriptionViewModel viewModel, Pre
             SelectedMedicines = viewModel.SelectedMedicines
         };
 
-        await prescriptionStore.CreatePrescription(savePrescriptionRequest);
+        await prescriptionStore.CreateEntity(savePrescriptionRequest);
         resetForm.Invoke();
     }
 }

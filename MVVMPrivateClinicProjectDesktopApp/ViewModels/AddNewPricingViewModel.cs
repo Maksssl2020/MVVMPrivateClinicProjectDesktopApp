@@ -6,6 +6,7 @@ using System.Windows.Input;
 using MVVMPrivateClinicProjectDesktopApp.Commands;
 using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
 using MVVMPrivateClinicProjectDesktopApp.Stores;
+using static MVVMPrivateClinicProjectDesktopApp.Helpers.RegexPatterns;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
@@ -16,7 +17,7 @@ public class AddNewPricingViewModel : AddNewEntityViewModelBase {
     private string _serviceName = string.Empty;
 
     [Required(ErrorMessage = "Service Name is required!")]
-    [RegularExpression(@"([\p{L}]+[\s]?)+", ErrorMessage = "Use letters only please!")]
+    [RegularExpression(LettersOnlyRegexWithAdditionalCharacters, ErrorMessage = "Use letters only please!")]
     public string ServiceName {
         get => _serviceName;
         set {

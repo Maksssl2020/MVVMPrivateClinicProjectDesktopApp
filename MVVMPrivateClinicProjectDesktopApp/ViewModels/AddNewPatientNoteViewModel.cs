@@ -34,7 +34,6 @@ public class AddNewPatientNoteViewModel : AddNewEntityViewModelBase {
     private string _patientNoteDescription = string.Empty;
 
     [Required(ErrorMessage = "Patient Note is required!")]
-    [RegularExpression(@"([\p{L} .,!?]+[\s]?)+", ErrorMessage = "Use letters only please!")]
     public string PatientNoteDescription {
         get => _patientNoteDescription;
         set {
@@ -71,7 +70,7 @@ public class AddNewPatientNoteViewModel : AddNewEntityViewModelBase {
     private AddNewPatientNoteViewModel(DoctorStore doctorStore, PatientStore patientStore, PatientNoteStore patientNoteStore){
         _doctorsDto = [];
         _patientNotesDto = [];
-        SelectedPatientId = patientStore.PatientIdToShowDetails;
+        SelectedPatientId = patientStore.EntityIdToShowDetails;
         
         DoctorsDtoView = CollectionViewSource.GetDefaultView(_doctorsDto);
         PatientNotesWithDoctorDataDtoView = CollectionViewSource.GetDefaultView(_patientNotesDto);

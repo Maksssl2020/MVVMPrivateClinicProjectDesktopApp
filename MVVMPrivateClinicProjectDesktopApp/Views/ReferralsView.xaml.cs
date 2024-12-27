@@ -5,7 +5,7 @@ using MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
 namespace MVVMPrivateClinicProjectDesktopApp.Views;
 
-public partial class ReferralsView : UserControl {
+public partial class ReferralsView {
     public ReferralsView(){
         InitializeComponent();
     }
@@ -14,7 +14,7 @@ public partial class ReferralsView : UserControl {
         if (DataContext is not ReferralsViewModel viewModel) return;
         if (sender is not Button { DataContext: ReferralDto referralDto }) return;
         
-        viewModel.SetReferralIdToShowDetails(referralDto.Id);
+        viewModel.SetEntityIdToShowDetails(referralDto.Id);
         viewModel.ShowReferralDetailsCommand.Execute(null);
     }
     
@@ -23,5 +23,20 @@ public partial class ReferralsView : UserControl {
         
         viewModel.SetDataInAddSpecificDataToPatientStore();
         viewModel.ShowSelectPatientToAddSpecificDataModal.Execute(null);
+    }
+
+    private void ShowDeleteReferral_OnClick(object sender, RoutedEventArgs e){
+        if (DataContext is not ReferralsViewModel viewModel) return;
+        if (sender is not Button { DataContext: ReferralDto referralDto }) return;
+
+        viewModel.SetEntityIdToDelete(referralDto.Id);
+        
+    }
+
+    private void GeneratePdf_OnClick(object sender, RoutedEventArgs e){
+        if (DataContext is not ReferralsViewModel viewModel) return;
+        if (sender is not Button { DataContext: ReferralDto referralDto }) return;
+        
+        viewModel.GenerateReferralPdfCommand.Execute(referralDto.Id);
     }
 }

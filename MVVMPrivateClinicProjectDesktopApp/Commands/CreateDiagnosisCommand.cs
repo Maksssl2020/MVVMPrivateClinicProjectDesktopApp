@@ -14,7 +14,7 @@ public class CreateDiagnosisCommand(AddNewDiagnosisViewModel viewModel, Diagnosi
                 PatientId = viewModel.SelectedPatientId
             };
             
-            await diagnosisStore.CreateDiagnosis(saveDiagnosisRequest);
+            await diagnosisStore.CreateEntity(saveDiagnosisRequest);
         }
         catch (Exception e) {
             Console.WriteLine(e);

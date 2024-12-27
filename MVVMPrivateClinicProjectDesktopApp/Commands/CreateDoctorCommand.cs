@@ -16,7 +16,7 @@ public class CreateDoctorCommand(AddNewDoctorViewModel viewModel, DoctorStore do
         };
         
         if (doctorSpecializationId > 0) {
-            await doctorStore.CreateDoctor(saveDoctorRequest);
+            await doctorStore.CreateEntity(saveDoctorRequest);
             resetForm.Invoke();
         }
     }

@@ -11,20 +11,18 @@ using MVVMPrivateClinicProjectDesktopApp.Stores;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
-public class PatientsNotesViewModel : DisplayEntitiesViewModelBase<PatientNoteDto> {
-    private readonly PatientNoteStore _patientNoteStore;
+public class PatientsNotesViewModel : DisplayEntitiesViewModelBase<PatientNoteDto, PatientNoteDetailsDto> {
     private readonly AddSpecificDataToPatientStore _addSpecificDataToPatientStore;
     
-    private ICommand LoadPatientsNotesCommand { get; set; }
     public ICommand ShowPatientNoteDetailsCommand { get; set; }
     public ICommand ShowSelectPatientToAddSpecificDataModal { get; set; }
 
     private PatientsNotesViewModel(PatientNoteStore patientNoteStore, AddSpecificDataToPatientStore addSpecificDataToPatientStore, ModalNavigationViewModel modalNavigationViewModel)
-        :base([SortingOptions.IdAscending, SortingOptions.IdDescending, SortingOptions.DateAscending, SortingOptions.DateDescending]) {
-        _patientNoteStore = patientNoteStore;
+        :base([SortingOptions.IdAscending, SortingOptions.IdDescending, SortingOptions.DateAscending, SortingOptions.DateDescending],
+            patientNoteStore,
+            modalNavigationViewModel) {
         _addSpecificDataToPatientStore = addSpecificDataToPatientStore;
 
-        LoadPatientsNotesCommand = new LoadPatientsNotesDtoCommand(this, patientNoteStore);
         ShowPatientNoteDetailsCommand = modalNavigationViewModel.ShowPatientNoteDetailsModal;
         ShowSelectPatientToAddSpecificDataModal = modalNavigationViewModel.ShowSelectPatientToAddSpecificDataModal;
     }
@@ -32,13 +30,9 @@ public class PatientsNotesViewModel : DisplayEntitiesViewModelBase<PatientNoteDt
     public static PatientsNotesViewModel LoadPatientNoteViewModel(PatientNoteStore patientNoteStore, AddSpecificDataToPatientStore addSpecificDataToPatientStore, ModalNavigationViewModel modalNavigationViewModel){
         var patientNoteViewModel = new PatientsNotesViewModel(patientNoteStore, addSpecificDataToPatientStore, modalNavigationViewModel);
         
-        patientNoteViewModel.LoadPatientsNotesCommand.Execute(null);
+        patientNoteViewModel.LoadEntitiesCommand.Execute(null);
         
         return patientNoteViewModel;
-    }
-
-    public void SetPatientNoteIdToShowDetails(int patientNoteId){
-        _patientNoteStore.SelectedPatientNoteId = patientNoteId;
     }
     
     public void SetDataInAddSpecificDataToPatientStore(){
@@ -47,7 +41,7 @@ public class PatientsNotesViewModel : DisplayEntitiesViewModelBase<PatientNoteDt
             (SolidColorBrush) Application.Current.Resources["CustomBlueColor1"]!;
     }
 
-    public override void UpdateEntities(IEnumerable<PatientNoteDto> entities){
+    protected override void UpdateEntities(IEnumerable<PatientNoteDto> entities){
         Entities.Clear();
 
         foreach (var entity in entities) {

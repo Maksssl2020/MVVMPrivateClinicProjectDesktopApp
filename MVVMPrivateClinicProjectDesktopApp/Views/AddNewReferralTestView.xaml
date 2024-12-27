@@ -1,0 +1,92 @@
+<local:WindowViewBase x:Class="MVVMPrivateClinicProjectDesktopApp.Views.AddNewReferralTestView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Views"
+        xmlns:components="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Views.Components"
+        xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+        xmlns:viewModel="clr-namespace:MVVMPrivateClinicProjectDesktopApp.ViewModels"
+        xmlns:views="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Views"
+        xmlns:dto="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Models.DTOs"
+        xmlns:converters="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Converters"
+        mc:Ignorable="d"
+        Title="AddNewPricingView" 
+        Height="575" 
+        Width="500"
+        WindowStyle="None" 
+        WindowStartupLocation="CenterScreen"
+        Background="Transparent"
+        AllowsTransparency="True"
+        d:DataContext="{d:DesignInstance viewModel:AddNewReferralTestViewModel}">
+    
+    <Border MouseLeftButtonDown="MouseLeftButtonDown_Hold" BorderThickness="2" BorderBrush="{StaticResource CustomWarmBeigeColor1}" Background="{StaticResource CustomBlackColor1}" CornerRadius="20" Padding="20">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="35"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+            
+            <StackPanel HorizontalAlignment="Right" Grid.Row="0">
+                <Button  Click="buttonClose_Click"
+                         Style="{StaticResource ControlBarButton}"
+                         Tag="{StaticResource CustomRedColor1}"
+                >
+                    <fa:IconImage Icon="Xmark" Style="{StaticResource ControlBarButtonIcon}"/>
+                </Button>
+            </StackPanel>
+            
+            <Border Grid.Row="1" Width="450" Height="410" Grid.Column="0"  Padding="5" BorderThickness="2" BorderBrush="{StaticResource CustomGrayColor1}" CornerRadius="15" Background="Transparent">
+                    <StackPanel>
+                        <Label FontSize="18" Margin="0 0 0 15" Foreground="White" Content="New Referral Test Form"/>
+                        <components:FormInput 
+                            x:Name="ReferralTestNameInput" 
+                            InputHeight="50"
+                            ErrorMessage="{Binding ElementName=ReferralTestNameInput, Path=(Validation.Errors)[0].ErrorContent}" 
+                            Style="{StaticResource FormInputErrorsStyle}" 
+                            FormText="{Binding ReferralTestName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                            InputBackgroundColor="{StaticResource CustomGrayColor1}"
+                            LabelTitle="Referral Test Name*"/>
+                        
+                        <components:FormInput 
+                            x:Name="ReferralTestDescriptionInput" 
+                            InputHeight="145"
+                            ErrorMessage="{Binding ElementName=ReferralTestDescriptionInput, Path=(Validation.Errors)[0].ErrorContent}" 
+                            Style="{StaticResource FormInputErrorsStyle}" 
+                            FormText="{Binding ReferralTestDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            InputBackgroundColor="{StaticResource CustomGrayColor1}"
+                            LabelTitle="Referral Test Description*"/>
+                    </StackPanel>
+                </Border>
+            
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left">
+                    <Button
+                        Style="{StaticResource CommonButton}"
+                        Width="220"
+                        Content="Clear Form"
+                        BorderBrush="Transparent"
+                        BorderThickness="0"
+                        Margin="0 0 5 0"
+                        Click="buttonClearForm_Click"
+                        Tag="{StaticResource CustomWarmBeigeColor1}"/>
+                </StackPanel>
+                
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1">
+                    <components:ButtonWithIcon 
+                        ButtonWidth="220"
+                        ButtonText="Add New Referral Test"
+                        IconName="Plus"
+                        TextColor="{StaticResource CustomWarmBeigeColor1}"
+                        Command="{Binding SubmitCommand}"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Border>
+</local:WindowViewBase>

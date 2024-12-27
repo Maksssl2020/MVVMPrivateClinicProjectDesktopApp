@@ -1,0 +1,62 @@
+<Window x:Class="MVVMPrivateClinicProjectDesktopApp.Views.DeleteEntityView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Views"
+        xmlns:components="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Views.Components"
+        xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+        xmlns:viewModel="clr-namespace:MVVMPrivateClinicProjectDesktopApp.ViewModels"
+        mc:Ignorable="d"
+        Title="DeletePatientView"
+        Height="300" 
+        Width="450"
+        WindowStyle="None" 
+        WindowStartupLocation="CenterScreen"
+        Background="Transparent"
+        AllowsTransparency="True"
+        d:DataContext="{d:DesignInstance viewModel:DeleteEntityViewModel}">
+    <Border MouseLeftButtonDown="MouseLeftButtonDown_Hold" BorderThickness="2" BorderBrush="{StaticResource CustomGrayColor1}" Background="{StaticResource CustomBlackColor1}" CornerRadius="20" Padding="20">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+            
+            <StackPanel HorizontalAlignment="Right" Grid.Row="0">
+                <Button  Click="buttonClose_Click"
+                         Style="{StaticResource ControlBarButton}"
+                         Tag="{StaticResource CustomRedColor1}"
+                >
+                    <fa:IconImage Icon="Xmark" Style="{StaticResource ControlBarButtonIcon}"/>
+                </Button>
+            </StackPanel>
+            
+            <StackPanel HorizontalAlignment="Center" Grid.Row="1">
+                <Label Margin="0 0 0 15" Foreground="{StaticResource CustomRedColor1}" HorizontalAlignment="Center" FontSize="28" FontWeight="Bold" Content="WARNING"/>
+                <TextBlock Foreground="White" FontSize="22" TextWrapping="Wrap">
+                    <Run>Are you sure that you want to delete</Run>
+                    <Run Text="{Binding EntityTypeName}"/>
+                    <Run Text="{Binding EntityCode}"/>
+                    <Run>?</Run>
+                </TextBlock>
+            </StackPanel>
+            
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="2">
+                <Button Command="{Binding DeleteEntityCommand}" 
+                        Width="185" 
+                        FontWeight="Bold"
+                        Tag="{StaticResource CustomRedColor1}" 
+                        Content="DELETE" 
+                        Style="{StaticResource CommonButton}"/>
+                <Button Click="buttonClose_Click" 
+                        Width="185" 
+                        FontWeight="Bold"
+                        Tag="{StaticResource CustomBlueColor1}" 
+                        Content="CANCEL" 
+                        Style="{StaticResource CommonButton}"/>
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>

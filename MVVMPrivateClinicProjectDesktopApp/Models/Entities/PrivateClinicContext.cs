@@ -150,6 +150,8 @@ public partial class PrivateClinicContext : Microsoft.EntityFrameworkCore.DbCont
             entity.ToTable("Diagnosis");
 
             entity.Property(e => e.Description).HasMaxLength(255);
+            entity.Property(e => e.DisabledDate).HasColumnType("datetime");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
 
             entity.HasOne(d => d.IdDiseaseNavigation).WithMany(p => p.Diagnoses)
                 .HasForeignKey(d => d.IdDisease)
@@ -173,7 +175,9 @@ public partial class PrivateClinicContext : Microsoft.EntityFrameworkCore.DbCont
 
             entity.HasIndex(e => e.DiseaseCode, "UK_DiseaseCode_Table1").IsUnique();
 
+            entity.Property(e => e.DisabledDate).HasColumnType("datetime");
             entity.Property(e => e.DiseaseCode).HasMaxLength(255);
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.Name).HasMaxLength(255);
         });
 
@@ -181,10 +185,12 @@ public partial class PrivateClinicContext : Microsoft.EntityFrameworkCore.DbCont
         {
             entity.ToTable("Doctor");
 
+            entity.Property(e => e.DisabledDate).HasColumnType("datetime");
             entity.Property(e => e.DoctorCode)
                 .HasMaxLength(15)
                 .HasComputedColumnSql("((('DOC'+upper(left([FirstName],(1))))+upper(left([LastName],(1))))+CONVERT([varchar](10),[Id]))", false);
             entity.Property(e => e.FirstName).HasMaxLength(255);
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.LastName).HasMaxLength(255);
             entity.Property(e => e.PhoneNumber).HasMaxLength(50);
 
@@ -220,6 +226,8 @@ public partial class PrivateClinicContext : Microsoft.EntityFrameworkCore.DbCont
         {
             entity.ToTable("DoctorSpecialization");
 
+            entity.Property(e => e.DisabledDate).HasColumnType("datetime");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.Name).HasMaxLength(255);
         });
 
@@ -229,7 +237,9 @@ public partial class PrivateClinicContext : Microsoft.EntityFrameworkCore.DbCont
 
             entity.Property(e => e.Amount).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.DateIssued).HasColumnType("datetime");
+            entity.Property(e => e.DisabledDate).HasColumnType("datetime");
             entity.Property(e => e.DueDate).HasColumnType("datetime");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.Status)
                 .HasMaxLength(50)
                 .HasDefaultValue("AwaitingPayment");
@@ -250,6 +260,8 @@ public partial class PrivateClinicContext : Microsoft.EntityFrameworkCore.DbCont
             entity.ToTable("Medicine");
 
             entity.Property(e => e.Description).HasMaxLength(255);
+            entity.Property(e => e.DisabledDate).HasColumnType("datetime");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.Name).HasMaxLength(255);
             entity.Property(e => e.Type).HasMaxLength(255);
         });
@@ -260,8 +272,10 @@ public partial class PrivateClinicContext : Microsoft.EntityFrameworkCore.DbCont
 
             entity.HasIndex(e => e.EmailAddress, "UK_EmailAddress_Table1").IsUnique();
 
+            entity.Property(e => e.DisabledDate).HasColumnType("datetime");
             entity.Property(e => e.EmailAddress).HasMaxLength(255);
             entity.Property(e => e.FirstName).HasMaxLength(255);
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.LastName).HasMaxLength(255);
             entity.Property(e => e.PatientCode)
                 .HasMaxLength(35)
@@ -316,6 +330,8 @@ public partial class PrivateClinicContext : Microsoft.EntityFrameworkCore.DbCont
 
             entity.Property(e => e.DateIsuued).HasColumnType("datetime");
             entity.Property(e => e.Description).HasMaxLength(1024);
+            entity.Property(e => e.DisabledDate).HasColumnType("datetime");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
 
             entity.HasOne(d => d.IdDoctorNavigation).WithMany(p => p.PatientNotes)
                 .HasForeignKey(d => d.IdDoctor)
@@ -334,6 +350,8 @@ public partial class PrivateClinicContext : Microsoft.EntityFrameworkCore.DbCont
 
             entity.HasIndex(e => e.PrescriptionCode, "UK_PrescriptionCode_Table1").IsUnique();
 
+            entity.Property(e => e.DisabledDate).HasColumnType("datetime");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.PrescriptionCode).HasMaxLength(50);
             entity.Property(e => e.PrescriptionDescription).HasMaxLength(255);
 
@@ -367,6 +385,7 @@ public partial class PrivateClinicContext : Microsoft.EntityFrameworkCore.DbCont
         {
             entity.ToTable("Pricing");
 
+            entity.Property(e => e.DisabledDate).HasColumnType("datetime");
             entity.Property(e => e.Price).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.ServiceName).HasMaxLength(255);
             entity.Property(e => e.ServiceType).HasMaxLength(255);
@@ -378,6 +397,8 @@ public partial class PrivateClinicContext : Microsoft.EntityFrameworkCore.DbCont
 
             entity.Property(e => e.DateIssued).HasColumnType("datetime");
             entity.Property(e => e.Description).HasMaxLength(255);
+            entity.Property(e => e.DisabledDate).HasColumnType("datetime");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.Name).HasMaxLength(255);
 
             entity.HasOne(d => d.IdDiseaseNavigation).WithMany(p => p.Referrals)
@@ -405,6 +426,8 @@ public partial class PrivateClinicContext : Microsoft.EntityFrameworkCore.DbCont
             entity.ToTable("ReferralTest");
 
             entity.Property(e => e.Description).HasMaxLength(255);
+            entity.Property(e => e.DisabledDate).HasColumnType("datetime");
+            entity.Property(e => e.IsDeleted).HasDefaultValue(false);
             entity.Property(e => e.Name).HasMaxLength(255);
         });
 

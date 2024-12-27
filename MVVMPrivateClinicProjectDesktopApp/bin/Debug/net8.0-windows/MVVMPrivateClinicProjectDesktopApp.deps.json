@@ -15,7 +15,9 @@
           "Microsoft.EntityFrameworkCore": "8.0.10",
           "Microsoft.EntityFrameworkCore.Design": "8.0.10",
           "Microsoft.EntityFrameworkCore.SqlServer": "8.0.10",
-          "SimpleModal.WPF": "1.0.0"
+          "QuestPDF": "2024.12.1",
+          "SimpleModal.WPF": "1.0.0",
+          "Syncfusion.Pdf.Wpf": "28.1.36"
         },
         "runtime": {
           "MVVMPrivateClinicProjectDesktopApp.dll": {}
@@ -752,6 +754,116 @@
           }
         }
       },
+      "QuestPDF/2024.12.1": {
+        "runtime": {
+          "lib/net8.0/QuestPDF.dll": {
+            "assemblyVersion": "2024.12.1.0",
+            "fileVersion": "2024.12.1.0"
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/linux-arm64/native/libQuestPdfSkia.so": {
+            "rid": "linux-arm64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/linux-arm64/native/libqpdf.so": {
+            "rid": "linux-arm64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/linux-musl-x64/native/libQuestPdfSkia.so": {
+            "rid": "linux-musl-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/linux-musl-x64/native/libqpdf.so": {
+            "rid": "linux-musl-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/linux-x64/native/libQuestPdfSkia.so": {
+            "rid": "linux-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/linux-x64/native/libqpdf.so": {
+            "rid": "linux-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/osx-arm64/native/libQuestPdfSkia.dylib": {
+            "rid": "osx-arm64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/osx-arm64/native/libqpdf.dylib": {
+            "rid": "osx-arm64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/osx-x64/native/libQuestPdfSkia.dylib": {
+            "rid": "osx-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/osx-x64/native/libqpdf.dylib": {
+            "rid": "osx-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x64/native/QuestPdfSkia.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x64/native/libgcc_s_seh-1.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x64/native/libstdc++-6.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x64/native/libwinpthread-1.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "1.0.0.0"
+          },
+          "runtimes/win-x64/native/qpdf.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x86/native/QuestPdfSkia.dll": {
+            "rid": "win-x86",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x86/native/libgcc_s_dw2-1.dll": {
+            "rid": "win-x86",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x86/native/libstdc++-6.dll": {
+            "rid": "win-x86",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x86/native/libwinpthread-1.dll": {
+            "rid": "win-x86",
+            "assetType": "native",
+            "fileVersion": "1.0.0.0"
+          },
+          "runtimes/win-x86/native/qpdf.dll": {
+            "rid": "win-x86",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
       "runtime.native.System.Data.SqlClient.sni/4.7.0": {
         "dependencies": {
           "runtime.win-arm64.runtime.native.System.Data.SqlClient.sni": "4.4.0",
@@ -791,6 +903,34 @@
           "lib/netcoreapp3.1/ModalControl.dll": {
             "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "Syncfusion.Compression.Base/28.1.36": {
+        "runtime": {
+          "lib/net8.0-windows7.0/Syncfusion.Compression.Base.dll": {
+            "assemblyVersion": "28.1.36.0",
+            "fileVersion": "28.1.36.0"
+          }
+        }
+      },
+      "Syncfusion.Licensing/28.1.36": {
+        "runtime": {
+          "lib/net8.0/Syncfusion.Licensing.dll": {
+            "assemblyVersion": "28.1.36.0",
+            "fileVersion": "28.1.36.0"
+          }
+        }
+      },
+      "Syncfusion.Pdf.Wpf/28.1.36": {
+        "dependencies": {
+          "Syncfusion.Compression.Base": "28.1.36",
+          "Syncfusion.Licensing": "28.1.36"
+        },
+        "runtime": {
+          "lib/net8.0-windows7.0/Syncfusion.Pdf.Base.dll": {
+            "assemblyVersion": "28.1.36.0",
+            "fileVersion": "28.1.36.0"
           }
         }
       },
@@ -1359,6 +1499,13 @@
       "path": "mono.texttemplating/2.2.1",
       "hashPath": "mono.texttemplating.2.2.1.nupkg.sha512"
     },
+    "QuestPDF/2024.12.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-uQxbQm4Cs05EME373iDq/+6LZD1CZXyueFN7GnCyuEx1iG1Jcy4uU6cnSMtxZMPWEazOZL8hk6SZXUvVHqJgCw==",
+      "path": "questpdf/2024.12.1",
+      "hashPath": "questpdf.2024.12.1.nupkg.sha512"
+    },
     "runtime.native.System.Data.SqlClient.sni/4.7.0": {
       "type": "package",
       "serviceable": true,
@@ -1393,6 +1540,27 @@
       "sha512": "sha512-dtTvUl6O2peKZz2oCh5Y6mRjYL+q/Izxm6+z/Nzdpbcgxdo/qTD39stwegu/sY0uBTAYGJEy2P9X8mwpOMM+rw==",
       "path": "simplemodal.wpf/1.0.0",
       "hashPath": "simplemodal.wpf.1.0.0.nupkg.sha512"
+    },
+    "Syncfusion.Compression.Base/28.1.36": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-gvrDCZyAfz4Ck1wNl8i/VbmeRx3W29+TtgqayUuhedETyItDfTgqI3oqyPVaJP383fWIQxFZbKN+eJ88aEc5KA==",
+      "path": "syncfusion.compression.base/28.1.36",
+      "hashPath": "syncfusion.compression.base.28.1.36.nupkg.sha512"
+    },
+    "Syncfusion.Licensing/28.1.36": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-MmpXZdmJd07FUlQMiq7PYftNGK87JoDMkAve1I7roNiRBTHKlnin/vXAccEi1VcCFIHTPPCsRQkONrKWfR9HiA==",
+      "path": "syncfusion.licensing/28.1.36",
+      "hashPath": "syncfusion.licensing.28.1.36.nupkg.sha512"
+    },
+    "Syncfusion.Pdf.Wpf/28.1.36": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-6Z4Z1pmTZrugcxTiDhVvxxVIgkxKYsfyDn6QLA1T0fHiK9e8aJ+jOFM4pP1d3eXu7mGo+FlSMNsbAIRaLP5vtg==",
+      "path": "syncfusion.pdf.wpf/28.1.36",
+      "hashPath": "syncfusion.pdf.wpf.28.1.36.nupkg.sha512"
     },
     "System.CodeDom/6.0.0": {
       "type": "package",

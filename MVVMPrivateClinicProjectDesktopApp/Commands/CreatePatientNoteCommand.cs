@@ -12,7 +12,7 @@ public class CreatePatientNoteCommand(AddNewPatientNoteViewModel viewModel, Pati
             IdPatient = viewModel.SelectedPatientId
         };
 
-        await patientNoteStore.CreatePatientNote(savePatientNoteRequest);
+        await patientNoteStore.CreateEntity(savePatientNoteRequest);
         resetForm.Invoke();
     }
 }

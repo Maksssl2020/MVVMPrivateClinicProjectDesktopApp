@@ -13,7 +13,7 @@ public class CreateInvoiceCommand(AddNewInvoiceViewModel viewModel, InvoiceStore
                 IdPricing = viewModel.SelectedPricing.Id
             };
 
-            await invoiceStore.CreateInvoice(saveInvoiceRequest);
+            await invoiceStore.CreateEntity(saveInvoiceRequest);
             resetForm.Invoke();
         }
         catch (Exception e) {

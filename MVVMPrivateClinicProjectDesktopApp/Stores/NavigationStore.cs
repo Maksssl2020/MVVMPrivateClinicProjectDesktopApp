@@ -77,6 +77,11 @@ public class NavigationStore : NavigationStoreBase<ViewModelBase> {
                 HeaderBrush = (SolidColorBrush)Application.Current.Resources["CustomWarmBeigeColor1"]!;
                 break;
             }
+            case "Disabled Data": {
+                ViewIcon = IconChar.Trash;
+                HeaderBrush = (SolidColorBrush)Application.Current.Resources["CustomSlateGrayColor1"]!;
+                break;
+            }
             default: {
                 ViewIcon = IconChar.House;
                 HeaderBrush = (SolidColorBrush)Application.Current.Resources["CustomLavenderColor1"]!;

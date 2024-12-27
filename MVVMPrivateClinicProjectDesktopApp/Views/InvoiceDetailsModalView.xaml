@@ -24,7 +24,7 @@
         <converters:InvoiceStatusConverter x:Key="InvoiceStatusConverter"/>
     </Window.Resources>
     
-    <Border MouseLeftButtonDown="MouseLeftButtonDown_Hold" BorderThickness="2" BorderBrush="{StaticResource CustomGrayColor1}" Background="{StaticResource CustomBlackColor1}" CornerRadius="20" Padding="20">
+    <Border MouseLeftButtonDown="MouseLeftButtonDown_Hold" BorderThickness="2" BorderBrush="{StaticResource CustomCoralColor1}" Background="{StaticResource CustomBlackColor1}" CornerRadius="20" Padding="20">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"/>
@@ -42,7 +42,7 @@
                         <StackPanel Width="400" Grid.Row="0">
                             <TextBlock Foreground="White" FontSize="18" FontWeight="Bold">
                                 <Run Text="Invoice Nr. #"/>
-                                <Run Text="{Binding Invoice.Id}"/>
+                                <Run Text="{Binding Entity.Id}"/>
                                 <Run Text="Details"/>
                             </TextBlock>
                         </StackPanel>
@@ -76,7 +76,7 @@
                             BorderBrush="{StaticResource CustomGrayColor1}" 
                             CornerRadius="10"
                     >
-                        <TextBlock Text="{Binding Invoice.DateIssued, Converter={StaticResource DateTimeFormatConverter}}"
+                        <TextBlock Text="{Binding Entity.DateIssued, Converter={StaticResource DateTimeFormatConverter}}"
                                    Foreground="White"
                                    FontWeight="Bold"
                                    FontSize="15"
@@ -92,7 +92,7 @@
                             BorderBrush="{StaticResource CustomGrayColor1}" 
                             CornerRadius="10"
                     >
-                        <TextBlock Text="{Binding Invoice.DueDate, Converter={StaticResource DateTimeFormatConverter}}"
+                        <TextBlock Text="{Binding Entity.DueDate, Converter={StaticResource DateTimeFormatConverter}}"
                                    Foreground="White"
                                    FontWeight="Bold"
                                    FontSize="15"
@@ -114,10 +114,10 @@
                                    Padding="5 0 0 0"
                                    HorizontalAlignment="Left"
                                    VerticalAlignment="Center">
-                            <Run Text="{Binding Invoice.PatientDetailsDto.FirstName}"/>
-                            <Run Text="{Binding Invoice.PatientDetailsDto.LastName}"/>
+                            <Run Text="{Binding Entity.PatientDetailsDto.FirstName}"/>
+                            <Run Text="{Binding Entity.PatientDetailsDto.LastName}"/>
                             <Run Text="-"/>
-                            <Run Text="{Binding Invoice.PatientDetailsDto.PatientCode}"/>
+                            <Run Text="{Binding Entity.PatientDetailsDto.PatientCode}"/>
                         </TextBlock>
                     </Border>
                 </StackPanel>
@@ -135,9 +135,9 @@
                                    Padding="5 0 0 0"
                                    HorizontalAlignment="Left"
                                    VerticalAlignment="Center">
-                            <Run Text="{Binding Invoice.PricingDto.ServiceName}"/>
+                            <Run Text="{Binding Entity.PricingDto.ServiceName}"/>
                             <Run Text="-"/>
-                            <Run Text="{Binding Invoice.PricingDto.ServiceType}"/>
+                            <Run Text="{Binding Entity.PricingDto.ServiceType}"/>
                         </TextBlock>
                     </Border>
                 </StackPanel>
@@ -149,7 +149,7 @@
                             BorderBrush="{StaticResource CustomGrayColor1}" 
                             CornerRadius="10"
                     >
-                        <TextBlock Text="{Binding Invoice.Amount, Converter={StaticResource PriceFormatConverter}}"
+                        <TextBlock Text="{Binding Entity.Amount, Converter={StaticResource PriceFormatConverter}}"
                                    Foreground="White"
                                    FontWeight="Bold"
                                    FontSize="15"
@@ -165,7 +165,7 @@
                             BorderBrush="{StaticResource CustomGrayColor1}" 
                             CornerRadius="10"
                     >
-                        <TextBlock Text="{Binding Invoice.Status, Converter={StaticResource InvoiceStatusConverter}}"
+                        <TextBlock Text="{Binding Entity.Status, Converter={StaticResource InvoiceStatusConverter}}"
                                    Foreground="White"
                                    FontWeight="Bold"
                                    FontSize="15"

@@ -34,10 +34,9 @@ public class MapperProfiles : Profile {
             .ForMember(dest => dest.DoctorDtoBase, opt => opt.Ignore())
             .ForMember(dest => dest.DiseaseDetailsDto, opt => opt.Ignore())
             .ForMember(dest => dest.ReferralTestDetailsDto, opt => opt.Ignore());
-        
+
         CreateMap<Invoice, InvoiceDto>()
-            .ForMember(dest => dest.PatientCode, opt => opt.Ignore())
-            .ForMember(dest => dest.Status, opt => opt.Ignore());
+            .ForMember(dest => dest.PatientCode, opt => opt.Ignore());
 
         CreateMap<Invoice, InvoiceDetailsDto>()
             .ForMember(dest => dest.PatientDetailsDto, opt => opt.Ignore())
@@ -48,6 +47,8 @@ public class MapperProfiles : Profile {
         CreateMap<Pricing, TopPricingDto>()
             .ForMember(dest => dest.TotalUseAmount, opt => opt.MapFrom(src => src.Appointments.Count))
             .ForMember(dest => dest.Position, opt => opt.Ignore());
+        CreateMap<Pricing, PricingDetailsDto>()
+            .ForMember(dest => dest.TotalUses, opt => opt.MapFrom(src => src.Appointments.Count));
         
         CreateMap<PatientNote, PatientNoteDto>()
             .ForMember(dest => dest.PatientCode, opt => opt.Ignore())
@@ -79,6 +80,6 @@ public class MapperProfiles : Profile {
         CreateMap<Prescription, PrescriptionDetailsDto>()
             .ForMember(dest => dest.MedicinesDto, opt => opt.Ignore())
             .ForMember(dest => dest.DoctorDtoBase, opt => opt.Ignore())
-            .ForMember(dest => dest.PatientDetailsCto, opt => opt.Ignore());
+            .ForMember(dest => dest.PatientDetailsDto, opt => opt.Ignore());
     }
 }

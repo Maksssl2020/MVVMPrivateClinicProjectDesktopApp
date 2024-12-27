@@ -3,11 +3,11 @@ using MVVMPrivateClinicProjectDesktopApp.Stores;
 
 namespace MVVMPrivateClinicProjectDesktopApp.Commands;
 
-public class LoadFamilyDoctorsCommand(Action<IEnumerable<DoctorDto>> updateFamlilyDoctors, DoctorStore doctorStore) : AsyncRelayCommand {
+public class LoadFamilyDoctorsCommand(Action<IEnumerable<DoctorDto>> updateFamilyDoctors, DoctorStore doctorStore) : AsyncRelayCommand {
     public override async Task ExecuteAsync(object? parameter){
         try {
             await doctorStore.LoadFamilyMedicineDoctorsDto();
-            updateFamlilyDoctors.Invoke(doctorStore.FamilyMedicineDoctorsDto);
+            updateFamilyDoctors.Invoke(doctorStore.FamilyMedicineDoctorsDto);
         }
         catch (Exception e) {
             Console.WriteLine(e);

@@ -81,7 +81,8 @@
                                             <fa:IconImage Style="{StaticResource IconButtonSmall}" Icon="Eye"/>
                                         </Button>
                                         <Button Style="{StaticResource ButtonWithIconSmall}"
-                                                Tag="{StaticResource CustomRedColor1}">
+                                                Tag="{StaticResource CustomRedColor1}"
+                                                Click="ShowDeleteDiseaseModal_OnClick">
                                             <fa:IconImage Style="{StaticResource IconButtonSmall}" Icon="Trash"/>
                                         </Button>
                                     </StackPanel>       

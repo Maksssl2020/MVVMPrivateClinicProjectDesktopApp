@@ -8,49 +8,43 @@ using MVVMPrivateClinicProjectDesktopApp.Stores;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
-public class PrescriptionsViewModel : DisplayEntitiesViewModelBase<PrescriptionDto> {
-    private readonly PrescriptionStore _prescriptionStore;
+public class PrescriptionsViewModel : DisplayEntitiesViewModelBase<PrescriptionDto, PrescriptionDetailsDto> {
     private readonly AddSpecificDataToPatientStore _addSpecificDataToPatientStore;
     
-    private ICommand LoadPrescriptionsCommand { get; set; }
     public ICommand ShowPrescriptionDetailsModal { get; set; }
     public ICommand ShowSelectPatientToAddSpecificDataModal { get; set; }
+    public ICommand GeneratePrescriptionPdfCommand { get; set; }
     
     private PrescriptionsViewModel(PrescriptionStore prescriptionStore, AddSpecificDataToPatientStore addSpecificDataToPatientStore, ModalNavigationViewModel modalNavigationViewModel)
-        : base([SortingOptions.IdAscending, SortingOptions.IdDescending, SortingOptions.DateAscending, SortingOptions.DateDescending]) {
-        _prescriptionStore = prescriptionStore;
+        : base([SortingOptions.IdAscending, SortingOptions.IdDescending, SortingOptions.DateAscending, SortingOptions.DateDescending],
+            prescriptionStore,
+            modalNavigationViewModel) {
         _addSpecificDataToPatientStore = addSpecificDataToPatientStore;
         
-        LoadPrescriptionsCommand = new LoadPrescriptionsDtoCommand(this, prescriptionStore);
         ShowPrescriptionDetailsModal = modalNavigationViewModel.ShowPrescriptionDetailsModal;
         ShowSelectPatientToAddSpecificDataModal = modalNavigationViewModel.ShowSelectPatientToAddSpecificDataModal;
-        
-        prescriptionStore.PrescriptionCreated += OnPrescriptionCreated;
+        GeneratePrescriptionPdfCommand = new GeneratePrescriptionPdfCommand(prescriptionStore);
     }
 
     public static PrescriptionsViewModel LoadPrescriptionsViewModel(PrescriptionStore prescriptionStore, AddSpecificDataToPatientStore addSpecificDataToPatientStore, ModalNavigationViewModel modalNavigationViewModel){
         var prescriptionsViewModel = new PrescriptionsViewModel(prescriptionStore, addSpecificDataToPatientStore, modalNavigationViewModel);
         
-        prescriptionsViewModel.LoadPrescriptionsCommand.Execute(null);
+        prescriptionsViewModel.LoadEntitiesCommand.Execute(null);
         
         return prescriptionsViewModel;
     }
 
-    private void OnPrescriptionCreated(PrescriptionDto prescription){
-        Entities.Add(prescription);
+    public void GeneratePrescriptionPdf(int prescriptionId){
+        GeneratePrescriptionPdfCommand.Execute(prescriptionId);
     }
-
-    public void SetPrescriptionIdToSeeDetails(int prescriptionId){
-        _prescriptionStore.SelectedPrescriptionId = prescriptionId;
-    }
-
+    
     public void SetDataInAddSpecificDataToPatientStore(){
         _addSpecificDataToPatientStore.DataToAddName = "Prescription";
         _addSpecificDataToPatientStore.DataColor =
             (SolidColorBrush) Application.Current.Resources["CustomOrangeColor1"]!;
     }
-    
-    public override void UpdateEntities(IEnumerable<PrescriptionDto> entities){
+
+    protected override void UpdateEntities(IEnumerable<PrescriptionDto> entities){
         Entities.Clear();
 
         foreach (var entity in entities) {

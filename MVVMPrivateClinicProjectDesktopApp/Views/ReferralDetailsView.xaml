@@ -16,7 +16,7 @@
         AllowsTransparency="True"
         d:DataContext="{d:DesignInstance viewModel:ReferralDetailsViewModel}">
     
-    <Border MouseLeftButtonDown="MouseLeftButtonDown_Hold" BorderThickness="2" BorderBrush="{StaticResource CustomGrayColor1}" Background="{StaticResource CustomBlackColor1}" CornerRadius="20" Padding="20">
+    <Border MouseLeftButtonDown="MouseLeftButtonDown_Hold" BorderThickness="2" BorderBrush="{StaticResource CustomYellowColor1}" Background="{StaticResource CustomBlackColor1}" CornerRadius="20" Padding="20">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"/>
@@ -34,7 +34,7 @@
                         <StackPanel Width="400" Grid.Row="0">
                             <TextBlock Foreground="White" FontSize="18" FontWeight="Bold">
                                 <Run Text="Referral Nr. #"/>
-                                <Run Text="{Binding ReferralDetails.Id}"/>
+                                <Run Text="{Binding Entity.Id}"/>
                                 <Run Text="Details"/>
                             </TextBlock>
                         </StackPanel>
@@ -68,7 +68,7 @@
                             BorderBrush="{StaticResource CustomGrayColor1}" 
                             CornerRadius="10"
                     >
-                        <TextBlock Text="{Binding ReferralDetails.Name}"
+                        <TextBlock Text="{Binding Entity.Name}"
                                    Foreground="White"
                                    FontSize="15"
                                    FontWeight="Bold"
@@ -85,7 +85,7 @@
                             BorderBrush="{StaticResource CustomGrayColor1}" 
                             CornerRadius="10"
                     >
-                        <TextBlock Text="{Binding ReferralDetails.DateIssued}"
+                        <TextBlock Text="{Binding Entity.DateIssued}"
                                    Foreground="White"
                                    FontWeight="Bold"
                                    FontSize="15"
@@ -107,10 +107,10 @@
                                    Padding="5 0 0 0"
                                    HorizontalAlignment="Left"
                                    VerticalAlignment="Center">
-                            <Run Text="{Binding ReferralDetails.DoctorDtoBase.FirstName}"/>
-                            <Run Text="{Binding ReferralDetails.DoctorDtoBase.LastName}"/>
+                            <Run Text="{Binding Entity.DoctorDtoBase.FirstName}"/>
+                            <Run Text="{Binding Entity.DoctorDtoBase.LastName}"/>
                             <Run Text="-"/>
-                            <Run Text="{Binding ReferralDetails.DoctorDtoBase.DoctorSpecialization}"/>
+                            <Run Text="{Binding Entity.DoctorDtoBase.DoctorSpecialization}"/>
                         </TextBlock>
                     </Border>
                 </StackPanel>
@@ -128,10 +128,10 @@
                                    Padding="5 0 0 0"
                                    HorizontalAlignment="Left"
                                    VerticalAlignment="Center">
-                            <Run Text="{Binding ReferralDetails.PatientDetailsDto.FirstName}"/>
-                            <Run Text="{Binding ReferralDetails.PatientDetailsDto.LastName}"/>
+                            <Run Text="{Binding Entity.PatientDetailsDto.FirstName}"/>
+                            <Run Text="{Binding Entity.PatientDetailsDto.LastName}"/>
                             <Run Text="-"/>
-                            <Run Text="{Binding ReferralDetails.PatientDetailsDto.PatientCode}"/>
+                            <Run Text="{Binding Entity.PatientDetailsDto.PatientCode}"/>
                         </TextBlock>
                     </Border>
                 </StackPanel>
@@ -149,9 +149,9 @@
                                    Padding="5 0 0 0"
                                    HorizontalAlignment="Left"
                                    VerticalAlignment="Center">
-                            <Run Text="{Binding ReferralDetails.DiseaseDetailsDto.Name}"/>
+                            <Run Text="{Binding Entity.DiseaseDetailsDto.Name}"/>
                             <Run Text="-"/>
-                            <Run Text="{Binding ReferralDetails.DiseaseDetailsDto.DiseaseCode}"/>
+                            <Run Text="{Binding Entity.DiseaseDetailsDto.DiseaseCode}"/>
                         </TextBlock>
                     </Border>
                 </StackPanel>
@@ -168,9 +168,9 @@
                                    Padding="5"
                                    HorizontalAlignment="Left"
                                    TextWrapping="Wrap">
-                            <Run FontWeight="Bold" Text="{Binding ReferralDetails.ReferralTestDetailsDto.Name}"/>
+                            <Run FontWeight="Bold" Text="{Binding Entity.ReferralTestDetailsDto.Name}"/>
                             <LineBreak/>
-                            <Run Text="{Binding ReferralDetails.ReferralTestDetailsDto.Description}"/>
+                            <Run Text="{Binding Entity.ReferralTestDetailsDto.Description}"/>
                         </TextBlock>
                     </Border>
                 </StackPanel>

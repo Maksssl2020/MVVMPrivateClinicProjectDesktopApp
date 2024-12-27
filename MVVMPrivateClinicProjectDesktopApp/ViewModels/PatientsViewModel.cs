@@ -1,45 +1,32 @@
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Windows.Data;
 using System.Windows.Input;
-using MVVMPrivateClinicProjectDesktopApp.Commands;
 using MVVMPrivateClinicProjectDesktopApp.Helpers;
-using MVVMPrivateClinicProjectDesktopApp.Interfaces;
 using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
 using MVVMPrivateClinicProjectDesktopApp.Stores;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
-public class PatientsViewModel : DisplayEntitiesViewModelBase<PatientDto> {
-    private readonly PatientStore _patientStore;
-
+public class PatientsViewModel : DisplayEntitiesViewModelBase<PatientDto, PatientDto> {
     public ICommand ShowAddNewPatientModal {get; set;}
-    public ICommand ShowDeletePatientModal { get; set; }
     public ICommand ShowPatientDataModal { get; set; }
-    private ICommand LoadPatients { get; set; }
     
     private PatientsViewModel(PatientStore patientStore, ModalNavigationViewModel modalNavigationViewModel)
-        :base([SortingOptions.AlphabeticalAscending, SortingOptions.AlphabeticalDescending, SortingOptions.IdAscending, SortingOptions.IdDescending]){
-        _patientStore = patientStore;
-        LoadPatients = new LoadPatientsCommand(UpdateEntities, patientStore);
+        :base([SortingOptions.AlphabeticalAscending, SortingOptions.AlphabeticalDescending, SortingOptions.IdAscending, SortingOptions.IdDescending],
+            patientStore,
+            modalNavigationViewModel){
         ShowAddNewPatientModal = modalNavigationViewModel.ShowAddNewPatientModal;
-        ShowDeletePatientModal = modalNavigationViewModel.ShowDeletePatientModal;
         ShowPatientDataModal = modalNavigationViewModel.ShowPatientDataModal;
-        
-        _patientStore.PatientCreated += OnPatientCreated;
-        _patientStore.PatientDeleted += OnPatientDeleted;
     }
 
     public static PatientsViewModel LoadPatientsViewModel(PatientStore patientStore,
         ModalNavigationViewModel modalNavigationViewModel){
         var patientsViewModel = new PatientsViewModel(patientStore, modalNavigationViewModel);
         
-        patientsViewModel.LoadPatients.Execute(null);
+        patientsViewModel.LoadEntitiesCommand.Execute(null);
         
         return patientsViewModel;
     }
 
-    public override void UpdateEntities(IEnumerable<PatientDto> entities){
+    protected override void UpdateEntities(IEnumerable<PatientDto> entities){
         Entities.Clear();
 
         foreach (var entity in entities) {
@@ -71,28 +58,5 @@ public class PatientsViewModel : DisplayEntitiesViewModelBase<PatientDto> {
         return patient.PatientCode.Contains(filter, StringComparison.CurrentCultureIgnoreCase) ||
                patient.FirstName.Contains(filter, StringComparison.CurrentCultureIgnoreCase) ||
                patient.LastName.Contains(filter, StringComparison.CurrentCultureIgnoreCase);
-    }
-    
-    public void SetPatientIdToDelete(int patientId) {
-        _patientStore.PatientIdToDelete = patientId;
-    }
-
-    public void SetPatientIdToShowDetails(int patientId){
-        _patientStore.PatientIdToShowDetails = patientId;
-    }
-    
-    public override void Dispose(){
-        _patientStore.PatientCreated -= OnPatientCreated;
-        _patientStore.PatientDeleted -= OnPatientDeleted;
-        base.Dispose();
-    }
-
-    private void OnPatientCreated(PatientDto patient){
-        Entities.Add(patient);
-    }
-
-    private void OnPatientDeleted(int patientId){
-        var foundPatient = Entities.First(patient => patient.Id == patientId);
-        Entities.Remove(foundPatient);
     }
 }

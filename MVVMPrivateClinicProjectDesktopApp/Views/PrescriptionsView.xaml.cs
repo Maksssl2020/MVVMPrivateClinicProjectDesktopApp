@@ -14,7 +14,7 @@ public partial class PrescriptionsView : UserControl {
         if (DataContext is not PrescriptionsViewModel viewModel) return;
         if (sender is not Button { DataContext: PrescriptionDto prescriptionDto }) return;
         
-        viewModel.SetPrescriptionIdToSeeDetails(prescriptionDto.Id);
+        viewModel.SetEntityIdToShowDetails(prescriptionDto.Id);
         viewModel.ShowPrescriptionDetailsModal.Execute(null);
     }
 
@@ -23,5 +23,19 @@ public partial class PrescriptionsView : UserControl {
         
         viewModel.SetDataInAddSpecificDataToPatientStore();
         viewModel.ShowSelectPatientToAddSpecificDataModal.Execute(null);
+    }
+    
+    private void ShowDeletePrescriptionModal_OnClick(object sender, RoutedEventArgs e){
+        if (DataContext is not PrescriptionsViewModel viewModel) return;
+        if (sender is not Button { DataContext: PrescriptionDto prescriptionDto }) return;
+        
+        viewModel.SetEntityIdToDelete(prescriptionDto.Id);
+    }
+
+    private void GeneratePdf_OnClick(object sender, RoutedEventArgs e){
+        if (DataContext is not PrescriptionsViewModel viewModel) return;
+        if (sender is not Button { DataContext: PrescriptionDto prescriptionDto }) return;
+        
+        viewModel.GeneratePrescriptionPdf(prescriptionDto.Id);
     }
 }

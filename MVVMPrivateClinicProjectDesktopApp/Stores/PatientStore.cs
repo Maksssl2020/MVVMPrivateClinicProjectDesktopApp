@@ -3,76 +3,46 @@ using MVVMPrivateClinicProjectDesktopApp.UnitOfWork;
 
 namespace MVVMPrivateClinicProjectDesktopApp.Stores;
 
-public class PatientStore {
-    private readonly IUnitOfWork _unitOfWork;
-    
-    public event Action<PatientDto>? PatientCreated;
-    public event Action<int>? PatientDeleted;
-    
-    private readonly List<PatientDto> _patients;
-    private readonly Lazy<Task> _initializeLazy;
-    
-    public IEnumerable<PatientDto> Patients => _patients;
-    
-    public int PatientIdToDelete { get; set; }
-    public int PatientIdToShowDetails { get; set; }
-    
-    public PatientDto? SelectedPatientData { get; set; }
+public class PatientStore(IUnitOfWork unitOfWork) : EntityStore<PatientDto, PatientDto>(unitOfWork) {
     public Address? SelectedPatientAddress { get; set; }
 
-    public PatientStore(IUnitOfWork unitOfWork){
-        _unitOfWork = unitOfWork;
-        _patients = [];
-        _initializeLazy = new Lazy<Task>(InitializePatients);
-    }
-    
     public async Task<Address?> SavePatientAddress(SaveAddressRequest patientAddress){
-        return await _unitOfWork.AddressRepository.SaveAddressAsync(patientAddress);
+        return await UnitOfWork.AddressRepository.SaveAddressAsync(patientAddress);
     }
     
-    public async Task CreatePatient(SavePatientRequest patient){
-        var savedPatient = await _unitOfWork.PatientRepository.SavePatientAsync(patient);
-        _patients.Add(savedPatient);
+    public override async Task CreateEntity(object entityRequest){
+        if (entityRequest is SavePatientRequest savePatientRequest) {
+            var savedPatient = await UnitOfWork.PatientRepository.SavePatientAsync(savePatientRequest);
+            Entities.Add(savedPatient);
         
-        OnPatientCreated(savedPatient);
+            OnEntityCreated(savedPatient);
+        }
     }
-    
-    private void OnPatientCreated(PatientDto patient){
-        PatientCreated?.Invoke(patient);
+
+    public override async Task DeleteEntity(int entityId){
+        await UnitOfWork.PatientRepository.DeleteEntityAsync(entityId);
+        Entities.RemoveAll(p => p.Id == entityId);
+        OnEntityDeleted(entityId);
     }
-    
-    public void DeletePatient(int patientId){
-        _unitOfWork.PatientRepository.DeletePatient(patientId);
-        _patients.RemoveAll(p => p.Id == patientId);
+
+    public override async Task LoadEntityDetails(){
+        SelectedEntityDetails = (await UnitOfWork.PatientRepository.GetPatientByIdAsync(EntityIdToShowDetails) ?? null) ?? throw new InvalidOperationException();
+    }
+
+    protected override async Task InitializeEntities(){
+        var loadedPatients = await UnitOfWork.PatientRepository.GetAllPatientsAsync();
         
-        OnPatientDeleted(patientId);
+        Entities.Clear();
+        Entities.AddRange(loadedPatients);
     }
 
     public string? GetSelectedPatientCode(int patientId){
-        return _patients.Find(patient => patient.Id == patientId)?.PatientCode;
-    }
-    
-    private void OnPatientDeleted(int patientId){
-        PatientDeleted?.Invoke(patientId);
-    }
-
-    public async Task LoadPatientData(){
-        SelectedPatientData = await _unitOfWork.PatientRepository.GetPatientByIdAsync(PatientIdToShowDetails) ?? null;
+        return Entities.Find(patient => patient.Id == patientId)?.PatientCode;
     }
     
     public async Task LoadPatientDetails(){
-        SelectedPatientData = await _unitOfWork.PatientRepository.GetPatientByIdAsync(PatientIdToShowDetails) ?? null;
-        SelectedPatientAddress = await _unitOfWork.AddressRepository.GetAddressByPatientId(PatientIdToShowDetails) ?? null;
+        SelectedEntityDetails = (await UnitOfWork.PatientRepository.GetPatientByIdAsync(EntityIdToShowDetails) ?? null) ?? throw new InvalidOperationException();
+        SelectedPatientAddress = await UnitOfWork.AddressRepository.GetAddressByPatientId(EntityIdToShowDetails) ?? null;
     }
-    
-    public async Task LoadPatients(){
-        await _initializeLazy.Value;
-    }
-    
-    private async Task InitializePatients(){
-        var loadedPatients = await _unitOfWork.PatientRepository.GetAllPatientsAsync();
-        
-        _patients.Clear();
-        _patients.AddRange(loadedPatients);
-    }
+
 }

@@ -3,48 +3,43 @@ using MVVMPrivateClinicProjectDesktopApp.UnitOfWork;
 
 namespace MVVMPrivateClinicProjectDesktopApp.Stores;
 
-public class DoctorSpecializationStore {
-    private readonly IUnitOfWork _unitOfWork;
+public class DoctorSpecializationStore(IUnitOfWork unitOfWork)
+    : EntityStore<DoctorSpecializationDto, DoctorSpecializationDto>(unitOfWork) {
+    private DoctorSpecializationDto CreatedDoctorSpecializationDto { get; set; } = null!;
     
-    private readonly List<DoctorSpecializationDto> _doctorSpecializations;
-    private readonly Lazy<Task> _initializeLazy;
-
-    public IEnumerable<DoctorSpecializationDto> DoctorSpecializations => _doctorSpecializations;
-
-    public DoctorSpecializationStore(IUnitOfWork unitOfWork){
-        _unitOfWork = unitOfWork;
-
-        _doctorSpecializations = [];
-        _initializeLazy = new Lazy<Task>(InitializeDoctorSpecializations);
-    }
-
-    public async Task LoadDoctorSpecializations(){
-        await _initializeLazy.Value;
-    }
-
     public async Task<int> GetDoctorSpecializationId(string doctorSpecializationName){
-        if (await _unitOfWork.DoctorSpecializationRepository.IsDoctorSpecializationExist(doctorSpecializationName)) {
-            var foundDoctorSpecializationId = await _unitOfWork.DoctorSpecializationRepository.GetDoctorSpecializationId(doctorSpecializationName);
+        if (await UnitOfWork.DoctorSpecializationRepository.IsDoctorSpecializationExists(doctorSpecializationName)) {
+            var foundDoctorSpecializationId = await UnitOfWork.DoctorSpecializationRepository.GetDoctorSpecializationId(doctorSpecializationName);
             
             return foundDoctorSpecializationId ?? -1;
         }
 
-        var doctorSpecialization = CreateDoctorSpecialization(doctorSpecializationName);
-        return doctorSpecialization.Id;
+        await CreateEntity(doctorSpecializationName);
+        return CreatedDoctorSpecializationDto.Id;
     }
 
-    private async Task<DoctorSpecializationDto> CreateDoctorSpecialization(string doctorSpecializationName){
-        var savedDoctorSpecialization = await _unitOfWork.DoctorSpecializationRepository.SaveDoctorSpecializationAsync(
-            doctorSpecializationName);
-        
-        _doctorSpecializations.Add(savedDoctorSpecialization);
-        return savedDoctorSpecialization;
+    public override async Task CreateEntity(object entityRequest){
+        if (entityRequest is string doctorSpecializationName) {
+            var savedDoctorSpecialization = await UnitOfWork.DoctorSpecializationRepository.SaveDoctorSpecializationAsync(
+                doctorSpecializationName);
+            Entities.Add(savedDoctorSpecialization);
+            CreatedDoctorSpecializationDto = savedDoctorSpecialization;
+            OnEntityCreated(savedDoctorSpecialization);
+        }
     }
-    
-    private async Task InitializeDoctorSpecializations(){
-        var loadedDoctorSpecializations = await _unitOfWork.DoctorSpecializationRepository.GetAllDoctorSpecializations();
+
+    public override async Task DeleteEntity(int entityId){
+        await Task.CompletedTask;
+    }
+
+    public override async Task LoadEntityDetails(){
+        await Task.CompletedTask;
+    }
+
+    protected override async Task InitializeEntities(){
+        var loadedDoctorSpecializations = await UnitOfWork.DoctorSpecializationRepository.GetAllDoctorSpecializations();
         
-        _doctorSpecializations.Clear();
-        _doctorSpecializations.AddRange(loadedDoctorSpecializations);
+        Entities.Clear();
+        Entities.AddRange(loadedDoctorSpecializations);
     }
 }

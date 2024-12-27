@@ -12,7 +12,7 @@ public class CreatePricingCommand(AddNewPricingViewModel viewModel, PricingStore
             ServiceType = viewModel.ServiceType.Type
         };
         
-        await pricingStore.CreatePricingAsync(savePricingRequest);
+        await pricingStore.CreateEntity(savePricingRequest);
         resetForm.Invoke();
     }
 }

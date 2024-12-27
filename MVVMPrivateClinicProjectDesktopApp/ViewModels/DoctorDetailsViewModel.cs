@@ -8,21 +8,12 @@ using MVVMPrivateClinicProjectDesktopApp.Stores;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
-public class DoctorDetailsViewModel : ViewModelBase {
+public class DoctorDetailsViewModel : EntityDetailsViewModelBase<DoctorStatisticsDto> {
     private readonly int _selectedDoctorId;
     public int SelectedDoctorId {
         get => _selectedDoctorId;
         private init {
             _selectedDoctorId = value;
-            OnPropertyChanged();
-        }
-    }
-    
-    private DoctorStatisticsDto _doctorStatistics = null!;
-    public DoctorStatisticsDto DoctorStatistics {
-        get => _doctorStatistics;
-        set {
-            _doctorStatistics = value;
             OnPropertyChanged();
         }
     }
@@ -39,23 +30,23 @@ public class DoctorDetailsViewModel : ViewModelBase {
     public ICollectionView IssuedReferralsView { get; set; }
     public ICollectionView IssuedDiagnosesView { get; set; }
     
-    private ICommand LoadDoctorStatistics { get; }
     private ICommand LoadDoctorAppointments { get; }
     private ICommand LoadIssuedPatientNotes { get; }
     private ICommand LoadIssuedPrescriptions { get; }
     private ICommand LoadIssuedReferrals { get; }
     private ICommand LoadIssuedDiagnoses { get; }
 
-    private DoctorDetailsViewModel(DoctorStore doctorStore, AppointmentStore appointmentStore, PatientNoteStore patientNoteStore, PrescriptionStore prescriptionStore, ReferralStore referralStore, DiagnosisStore diagnosisStore){
-        SelectedDoctorId = doctorStore.SelectedDoctorId;
+    private DoctorDetailsViewModel(DoctorStore doctorStore, AppointmentStore appointmentStore,
+        PatientNoteStore patientNoteStore, PrescriptionStore prescriptionStore, ReferralStore referralStore,
+        DiagnosisStore diagnosisStore) : base(new LoadEntityDetailsCommand<DoctorDto, DoctorStatisticsDto>(doctorStore)){
+        SelectedDoctorId = doctorStore.EntityIdToShowDetails;
 
         DoctorAppointmentsView = CollectionViewSource.GetDefaultView(_doctorAppointments);
         IssuedPatientNotesView = CollectionViewSource.GetDefaultView(_issuedPatientNotes);
         IssuedPrescriptionsView = CollectionViewSource.GetDefaultView(_issuedPrescriptions);
         IssuedReferralsView = CollectionViewSource.GetDefaultView(_issuedReferrals);
         IssuedDiagnosesView = CollectionViewSource.GetDefaultView(_issuedDiagnoses);
-        
-        LoadDoctorStatistics = new LoadDoctorStatisticsCommand(this, doctorStore);
+
         LoadDoctorAppointments = new LoadDoctorAppointments(this, appointmentStore);
         LoadIssuedPatientNotes = new LoadDoctorIssuedPatientNotes(this, patientNoteStore);
         LoadIssuedPrescriptions = new LoadDoctorIssuedPrescriptions(this, prescriptionStore);
@@ -66,7 +57,7 @@ public class DoctorDetailsViewModel : ViewModelBase {
     public static DoctorDetailsViewModel LoadDoctorDetailsViewModel(DoctorStore doctorStore, AppointmentStore appointmentStore, PatientNoteStore patientNoteStore, PrescriptionStore prescriptionStore, ReferralStore referralStore, DiagnosisStore diagnosisStore){
         var doctorDetailsViewModel = new DoctorDetailsViewModel(doctorStore, appointmentStore, patientNoteStore, prescriptionStore, referralStore, diagnosisStore);
         
-        doctorDetailsViewModel.LoadDoctorStatistics.Execute(null);
+        doctorDetailsViewModel.LoadEntityCommand.Execute(doctorDetailsViewModel);
         doctorDetailsViewModel.LoadDoctorAppointments.Execute(null);
         doctorDetailsViewModel.LoadIssuedPatientNotes.Execute(null);
         doctorDetailsViewModel.LoadIssuedPrescriptions.Execute(null);

@@ -3,15 +3,9 @@ using MVVMPrivateClinicProjectDesktopApp.UnitOfWork;
 
 namespace MVVMPrivateClinicProjectDesktopApp.Stores;
 
-public class DiagnosisStore {
-    private readonly IUnitOfWork _unitOfWork;
-    
-    private readonly List<DiagnosisDto> _diagnoses;
-    private readonly List<DiagnosisDto> _selectedPatientDiagnoses;
-    private readonly List<DiagnosisDto> _doctorIssuedDiagnoses;
-    private readonly Lazy<Task> _initializeDiagnoses;
-
-    public IEnumerable<DiagnosisDto> Diagnoses => _diagnoses;
+public class DiagnosisStore(IUnitOfWork unitOfWork) : EntityStore<DiagnosisDto, DiagnosisDto>(unitOfWork) {
+    private readonly List<DiagnosisDto> _selectedPatientDiagnoses = [];
+    private readonly List<DiagnosisDto> _doctorIssuedDiagnoses = [];
     public IEnumerable<DiagnosisDto> SelectedPatientDiagnoses => _selectedPatientDiagnoses;
     public IEnumerable<DiagnosisDto> DoctorIssuedDiagnoses => _doctorIssuedDiagnoses;
     
@@ -32,48 +26,41 @@ public class DiagnosisStore {
             _selectedPatientDiagnoses.Clear();
         }
     }
-    
-    public event Action<DiagnosisDto>? DiagnosisCreated;
-
-    public DiagnosisStore(IUnitOfWork unitOfWork){
-        _unitOfWork = unitOfWork;
-        
-        _diagnoses = [];
-        _selectedPatientDiagnoses = [];
-        _doctorIssuedDiagnoses = [];
-        _initializeDiagnoses = new Lazy<Task>(InitializeDiagnoses);
-    }
-
-    public async Task LoadDiagnoses(){
-        await _initializeDiagnoses.Value;
-    }
 
     public async Task LoadPatientDiagnoses(){
-        var loadedPatientDiagnoses = await _unitOfWork.DiagnosisRepository.GetIssuedDiagnosesByPatientIdOrDoctorId(SelectedPatientId, PersonType.Patient);
+        var loadedPatientDiagnoses = await UnitOfWork.DiagnosesRepository.GetIssuedDiagnosesByPatientIdOrDoctorId(SelectedPatientId, PersonType.Patient);
         _selectedPatientDiagnoses.AddRange(loadedPatientDiagnoses);
     }
 
     public async Task LoadDoctorIssuedDiagnoses(){
-        var loadedDoctorDiagnoses = await _unitOfWork.DiagnosisRepository.GetIssuedDiagnosesByPatientIdOrDoctorId(SelectedPatientId, PersonType.Doctor);
+        var loadedDoctorDiagnoses = await UnitOfWork.DiagnosesRepository.GetIssuedDiagnosesByPatientIdOrDoctorId(SelectedPatientId, PersonType.Doctor);
         _doctorIssuedDiagnoses.AddRange(loadedDoctorDiagnoses);
     }
-    
-    public async Task CreateDiagnosis(SaveDiagnosisRequest diagnosisRequest){
-        var savedDiagnosis = await _unitOfWork.DiagnosisRepository.SaveDiagnosisAsync(diagnosisRequest);
-        _diagnoses.Add(savedDiagnosis);
-        _selectedPatientDiagnoses.Add(savedDiagnosis);
 
-        OnDiagnosisCreated(savedDiagnosis);
+    public override async Task CreateEntity(object entityRequest){
+        if (entityRequest is SaveDiagnosisRequest saveDiagnosisRequest) {
+            var savedDiagnosis = await UnitOfWork.DiagnosesRepository.SaveDiagnosisAsync(saveDiagnosisRequest);
+            Entities.Add(savedDiagnosis);
+            _selectedPatientDiagnoses.Add(savedDiagnosis);
+
+            OnEntityCreated(savedDiagnosis);
+        }
     }
 
-    private void OnDiagnosisCreated(DiagnosisDto savedDiagnosis){
-        DiagnosisCreated?.Invoke(savedDiagnosis);
-    }   
+    public override async Task DeleteEntity(int entityId){
+        await UnitOfWork.DiagnosesRepository.DeleteEntityAsync(entityId);
+        Entities.RemoveAll(diagnosis => diagnosis.Id == entityId);
+        OnEntityDeleted(entityId);
+    }
 
-    private async Task InitializeDiagnoses(){
-        var loadedDiagnoses = await _unitOfWork.DiagnosisRepository.GetAllDiagnosisAsync();
+    public override async Task LoadEntityDetails(){
+        await Task.CompletedTask; 
+    }
+
+    protected override async Task InitializeEntities(){
+        var loadedDiagnoses = await UnitOfWork.DiagnosesRepository.GetAllDiagnosesAsync();
         
-        _diagnoses.Clear();
-        _diagnoses.AddRange(loadedDiagnoses);
+        Entities.Clear();
+        Entities.AddRange(loadedDiagnoses);
     }
 }

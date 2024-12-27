@@ -6,7 +6,7 @@ namespace MVVMPrivateClinicProjectDesktopApp.Commands;
 public class LoadSelectedPatientNotesDtoCommand(AddNewPatientNoteViewModel viewModel, PatientNoteStore patientNoteStore, PatientStore patientStore) : AsyncRelayCommand {
     public override async Task ExecuteAsync(object? parameter){
         try {
-            patientNoteStore.SelectedPatientId = patientStore.PatientIdToShowDetails;
+            patientNoteStore.SelectedPatientId = patientStore.EntityIdToShowDetails;
             await patientNoteStore.LoadSelectedPatientNotes();
             viewModel.UpdateSelectedPatientNotesDto(patientNoteStore.SelectedPatientNotes);
         }

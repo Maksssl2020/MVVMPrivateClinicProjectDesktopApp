@@ -12,7 +12,7 @@
              xmlns:converters="clr-namespace:MVVMPrivateClinicProjectDesktopApp.Converters"
              mc:Ignorable="d"
              FontFamily="/Fonts/#OpenSans"
-             d:DesignHeight="675" 
+             d:DesignHeight="700" 
              d:DesignWidth="1000"
              d:DataContext="{d:DesignInstance viewModel:HomeViewModel}">
     
@@ -31,7 +31,7 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="350"/>
                                 <RowDefinition Height="*"/>
-                                <RowDefinition Height="300"/>
+                                <RowDefinition Height="335"/>
                             </Grid.RowDefinitions>
                             <Border Grid.Row="0" Padding="5" BorderBrush="{StaticResource CustomVioletColor1}" BorderThickness="2" CornerRadius="10">
                                 <Grid>
@@ -135,7 +135,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="350"/>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="300"/>
+                    <RowDefinition Height="335"/>
                 </Grid.RowDefinitions>
                 <Border Grid.Row="0" Padding="5" BorderThickness="2" CornerRadius="10" BorderBrush="{StaticResource CustomRedColor1}">
                     <Grid>

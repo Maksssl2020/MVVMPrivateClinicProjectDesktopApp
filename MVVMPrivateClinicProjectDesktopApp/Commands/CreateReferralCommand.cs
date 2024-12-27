@@ -16,7 +16,7 @@ public class CreateReferralCommand(IssueReferralViewModel viewModel, ReferralSto
                 PatientId = viewModel.SelectedPatientId
             };
             
-            await referralStore.CreateReferral(saveReferralRequest);
+            await referralStore.CreateEntity(saveReferralRequest);
             resetForm.Invoke();
         }
         catch (Exception e) {

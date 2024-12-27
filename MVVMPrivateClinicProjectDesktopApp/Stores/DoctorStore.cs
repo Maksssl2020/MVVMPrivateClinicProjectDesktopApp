@@ -3,47 +3,22 @@ using MVVMPrivateClinicProjectDesktopApp.UnitOfWork;
 
 namespace MVVMPrivateClinicProjectDesktopApp.Stores;
 
-public class DoctorStore {
-    private readonly IUnitOfWork _unitOfWork;
-
-    private readonly List<DoctorDto> _allDoctorsDto;
+public class DoctorStore : EntityStore<DoctorDto, DoctorStatisticsDto> {
     private readonly List<DoctorDto> _familyMedicineDoctorsDto;
     private readonly List<DoctorDto> _mostPopularDoctorsDto;
-    private readonly Lazy<Task> _initializeLazyAllDoctors;
     private readonly Lazy<Task> _initializeLazyFamilyMedicineDoctors;
     private readonly Lazy<Task> _initializeLazyMostPopularDoctors;
 
-    public IEnumerable<DoctorDto> AllDoctorsDto => _allDoctorsDto;
     public IEnumerable<DoctorDto> FamilyMedicineDoctorsDto => _familyMedicineDoctorsDto;
     public IEnumerable<DoctorDto> MostPopularDoctorsDto => _mostPopularDoctorsDto;
-
-    private int _selectedDoctorId;
-    public int SelectedDoctorId {
-        get => _selectedDoctorId;
-        set {
-            _selectedDoctorId = value;
-            DoctorStatisticsDto = null!;
-        }
-    }
-
-    public DoctorStatisticsDto DoctorStatisticsDto { get; set; } = null!;
     
-    public event Action<DoctorDto>? DoctorCreated;
-    
-    public DoctorStore(IUnitOfWork unitOfWork){
-        _unitOfWork = unitOfWork;
-        
-        _allDoctorsDto = [];
+    public DoctorStore(IUnitOfWork unitOfWork) 
+        :base(unitOfWork) {
         _familyMedicineDoctorsDto = [];
         _mostPopularDoctorsDto = [];
         
-        _initializeLazyAllDoctors = new Lazy<Task>(InitializeAllDoctorsDto);
         _initializeLazyFamilyMedicineDoctors = new Lazy<Task>(InitializeFamilyMedicineDoctorsDto);
         _initializeLazyMostPopularDoctors = new Lazy<Task>(InitializeMostPopularDoctorsDto);
-    }
-
-    public async Task LoadAllDoctorsDto(){
-        await _initializeLazyAllDoctors.Value;
     }
 
     public async Task LoadFamilyMedicineDoctorsDto(){
@@ -54,22 +29,30 @@ public class DoctorStore {
         await _initializeLazyMostPopularDoctors.Value;
     }
     
-    public async Task CreateDoctor(SaveDoctorRequest doctorRequest){
-        var savedDoctor = await _unitOfWork.DoctorRepository.SaveDoctorAsync(doctorRequest);
-        _allDoctorsDto.Add(savedDoctor);
+    public override async Task CreateEntity(object entityRequest){
+        if (entityRequest is SaveDoctorRequest saveDoctorRequest) {
+            var savedDoctor = await UnitOfWork.DoctorRepository.SaveDoctorAsync(saveDoctorRequest);
+            Entities.Add(savedDoctor);
         
-        OnDoctorCreated(savedDoctor);
+            OnEntityCreated(savedDoctor);
+        }
     }
 
-    public async Task LoadDoctorStatistics(){
-        var foundDoctor = await _unitOfWork.DoctorRepository.GetDoctorByIdAsync(SelectedDoctorId);
-        var countAppointments = await _unitOfWork.AppointmentRepository.CountAppointmentsByDoctorIdAsync(SelectedDoctorId);
-        var countReferrals = await _unitOfWork.ReferralRepository.CountIssuedReferralsByDoctorIdAsync(SelectedDoctorId);
-        var countPrescriptions = await _unitOfWork.PrescriptionRepository.CountIssuedPrescriptionsByDoctorIdAsync(SelectedDoctorId);
-        var countDiagnosis = await _unitOfWork.DiagnosisRepository.CountIssuedDiagnosisByDoctorIdAsync(SelectedDoctorId);
-        var countPatientNotes = await _unitOfWork.PatientNoteRepository.CountIssuedPatientNotesByDoctorIdAsync(SelectedDoctorId);
+    public override async Task DeleteEntity(int entityId){
+        await UnitOfWork.DoctorRepository.DeleteEntityAsync(entityId);
+        Entities.RemoveAll(e => e.Id == entityId);
+        OnEntityDeleted(entityId);
+    }
 
-        DoctorStatisticsDto = new DoctorStatisticsDto {
+    public override async Task LoadEntityDetails(){
+        var foundDoctor = await UnitOfWork.DoctorRepository.GetDoctorByIdAsync(EntityIdToShowDetails);
+        var countAppointments = await UnitOfWork.AppointmentRepository.CountAppointmentsByDoctorIdAsync(EntityIdToShowDetails);
+        var countReferrals = await UnitOfWork.ReferralRepository.CountIssuedReferralsByDoctorIdAsync(EntityIdToShowDetails);
+        var countPrescriptions = await UnitOfWork.PrescriptionRepository.CountIssuedPrescriptionsByDoctorIdAsync(EntityIdToShowDetails);
+        var countDiagnosis = await UnitOfWork.DiagnosesRepository.CountIssuedDiagnosisByDoctorIdAsync(EntityIdToShowDetails);
+        var countPatientNotes = await UnitOfWork.PatientNoteRepository.CountIssuedPatientNotesByDoctorIdAsync(EntityIdToShowDetails);
+
+        SelectedEntityDetails = new DoctorStatisticsDto {
             DoctorCode = foundDoctor!.DoctorCode,
             AmountOfAppointments = countAppointments,
             IssuedReferrals = countReferrals,
@@ -78,29 +61,25 @@ public class DoctorStore {
             IssuedPatientNotes = countPatientNotes
         };
     }
-    
-    private void OnDoctorCreated(DoctorDto doctor){
-        DoctorCreated?.Invoke(doctor);
-    }
-    
-    private async Task InitializeAllDoctorsDto(){
-        var loadedDoctors = await _unitOfWork.DoctorRepository.GetAllDoctors();
-        
-        _allDoctorsDto.Clear();
-        _allDoctorsDto.AddRange(loadedDoctors);
-    }
 
     private async Task InitializeFamilyMedicineDoctorsDto(){
-        var allFamilyMedicineDoctors = await _unitOfWork.DoctorRepository.GetAllFamilyMedicineDoctors();
+        var allFamilyMedicineDoctors = await UnitOfWork.DoctorRepository.GetAllFamilyMedicineDoctors();
         
         _familyMedicineDoctorsDto.Clear();
         _familyMedicineDoctorsDto.AddRange(allFamilyMedicineDoctors);
     }
 
     private async Task InitializeMostPopularDoctorsDto(){
-        var loadedMostPopularDoctors = await _unitOfWork.DoctorRepository.GetMostPopularDoctors(4);
+        var loadedMostPopularDoctors = await UnitOfWork.DoctorRepository.GetMostPopularDoctors(4);
         
         _mostPopularDoctorsDto.Clear();
         _mostPopularDoctorsDto.AddRange(loadedMostPopularDoctors);
+    }
+    
+    protected override async Task InitializeEntities(){
+        var loadedDoctors = await UnitOfWork.DoctorRepository.GetAllDoctors();
+        
+        Entities.Clear();
+        Entities.AddRange(loadedDoctors);
     }
 }

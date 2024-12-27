@@ -4,14 +4,12 @@ using System.ComponentModel.DataAnnotations;
 using System.Windows.Data;
 using System.Windows.Input;
 using MVVMPrivateClinicProjectDesktopApp.Commands;
-using MVVMPrivateClinicProjectDesktopApp.Interfaces;
 using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
 using MVVMPrivateClinicProjectDesktopApp.Stores;
-using ValidationResult = System.Windows.Controls.ValidationResult;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
-public class AddNewAppointmentViewModel : ViewModelBase {
+public class AddNewAppointmentViewModel : AddNewEntityViewModelBase {
     private readonly AppointmentDateStore _appointmentDateStore;
 
     private readonly ObservableCollection<DoctorDto> _doctors = [];
@@ -36,6 +34,7 @@ public class AddNewAppointmentViewModel : ViewModelBase {
             Validate(nameof(SelectedDoctor), value);
             SubmitCommand.OnCanExecuteChanged();
             OnDoctorOrPatientSelected();
+            OnPropertyChanged();
         }
     }
     
@@ -50,6 +49,7 @@ public class AddNewAppointmentViewModel : ViewModelBase {
             SubmitCommand.OnCanExecuteChanged();
             OnDoctorOrPatientSelected();
             OnSelectionChanged();
+            OnPropertyChanged();
         }
     }
     
@@ -62,6 +62,7 @@ public class AddNewAppointmentViewModel : ViewModelBase {
             _selectedPricing = value;
             Validate(nameof(SelectedPricing), value);
             SubmitCommand.OnCanExecuteChanged();
+            OnPropertyChanged();
         }
     }
     
@@ -80,6 +81,7 @@ public class AddNewAppointmentViewModel : ViewModelBase {
             TimesView = CollectionViewSource.GetDefaultView(_datesToChoose[_selectedDate.Value]);
             OnSelectionChanged();
             OnPropertyChanged(nameof(TimesView));
+            OnPropertyChanged();
         }
     }
 
@@ -93,6 +95,7 @@ public class AddNewAppointmentViewModel : ViewModelBase {
             Validate(nameof(SelectedTime), value!);
             SubmitCommand.OnCanExecuteChanged();
             OnSelectionChanged();
+            OnPropertyChanged();
         }
     }
     
@@ -102,7 +105,6 @@ public class AddNewAppointmentViewModel : ViewModelBase {
     private ICommand LoadDoctorsCommand { get; set; }
     private ICommand LoadPatientsCommand { get; set; }
     private ICommand LoadPricingCommand { get; set; }
-    public SubmitCommand SubmitCommand { get; set; }
     private ICommand CreateAppointmentCommand { get; set; }
 
     private AddNewAppointmentViewModel(DoctorStore doctorStore, PatientStore patientStore, AppointmentStore appointmentStore,  AppointmentDateStore appointmentDateStore, PricingStore pricingStore, InvoiceStore invoiceStore){
@@ -115,25 +117,19 @@ public class AddNewAppointmentViewModel : ViewModelBase {
         DaysView = null!;
         TimesView = null!;
 
-        LoadDoctorsCommand = new LoadDoctorsCommand(UpdateDoctorsDto, doctorStore);
-        LoadPatientsCommand = new LoadPatientsCommand(UpdatePatients, patientStore);
-        LoadPricingCommand = new LoadPricingCommand(UpdatePricing, pricingStore);
+        LoadDoctorsCommand = new LoadEntitiesCommand<DoctorDto, DoctorStatisticsDto>(UpdateDoctorsDto, doctorStore);
+        LoadPatientsCommand = new LoadEntitiesCommand<PatientDto, PatientDto>(UpdatePatients, patientStore);
+        LoadPricingCommand = new LoadEntitiesCommand<PricingDto, PricingDetailsDto>(UpdatePricing, pricingStore);
         SubmitCommand = new SubmitCommand(Submit, CanSubmit);
         CreateAppointmentCommand =
             new CreateAppointmentCommand(this, appointmentStore, appointmentDateStore, invoiceStore, ResetForm);
     }
 
-    private bool CanSubmit(){
-        var context = new ValidationContext(this);
-        var results = new List<System.ComponentModel.DataAnnotations.ValidationResult>();
-        return Validator.TryValidateObject(this, context, results, true);
-    }
-
-    private void Submit(){
+    protected override void Submit(){
         CreateAppointmentCommand.Execute(null);
     }
 
-    private void ResetForm(){
+    protected override void ResetForm(){
         SelectedDoctor = null!;
         SelectedPatient = null!;
         SelectedTime = null!;

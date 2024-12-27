@@ -56,6 +56,9 @@
         <DataTemplate DataType="{x:Type viewModel:ReferralTestsViewModel}">
             <local:ReferralTestsView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:DisabledDataViewModel}">
+            <local:DisableDataView/>
+        </DataTemplate>
     </Window.Resources>
     
     <Border MouseLeftButtonDown="MouseLeftButtonDown_Press" Background="{StaticResource CustomBlackColor1}" CornerRadius="20">

@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Windows.Input;
 using MVVMPrivateClinicProjectDesktopApp.Commands;
 using MVVMPrivateClinicProjectDesktopApp.Stores;
+using static MVVMPrivateClinicProjectDesktopApp.Helpers.RegexPatterns;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
@@ -9,7 +10,7 @@ public class AddNewPatientViewModel : AddNewEntityViewModelBase {
     private string _firstName = string.Empty;
 
     [Required(ErrorMessage = "First name is required!")]
-    [RegularExpression(@"([\p{L}]+[\s]?)+", ErrorMessage = "Use letters only please!")]
+    [RegularExpression(LettersOnlyRegex, ErrorMessage = "Use letters only please!")]
     public string FirstName {
         get => _firstName;
         set {
@@ -23,7 +24,7 @@ public class AddNewPatientViewModel : AddNewEntityViewModelBase {
     private string _lastName = string.Empty;
 
     [Required(ErrorMessage = "Last name is required!")]
-    [RegularExpression(@"([\p{L}]+[\s]?)+", ErrorMessage = "Use letters only please!")]
+    [RegularExpression(LettersOnlyRegex, ErrorMessage = "Use letters only please!")]
     public string LastName {
         get => _lastName;
         set {
@@ -37,7 +38,7 @@ public class AddNewPatientViewModel : AddNewEntityViewModelBase {
     private string _phoneNumber = string.Empty;
 
     [Required(AllowEmptyStrings = true)]
-    [RegularExpression(@"(((\d{3}-?){3})?((\d{3}\s?){3})?(\d{9})?)?", ErrorMessage = "Invalid phone number!")]
+    [RegularExpression(PhoneNumberRegex, ErrorMessage = "Invalid phone number!")]
     public string PhoneNumber {
         get => _phoneNumber;
         set {
@@ -51,7 +52,7 @@ public class AddNewPatientViewModel : AddNewEntityViewModelBase {
     private string _email = string.Empty;
 
     [Required(AllowEmptyStrings = true)]
-    [RegularExpression("([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,})", ErrorMessage = "Invalid email!")]
+    [RegularExpression(EmailAddressRegex, ErrorMessage = "Invalid email!")]
     public string Email {
         get => _email;
         set {
@@ -65,7 +66,7 @@ public class AddNewPatientViewModel : AddNewEntityViewModelBase {
     private string _city = string.Empty;
 
     [Required(ErrorMessage = "City is required!")]
-    [RegularExpression(@"([\p{L}]+[\s]?)+", ErrorMessage = "Use letters only please!")]
+    [RegularExpression(LettersOnlyRegexWithAdditionalCharacters, ErrorMessage = "Use letters only please!")]
     public string City {
         get => _city;
         set {
@@ -79,7 +80,7 @@ public class AddNewPatientViewModel : AddNewEntityViewModelBase {
     private string _postalCode = string.Empty;
     
     [Required(ErrorMessage = "Postal code is required!")]
-    [RegularExpression(@"\d{2}-\d{3}", ErrorMessage = "Invalid Postal code!")]
+    [RegularExpression(PostalCodeRegex, ErrorMessage = "Invalid Postal code!")]
     public string PostalCode {
         get => _postalCode;
         set {
@@ -94,7 +95,7 @@ public class AddNewPatientViewModel : AddNewEntityViewModelBase {
     private string _street = string.Empty;
 
     [Required(ErrorMessage = "Street is required!")]
-    [RegularExpression(@"([\p{L}]+[\s]?)+", ErrorMessage = "Use letters only please!")]
+    [RegularExpression(LettersOnlyRegexWithAdditionalCharacters, ErrorMessage = "Use letters only please!")]
     public string Street {
         get => _street;
         set {
@@ -109,7 +110,7 @@ public class AddNewPatientViewModel : AddNewEntityViewModelBase {
     private string _buildingNumber = string.Empty;
 
     [Required(ErrorMessage = "Building number is required!")]
-    [RegularExpression(@"\d+([\p{L}]+[\s]?)*", ErrorMessage = "Invalid building number!")]
+    [RegularExpression(BuildingNumberRegex, ErrorMessage = "Invalid building number!")]
     public string BuildingNumber {
         get => _buildingNumber;
         set {

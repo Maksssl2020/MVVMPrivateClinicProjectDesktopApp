@@ -53,8 +53,8 @@ public class AddNewInvoiceViewModel : AddNewEntityViewModelBase {
         PatientsView = CollectionViewSource.GetDefaultView(_patients);
         PricingView = CollectionViewSource.GetDefaultView(_pricing);
 
-        LoadPatientsCommand = new LoadPatientsCommand(UpdatePatients, patientStore);
-        LoadPricingCommand = new LoadPricingCommand(UpdatePricing, pricingStore);
+        LoadPatientsCommand = new LoadEntitiesCommand<PatientDto, PatientDto>(UpdatePatients, patientStore);
+        LoadPricingCommand = new LoadEntitiesCommand<PricingDto, PricingDetailsDto>(UpdatePricing, pricingStore);
         CreateInvoiceCommand = new CreateInvoiceCommand(this, invoiceStore, ResetForm);
     }
 

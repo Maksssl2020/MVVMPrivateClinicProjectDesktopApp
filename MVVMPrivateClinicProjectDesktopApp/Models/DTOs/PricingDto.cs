@@ -1,6 +1,8 @@
+using MVVMPrivateClinicProjectDesktopApp.Interfaces;
+
 namespace MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
 
-public class PricingDto {
+public class PricingDto : IEntity {
     public int Id { get; set; }
     public required string ServiceName { get; set; }
     public required string ServiceType { get; set; }

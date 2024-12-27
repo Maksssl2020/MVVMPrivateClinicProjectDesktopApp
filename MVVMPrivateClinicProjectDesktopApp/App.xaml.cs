@@ -39,6 +39,7 @@ public partial class App : Application {
     private readonly AppointmentDateStore _appointmentDateStore;
     private readonly AddSpecificDataToPatientStore _addSpecificDataToPatientStore;
     private readonly StatisticsStore _statisticsStore;
+    private readonly DisabledDataStore _disabledDataStore;
     
     private readonly NavigationBarViewModel _navigationBarViewModel;
     private readonly ModalNavigationViewModel _modalNavigationViewModel;
@@ -71,6 +72,7 @@ public partial class App : Application {
         _appointmentDateStore = new AppointmentDateStore(unitOfWork);
         _addSpecificDataToPatientStore = new AddSpecificDataToPatientStore();
         _statisticsStore = new StatisticsStore(unitOfWork);
+        _disabledDataStore = new DisabledDataStore(unitOfWork);
         
         _navigationBarViewModel = new NavigationBarViewModel(
             CreateHomeNavigationService(),
@@ -84,11 +86,12 @@ public partial class App : Application {
             CreateInvoicesNavigationService(),
             CreatePricingNavigationService(),
             CreatePatientsNotesNavigationService(),
-            CreateReferralTestsNavigationService()
+            CreateReferralTestsNavigationService(),
+            CreateDisabledDataNavigationService()
         );
         _modalNavigationViewModel = new ModalNavigationViewModel(
+            _modalNavigationStore,
             CreateAddNewPatientsNavigationService(),
-            CreateDeletePatientsNavigationService(),
             CreatePatientDataModalNavigationService(),
             CreateAddNewDiseaseNavigationService(),
             CreateAddNewMedicineNavigationService(),
@@ -104,7 +107,10 @@ public partial class App : Application {
             CreateDoctorDetailsNavigationService(),
             CreateMedicineDetailsNavigationService(),
             CreateDiseaseDetailsNavigationStore(),
-            CreateReferralTestDetailsNavigationStore()
+            CreateReferralTestDetailsNavigationStore(),
+            CreatePricingDetailsNavigationStore(),
+            CreateAppointmentDetailsNavigationStore(),
+            CreateAddNewReferralTestNavigationStore()
             );
 
         _patientDataModalNavigationViewModel = new PatientDataModalNavigationViewModel(
@@ -175,13 +181,14 @@ public partial class App : Application {
     private NavigationServiceBase CreateReferralTestsNavigationService(){
         return new NavigationService(_navigationStore, () => ReferralTestsViewModel.LoadReferralTestsViewModel(_referralTestStore, _modalNavigationViewModel));
     }
+
+    private NavigationServiceBase CreateDisabledDataNavigationService(){
+        return new NavigationService(_navigationStore,
+            () => DisabledDataViewModel.LoadDisabledDataViewModel(_disabledDataStore));
+    }
     
     private NavigationServiceBase CreateAddNewPatientsNavigationService(){
         return new ModalNavigationService(_modalNavigationStore, () => new AddNewPatientViewModel(_patientStore));
-    }
-
-    private NavigationServiceBase CreateDeletePatientsNavigationService(){
-        return new ModalNavigationService(_modalNavigationStore, () => new DeletePatientViewModel(_patientStore));
     }
 
     private NavigationServiceBase CreatePatientDataModalNavigationService(){
@@ -256,6 +263,21 @@ public partial class App : Application {
     private NavigationServiceBase CreateReferralTestDetailsNavigationStore(){
         return new ModalNavigationService(_modalNavigationStore,
             () => ReferralTestDetailsViewModel.LoadReferralTestDetailsViewModel(_referralTestStore));
+    }
+
+    private NavigationServiceBase CreatePricingDetailsNavigationStore(){
+        return new ModalNavigationService(_modalNavigationStore,
+            () => PricingDetailsViewModel.LoadPricingDetailsViewModel(_pricingStore));
+    }
+
+    private NavigationServiceBase CreateAppointmentDetailsNavigationStore(){
+        return new ModalNavigationService(_modalNavigationStore,
+            () => AppointmentDetailsViewModel.LoadAppointmentDetailsViewModel(_appointmentStore));
+    }
+
+    private NavigationServiceBase CreateAddNewReferralTestNavigationStore(){
+        return new ModalNavigationService(_modalNavigationStore,
+            () => new AddNewReferralTestViewModel(_referralTestStore));
     }
     
     private NavigationServiceBase CreatePatientDetailsNavigationService(){

@@ -1,23 +1,22 @@
 using System.Collections;
+using System.Diagnostics;
+using System.IO;
 using System.Windows.Documents;
+using MVVMPrivateClinicProjectDesktopApp.Helpers;
 using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
 using MVVMPrivateClinicProjectDesktopApp.UnitOfWork;
+using QuestPDF.Fluent;
+using QuestPDF.Infrastructure;
 
 namespace MVVMPrivateClinicProjectDesktopApp.Stores;
 
-public class ReferralStore {
-    private readonly IUnitOfWork _unitOfWork;
+public class ReferralStore(IUnitOfWork unitOfWork) : EntityStore<ReferralDto, ReferralDetailsDto>(unitOfWork) {
+    private readonly List<ReferralDto> _selectedPatientReferralsDto = [];
+    private readonly List<ReferralDto> _selectedDoctorIssuedReferralsDto = [];
     
-    private readonly List<ReferralDto> _referralsDto;
-    private readonly List<ReferralDto> _selectedPatientReferralsDto;
-    private readonly List<ReferralDto> _selectedDoctorIssuedReferralsDto;
-    private readonly Lazy<Task> _initializeLazy;
-    
-    public IEnumerable<ReferralDto> ReferralsDto => _referralsDto;
     public IEnumerable<ReferralDto> SelectedPatientReferralsDto => _selectedPatientReferralsDto;
     public IEnumerable<ReferralDto> SelectedDoctorIssuedReferrals => _selectedDoctorIssuedReferralsDto;
     
-    public event Action<ReferralDto>? ReferralCreated;
     
     private int _selectedPatientId;
     public int SelectedPatientId {
@@ -37,61 +36,48 @@ public class ReferralStore {
         }
     }
 
-    private int _selectedReferralId;
-    public int SelectedReferralId {
-        get => _selectedReferralId;
-        set {
-            _selectedReferralId = value;
-            SelectedReferralDetails = null!;
-        }
-    }
-
-    public ReferralDetailsDto SelectedReferralDetails { get; set; } = null!;
-    
-    public ReferralStore(IUnitOfWork unitOfWork){
-        _unitOfWork = unitOfWork;
-        
-        _referralsDto = [];
-        _selectedPatientReferralsDto = [];
-        _selectedDoctorIssuedReferralsDto = [];
-        _initializeLazy = new Lazy<Task>(InitializeReferrals);
-    }
-
-    public async Task LoadReferrals(){
-        await _initializeLazy.Value;
-    }
-
     public async Task LoadPatientReferrals(){
-        var loadedPatientReferrals = await _unitOfWork.ReferralRepository.GetIssuedReferralsByPatientIdOrDoctorId(SelectedPatientId, PersonType.Patient);
+        var loadedPatientReferrals = await UnitOfWork.ReferralRepository.GetIssuedReferralsByPatientIdOrDoctorId(SelectedPatientId, PersonType.Patient);
         _selectedPatientReferralsDto.AddRange(loadedPatientReferrals);
     }
 
     public async Task LoadDoctorIssuedReferrals(){
-        var foundReferrals = await _unitOfWork.ReferralRepository.GetIssuedReferralsByPatientIdOrDoctorId(SelectedPatientId, PersonType.Doctor);
+        var foundReferrals = await UnitOfWork.ReferralRepository.GetIssuedReferralsByPatientIdOrDoctorId(SelectedPatientId, PersonType.Doctor);
         _selectedDoctorIssuedReferralsDto.AddRange(foundReferrals);
     }
+
+    public override async Task CreateEntity(object entityRequest){
+        if (entityRequest is SaveReferralRequest saveReferralRequest) {
+            var savedReferral = await UnitOfWork.ReferralRepository.SaveReferralAsync(saveReferralRequest);
+            Entities.Add(savedReferral);
+            _selectedPatientReferralsDto.Add(savedReferral);
+
+            OnEntityCreated(savedReferral);
+        }
+    }
+
+    public override async Task DeleteEntity(int entityId){
+        await UnitOfWork.ReferralRepository.DeleteEntityAsync(entityId);
+        Entities.RemoveAll(e => e.Id == entityId);
+        OnEntityDeleted(entityId);
+    }
+
+    public override async Task LoadEntityDetails(){
+        var foundReferral = await UnitOfWork.ReferralRepository.GetReferralDetailsByIdAsync(EntityIdToShowDetails);
+        if (foundReferral != null) SelectedEntityDetails = foundReferral;
+    }
+
+    public async Task GenerateReferralDetailsPdf(int referralId){
+        var foundReferral = await UnitOfWork.ReferralRepository.GetReferralDetailsByIdAsync(referralId);
+        if (foundReferral != null) {
+            PdfGenerator.GenerateReferralPdf(foundReferral);
+        }
+    }
     
-    public async Task CreateReferral(SaveReferralRequest referralRequest){
-        var savedReferral = await _unitOfWork.ReferralRepository.SaveReferralAsync(referralRequest);
-        _referralsDto.Add(savedReferral);
-        _selectedPatientReferralsDto.Add(savedReferral);
-
-        OnReferralCreated(savedReferral);
-    }
-
-    public async Task LoadReferralDetails(){
-        var foundReferral = await _unitOfWork.ReferralRepository.GetReferralDetailsByIdAsync(SelectedReferralId);
-        if (foundReferral != null) SelectedReferralDetails = foundReferral;
-    }
-    
-    private void OnReferralCreated(ReferralDto savedReferral){
-        ReferralCreated?.Invoke(savedReferral);
-    }
-
-    private async Task InitializeReferrals(){
-        var loadedReferralsDto = await _unitOfWork.ReferralRepository.GetAllReferralsDtoAsync();
+    protected override async Task InitializeEntities(){
+        var loadedReferralsDto = await UnitOfWork.ReferralRepository.GetAllReferralsDtoAsync();
         
-        _referralsDto.Clear();
-        _referralsDto.AddRange(loadedReferralsDto);
+        Entities.Clear();
+        Entities.AddRange(loadedReferralsDto);
     }
 }

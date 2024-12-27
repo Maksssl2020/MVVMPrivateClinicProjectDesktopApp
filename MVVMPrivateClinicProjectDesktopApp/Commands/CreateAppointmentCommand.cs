@@ -35,9 +35,9 @@ public class CreateAppointmentCommand(
                 IdPricing = viewModel.SelectedPricing.Id,
             };
 
-            await appointmentStore.CreateAppointment(saveAppointmentRequest);
+            await appointmentStore.CreateEntity(saveAppointmentRequest);
             await appointmentDateStore.CreateAppointmentDate(saveAppointmentDateRequest);
-            await invoiceStore.CreateInvoice(saveNewInvoiceRequest);
+            await invoiceStore.CreateEntity(saveNewInvoiceRequest);
             
             resetForm.Invoke();
         }

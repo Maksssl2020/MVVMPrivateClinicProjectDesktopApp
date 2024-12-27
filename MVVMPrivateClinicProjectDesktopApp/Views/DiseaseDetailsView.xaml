@@ -16,7 +16,7 @@
         Background="Transparent"
         AllowsTransparency="True"
         d:DataContext="{d:DesignInstance viewModel:DiseaseDetailsViewModel}">
-    <Border MouseLeftButtonDown="MouseLeftButtonDown_Hold" BorderThickness="2" BorderBrush="{StaticResource CustomGrayColor1}" Background="{StaticResource CustomBlackColor1}" CornerRadius="20" Padding="20">
+    <Border MouseLeftButtonDown="MouseLeftButtonDown_Hold" BorderThickness="2" BorderBrush="{StaticResource CustomTurquoiseColor1}" Background="{StaticResource CustomBlackColor1}" CornerRadius="20" Padding="20">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"/>
@@ -34,7 +34,7 @@
                         <StackPanel Width="400" Grid.Row="0">
                             <TextBlock Foreground="White" FontSize="18" FontWeight="Bold">
                                 <Run Text="Disease Nr. #"/>
-                                <Run Text="{Binding DiseaseDetails.DiseaseCode}"/>
+                                <Run Text="{Binding Entity.DiseaseCode}"/>
                                 <Run Text="Details"/>
                             </TextBlock>
                         </StackPanel>
@@ -64,7 +64,7 @@
                             BorderBrush="{StaticResource CustomGrayColor1}" 
                             CornerRadius="10"
                     >
-                        <TextBlock Text="{Binding DiseaseDetails.Name}"
+                        <TextBlock Text="{Binding Entity.Name}"
                                    Foreground="White"
                                    FontSize="15"
                                    FontWeight="Bold"
@@ -81,7 +81,7 @@
                             BorderBrush="{StaticResource CustomGrayColor1}" 
                             CornerRadius="10"
                     >
-                        <TextBlock Text="{Binding DiseaseDetails.TotalDiagnoses}"
+                        <TextBlock Text="{Binding Entity.TotalDiagnoses}"
                                    Foreground="White"
                                    FontSize="15"
                                    FontWeight="Bold"

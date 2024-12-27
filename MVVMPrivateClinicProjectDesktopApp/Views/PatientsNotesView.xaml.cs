@@ -14,7 +14,7 @@ public partial class PatientsNotesView : UserControl {
         if (DataContext is not PatientsNotesViewModel viewModel) return;
         if (sender is not Button { DataContext: PatientNoteDto patientNoteDto }) return;
         
-        viewModel.SetPatientNoteIdToShowDetails(patientNoteDto.Id);
+        viewModel.SetEntityIdToShowDetails(patientNoteDto.Id);
         viewModel.ShowPatientNoteDetailsCommand.Execute(null);
     }
     
@@ -23,5 +23,12 @@ public partial class PatientsNotesView : UserControl {
         
         viewModel.SetDataInAddSpecificDataToPatientStore();
         viewModel.ShowSelectPatientToAddSpecificDataModal.Execute(null);
+    }
+    
+    private void ShowDeletePatientNoteModal_OnClick(object sender, RoutedEventArgs e){
+        if (DataContext is not PatientsNotesViewModel viewModel) return;
+        if (sender is not Button { DataContext: PatientNoteDto patientNoteDto }) return;
+        
+        viewModel.SetEntityIdToDelete(patientNoteDto.Id);
     }
 }

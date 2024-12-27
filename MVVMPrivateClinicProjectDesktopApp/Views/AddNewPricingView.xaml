@@ -20,7 +20,7 @@
         AllowsTransparency="True"
         d:DataContext="{d:DesignInstance viewModel:AddNewPricingViewModel}">
     
-    <Border MouseLeftButtonDown="MouseLeftButtonDown_Hold" BorderThickness="2" BorderBrush="{StaticResource CustomGrayColor1}" Background="{StaticResource CustomBlackColor1}" CornerRadius="20" Padding="20">
+    <Border MouseLeftButtonDown="MouseLeftButtonDown_Hold" BorderThickness="2" BorderBrush="{StaticResource CustomPaleGoldColor1}" Background="{StaticResource CustomBlackColor1}" CornerRadius="20" Padding="20">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="35"/>
@@ -29,8 +29,7 @@
             </Grid.RowDefinitions>
             
             <StackPanel HorizontalAlignment="Right" Grid.Row="0">
-                <Button  x:Name="closeButton" 
-                         Click="buttonClose_Click"
+                <Button  Click="buttonClose_Click"
                          Style="{StaticResource ControlBarButton}"
                          Tag="{StaticResource CustomRedColor1}"
                 >

@@ -22,7 +22,7 @@
         <converters:DateTimeFormatConverter x:Key="DateTimeFormatConverter"/>
     </local:WindowViewBase.Resources>
     
-    <Border MouseLeftButtonDown="MouseLeftButtonDown_Hold" BorderThickness="2" BorderBrush="{StaticResource CustomGrayColor1}" Background="{StaticResource CustomBlackColor1}" CornerRadius="20" Padding="20">
+    <Border MouseLeftButtonDown="MouseLeftButtonDown_Hold" BorderThickness="2" BorderBrush="{StaticResource CustomVioletColor1}" Background="{StaticResource CustomBlackColor1}" CornerRadius="20" Padding="20">
         <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
@@ -87,11 +87,11 @@
                             <Label FontSize="14" Foreground="White" Content="Issued patient notes:"/>
                         </StackPanel>
                         <StackPanel Grid.Column="1">
-                            <Label FontSize="14" Foreground="White" Content="{Binding DoctorStatistics.AmountOfAppointments }"/>
-                            <Label FontSize="14" Foreground="White" Content="{Binding DoctorStatistics.IssuedReferrals }"/>
-                            <Label FontSize="14" Foreground="White" Content="{Binding DoctorStatistics.IssuedPrescriptions }"/>
-                            <Label FontSize="14" Foreground="White" Content="{Binding DoctorStatistics.IssuedDiagnosis }"/>
-                            <Label FontSize="14" Foreground="White" Content="{Binding DoctorStatistics.IssuedPatientNotes}"/>
+                            <Label FontSize="14" Foreground="White" Content="{Binding Entity.AmountOfAppointments }"/>
+                            <Label FontSize="14" Foreground="White" Content="{Binding Entity.IssuedReferrals }"/>
+                            <Label FontSize="14" Foreground="White" Content="{Binding Entity.IssuedPrescriptions }"/>
+                            <Label FontSize="14" Foreground="White" Content="{Binding Entity.IssuedDiagnosis }"/>
+                            <Label FontSize="14" Foreground="White" Content="{Binding Entity.IssuedPatientNotes}"/>
                         </StackPanel>
                     </Grid>
                 </StackPanel>

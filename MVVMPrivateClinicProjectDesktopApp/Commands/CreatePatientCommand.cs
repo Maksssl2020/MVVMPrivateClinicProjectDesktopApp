@@ -1,6 +1,4 @@
 using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
-using MVVMPrivateClinicProjectDesktopApp.Repositories.Address;
-using MVVMPrivateClinicProjectDesktopApp.Repositories.Patient;
 using MVVMPrivateClinicProjectDesktopApp.Stores;
 using MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
@@ -30,7 +28,7 @@ public class CreatePatientCommand(AddNewPatientViewModel addNewPatientViewModel,
             AddressId = savedAddress!.Id
         };
 
-        await patientStore.CreatePatient(savePatientRequest);
+        await patientStore.CreateEntity(savePatientRequest);
         
         resetForm.Invoke();
     }

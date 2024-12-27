@@ -1,18 +1,19 @@
-using MVVMPrivateClinicProjectDesktopApp.Repositories.Address;
-using MVVMPrivateClinicProjectDesktopApp.Repositories.Appointment;
-using MVVMPrivateClinicProjectDesktopApp.Repositories.AppointmentDate;
-using MVVMPrivateClinicProjectDesktopApp.Repositories.Diagnosis;
-using MVVMPrivateClinicProjectDesktopApp.Repositories.Disease;
-using MVVMPrivateClinicProjectDesktopApp.Repositories.Doctor;
-using MVVMPrivateClinicProjectDesktopApp.Repositories.DoctorSpecialization;
-using MVVMPrivateClinicProjectDesktopApp.Repositories.Invoice;
-using MVVMPrivateClinicProjectDesktopApp.Repositories.Medicine;
-using MVVMPrivateClinicProjectDesktopApp.Repositories.Note;
-using MVVMPrivateClinicProjectDesktopApp.Repositories.Patient;
-using MVVMPrivateClinicProjectDesktopApp.Repositories.Prescription;
-using MVVMPrivateClinicProjectDesktopApp.Repositories.Pricing;
-using MVVMPrivateClinicProjectDesktopApp.Repositories.Referral;
-using MVVMPrivateClinicProjectDesktopApp.Repositories.ReferralTest;
+using MVVMPrivateClinicProjectDesktopApp.DbContext;
+using MVVMPrivateClinicProjectDesktopApp.Repositories.AddressRepository;
+using MVVMPrivateClinicProjectDesktopApp.Repositories.AppointmentDateRepository;
+using MVVMPrivateClinicProjectDesktopApp.Repositories.AppointmentRepository;
+using MVVMPrivateClinicProjectDesktopApp.Repositories.DiagnosesRepository;
+using MVVMPrivateClinicProjectDesktopApp.Repositories.DiseaseRepository;
+using MVVMPrivateClinicProjectDesktopApp.Repositories.DoctorRepository;
+using MVVMPrivateClinicProjectDesktopApp.Repositories.DoctorSpecializationRepository;
+using MVVMPrivateClinicProjectDesktopApp.Repositories.InvoiceRepository;
+using MVVMPrivateClinicProjectDesktopApp.Repositories.MedicineRepository;
+using MVVMPrivateClinicProjectDesktopApp.Repositories.PatientNoteRepository;
+using MVVMPrivateClinicProjectDesktopApp.Repositories.PatientRepository;
+using MVVMPrivateClinicProjectDesktopApp.Repositories.PrescriptionRepository;
+using MVVMPrivateClinicProjectDesktopApp.Repositories.PricingRepository;
+using MVVMPrivateClinicProjectDesktopApp.Repositories.ReferralRepository;
+using MVVMPrivateClinicProjectDesktopApp.Repositories.ReferralTestRepository;
 
 namespace MVVMPrivateClinicProjectDesktopApp.UnitOfWork;
 
@@ -30,7 +31,8 @@ public interface IUnitOfWork {
     IPricingRepository PricingRepository { get; }
     IPatientNoteRepository PatientNoteRepository { get; }
     IReferralTestRepository ReferralTestRepository { get; }
-    IDiagnosisRepository DiagnosisRepository { get; }
+    IDiagnosesRepository DiagnosesRepository { get; }
     IAppointmentDateRepository AppointmentDateRepository { get; }
+    DbContextFactory DbContextFactory { get; }
     Task SaveChangesAsync();
 }

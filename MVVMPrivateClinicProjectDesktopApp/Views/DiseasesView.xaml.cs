@@ -15,7 +15,14 @@ public partial class DiseasesView : UserControl {
         if (sender is not Button { DataContext: DiseaseDto disease }) return;
         if (viewModel is null) return;
         
-        viewModel.SetDiseaseIdToSeeDetails(disease.Id);
+        viewModel.SetEntityIdToShowDetails(disease.Id);
         viewModel.ShowDiseaseDetailsModalCommand.Execute(null);
+    }
+    
+    private void ShowDeleteDiseaseModal_OnClick(object sender, RoutedEventArgs e){
+        var viewModel = DataContext as DiseasesViewModel;
+        if (sender is not Button { DataContext: DiseaseDto disease }) return;
+
+        viewModel?.SetEntityIdToDelete(disease.Id);
     }
 }

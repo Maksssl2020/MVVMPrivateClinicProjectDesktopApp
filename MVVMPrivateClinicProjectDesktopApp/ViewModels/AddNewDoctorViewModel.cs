@@ -6,67 +6,71 @@ using System.Windows.Input;
 using MVVMPrivateClinicProjectDesktopApp.Commands;
 using MVVMPrivateClinicProjectDesktopApp.Models.DTOs;
 using MVVMPrivateClinicProjectDesktopApp.Stores;
+using static MVVMPrivateClinicProjectDesktopApp.Helpers.RegexPatterns;
 
 namespace MVVMPrivateClinicProjectDesktopApp.ViewModels;
 
-public class AddNewDoctorViewModel : ViewModelBase {
+public class AddNewDoctorViewModel : AddNewEntityViewModelBase {
     private readonly ObservableCollection<DoctorSpecializationDto> _doctorSpecializations;
     public ICollectionView DoctorSpecializationsView { get; set; }
     
     private string _firstName = string.Empty;
 
     [Required(ErrorMessage = "First name is required!")]
-    [RegularExpression(@"([\p{L}]+[\s]?)+", ErrorMessage = "Use letters only please!")]
+    [RegularExpression(LettersOnlyRegex, ErrorMessage = "Use letters only please!")]
     public string FirstName {
         get => _firstName;
         set {
             _firstName = value;
             Validate(nameof(FirstName), value);
             SubmitCommand.OnCanExecuteChanged();
+            OnPropertyChanged();
         }
     }
     
     private string _lastName = string.Empty;
 
     [Required(ErrorMessage = "Last name is required!")]
-    [RegularExpression(@"([\p{L}]+[\s]?)+", ErrorMessage = "Use letters only please!")]
+    [RegularExpression(LettersOnlyRegex, ErrorMessage = "Use letters only please!")]
     public string LastName {
         get => _lastName;
         set {
             _lastName = value;
             Validate(nameof(LastName), value);
             SubmitCommand.OnCanExecuteChanged();
+            OnPropertyChanged();
         }
     }
     
     private string _phoneNumber = string.Empty;
 
     [Required(ErrorMessage = "Phone number is required!")]
-    [RegularExpression(@"(((\d{3}-?){3})?((\d{3}\s?){3})?(\d{9})?)?", ErrorMessage = "Invalid phone number!")]
+    [RegularExpression(PhoneNumberRegex, ErrorMessage = "Invalid phone number!")]
     public string PhoneNumber {
         get => _phoneNumber;
         set {
             _phoneNumber = value;
             Validate(nameof(PhoneNumber), value);
             SubmitCommand.OnCanExecuteChanged();
+            OnPropertyChanged();
         }
     }
     
     private DoctorSpecializationDto _selectedSelectedDoctorSpecialization = null!;
-
     public DoctorSpecializationDto SelectedDoctorSpecialization {
         get => _selectedSelectedDoctorSpecialization;
         set {
             _selectedSelectedDoctorSpecialization = value;
             SubmitCommand.OnCanExecuteChanged();
             DoctorSpecialization = value.Name;
+            OnPropertyChanged();
         }
     }
     
     private string _doctorSpecialization = string.Empty;
 
     [Required(ErrorMessage = "Doctor Specialization is required!")]
-    [RegularExpression(@"([\p{L}]+[\s]?)+", ErrorMessage = "Use letters only please!")]
+    [RegularExpression(LettersOnlyRegex, ErrorMessage = "Use letters only please!")]
     public string DoctorSpecialization
     {
         get => _doctorSpecialization;
@@ -75,30 +79,24 @@ public class AddNewDoctorViewModel : ViewModelBase {
             _doctorSpecialization = value;
             Validate(nameof(DoctorSpecialization), value);
             SubmitCommand.OnCanExecuteChanged();
+            OnPropertyChanged();
         }
     }
     
-    private ICommand LoadDoctorSpecializationsCommand { get; set; }
-    public SubmitCommand SubmitCommand { get; set; }
-    public ICommand CreateDoctorCommand { get; set; }
+    private ICommand LoadDoctorSpecializationsCommand { get; }
+    private ICommand CreateDoctorCommand { get; }
     
     private AddNewDoctorViewModel(DoctorStore doctorStore, DoctorSpecializationStore doctorSpecializationStore){
         _doctorSpecializations = [];
         
         DoctorSpecializationsView = CollectionViewSource.GetDefaultView(_doctorSpecializations);
 
-        LoadDoctorSpecializationsCommand = new LoadDoctorSpecializationsCommand(this, doctorSpecializationStore);
+        LoadDoctorSpecializationsCommand = new LoadEntitiesCommand<DoctorSpecializationDto, DoctorSpecializationDto>(UpdateDoctorSpecializations, doctorSpecializationStore);
         SubmitCommand = new SubmitCommand(Submit, CanSubmit);
         CreateDoctorCommand = new CreateDoctorCommand(this, doctorStore, doctorSpecializationStore, ResetForm);
     }
 
-    private bool CanSubmit(){
-        var context = new ValidationContext(this);
-        var results = new List<ValidationResult>();
-        return Validator.TryValidateObject(this, context, results, true);
-    }
-
-    private void Submit(){
+    protected override void Submit(){
         CreateDoctorCommand.Execute(null);
     }
 
@@ -110,8 +108,8 @@ public class AddNewDoctorViewModel : ViewModelBase {
         
         return addNewDoctorViewModel;
     }
-    
-    public void UpdateDoctorSpecializations(IEnumerable<DoctorSpecializationDto> doctorSpecializations){
+
+    private void UpdateDoctorSpecializations(IEnumerable<DoctorSpecializationDto> doctorSpecializations){
         _doctorSpecializations.Clear();
 
         foreach (var doctorSpecialization in doctorSpecializations) {
@@ -119,7 +117,7 @@ public class AddNewDoctorViewModel : ViewModelBase {
         }
     }
 
-    private void ResetForm(){
+    protected override void ResetForm(){
         FirstName = string.Empty;
         LastName = string.Empty;
         PhoneNumber = string.Empty;

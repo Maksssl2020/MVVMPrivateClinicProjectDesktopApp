@@ -39,7 +39,7 @@
                 </StackPanel>
                     
                 <components:ButtonWithIcon Grid.Column="1"
-                                           ButtonText="Add New Pricing"
+                                           ButtonText="Add New Medicine"
                                            ButtonHeight="60"
                                            ButtonWidth="200"
                                            TextColor="{StaticResource CustomPlumColor1}"
@@ -85,7 +85,8 @@
                                             <fa:IconImage Style="{StaticResource IconButtonSmall}" Icon="Eye"/>
                                         </Button>
                                         <Button Style="{StaticResource ButtonWithIconSmall}"
-                                                Tag="{StaticResource CustomRedColor1}">
+                                                Tag="{StaticResource CustomRedColor1}"
+                                                Click="ShowDeleteMedicineModal_OnClick">
                                             <fa:IconImage Style="{StaticResource IconButtonSmall}" Icon="Trash"/>
                                         </Button>
                                     </StackPanel>       
